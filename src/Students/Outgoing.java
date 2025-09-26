@@ -1,4 +1,4 @@
 package Students;
 
-public interface Outgoing {
+public interface Outgoing extends Student{
 }

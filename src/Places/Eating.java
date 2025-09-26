@@ -1,4 +1,4 @@
 package Places;
 
-public interface Eating {
+public interface Eating extends Services {
 }

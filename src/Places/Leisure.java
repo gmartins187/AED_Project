@@ -1,4 +1,4 @@
 package Places;
 
-public interface Leisure {
+public interface Leisure extends Services{
 }

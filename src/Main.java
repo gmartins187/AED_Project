@@ -6,8 +6,6 @@ public class Main {
     private static final String HELP = "help";
     private static final String EXIT = "exit";
 
-
-
     private static final String HELP_TEXT = """
     bounds - Defines the new geographic bounding rectangle
     save - Saves the current geographic bounding rectangle to a text file
@@ -33,9 +31,11 @@ public class Main {
 
 
     public static void main(String[] args){
-
         commands();
     }
+
+
+
 
     private static void commands() {
         Scanner in = new Scanner(System.in);

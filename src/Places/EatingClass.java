@@ -1,4 +1,4 @@
 package Places;
 
-public class EatingClass {
+public class EatingClass extends ServicesAbstractClass implements Eating{
 }

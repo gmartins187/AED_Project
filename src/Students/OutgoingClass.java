@@ -1,4 +1,4 @@
 package Students;
 
-public class OutgoingClass {
+public class OutgoingClass extends StudentAbstractClass implements Outgoing {
 }

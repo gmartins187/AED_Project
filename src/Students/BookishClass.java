@@ -1,4 +1,4 @@
 package Students;
 
-public class BookishClass {
+public class BookishClass extends StudentAbstractClass implements Bookish {
 }

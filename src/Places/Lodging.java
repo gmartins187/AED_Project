@@ -1,4 +1,4 @@
 package Places;
 
-public interface Lodging {
+public interface Lodging extends Services{
 }

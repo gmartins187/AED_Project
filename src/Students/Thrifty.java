@@ -1,4 +1,4 @@
 package Students;
 
-public interface Thrifty {
+public interface Thrifty extends Student{
 }

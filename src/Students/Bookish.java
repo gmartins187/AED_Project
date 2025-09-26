@@ -1,4 +1,4 @@
 package Students;
 
-public interface Bookish {
+public interface Bookish extends Student{
 }

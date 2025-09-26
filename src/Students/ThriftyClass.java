@@ -1,4 +1,5 @@
 package Students;
 
-public class ThriftyClass {
+public class ThriftyClass extends StudentAbstractClass implements Thrifty {
+
 }

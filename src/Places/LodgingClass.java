@@ -1,4 +1,4 @@
 package Places;
 
-public class LodgingClass {
+public class LodgingClass extends ServicesAbstractClass implements Services{
 }

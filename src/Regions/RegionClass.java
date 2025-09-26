@@ -1,4 +1,4 @@
 package Regions;
 
-public class RegionClass {
+public class RegionClass implements Region {
 }
