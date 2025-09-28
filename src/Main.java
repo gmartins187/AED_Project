@@ -1,3 +1,6 @@
+import App.*;
+import Exceptions.*;
+
 import java.util.Scanner;
 
 public class Main {
@@ -5,6 +8,24 @@ public class Main {
 
     private static final String HELP = "help";
     private static final String EXIT = "exit";
+    private static final String BOUNDS = "bounds";
+    private static final String SAVE = "save";
+    private static final String LOAD = "load";
+    private static final String SERVICE = "service";
+    private static final String SERVICES = "services";
+    private static final String STUDENT = "student";
+    private static final String STUDENTS = "students";
+    private static final String LEAVE = "leave";
+    private static final String GO = "go";
+    private static final String MOVE = "move";
+    private static final String USERS = "users";
+    private static final String STAR = "star";
+    private static final String WHERE = "where";
+    private static final String VISITED = "visited";
+    private static final String RANKING = "ranking";
+    private static final String RANKED = "ranked";
+    private static final String TAG = "tag";
+    private static final String FIND = "find";
 
     private static final String HELP_TEXT = """
     bounds - Defines the new geographic bounding rectangle
@@ -28,6 +49,10 @@ public class Main {
     help - Shows the available commands
     exit - Terminates the execution of the program""";
     private static final String EXIT_TEXT = "Bye!";
+    private static final String NOT_COMMAND_TEXT = "Unknown command. Type help to see available commands.";
+    private static final String INVALID_BOUNDS = "Invalid bounds.";
+    private static final String AREA_EXISTS_ALREADY = "Bounds already exists. Please load it!";
+    private static final String NO_CURRENT_AREA = "System bounds not defined.";
 
 
     public static void main(String[] args){
@@ -44,11 +69,95 @@ public class Main {
         String command = in.next();
 
         while (!command.equals(EXIT)) {
+            HomeAwayApp app = new homeAwayAppClass();
+
             switch (command) {
                 case HELP -> System.out.println(HELP_TEXT);
+                case BOUNDS -> newArea(app, in);
+                case SAVE -> saveArea(app);
+                case LOAD -> loadArea(app, in);
+                case SERVICE -> newService(app, in);
+                case SERVICES ->
+                case STUDENT ->
+                case STUDENTS ->
+                case LEAVE ->
+                case GO ->
+                case MOVE ->
+                case USERS ->
+                case STAR ->
+                case WHERE ->
+                case VISITED ->
+                case RANKING ->
+                case RANKED ->
+                case TAG ->
+                case FIND ->
+                default -> System.out.println(NOT_COMMAND_TEXT);
             }
             command = in.next();
         }
         System.out.println(EXIT_TEXT);
+        in.close();
+    }
+
+
+    /**
+     * Creates a new region in the app
+     * @param app the region manager (app object)
+     * @param in the scanner to read input from
+     */
+    private static void newArea(HomeAwayApp app, Scanner in) {
+        try {
+            int top = in.nextInt();
+            int left = in.nextInt();
+            int bottom = in.nextInt();
+            int right = in.nextInt();
+
+            String areaName = in.next();
+
+            app.newArea(top,left,bottom,right);
+
+            System.out.println(areaName + "created.");
+        } catch (InvalidArea e){
+            System.out.println(INVALID_BOUNDS);
+        } catch (AlreadyExists e){
+            System.out.println(AREA_EXISTS_ALREADY);
+        }
+    }
+
+    /**
+     * Saves the current region to a text file
+     * @param app the region manager (app object)
+     */
+    private static void saveArea(HomeAwayApp app) {
+        try{
+            app.saveArea();
+            System.out.println("saved.");
+        } catch (NoCurrentArea e){
+            System.out.println(NO_CURRENT_AREA);
+        }
+    }
+
+    /**
+     * Loads the region from a text file
+     * @param app the region manager (app object)
+     * @param in the scanner to read input from
+     */
+    private static void loadArea(HomeAwayApp app, Scanner in) {
+        String areaName = in.next();
+        try{
+            app.loadArea(areaName);
+            System.out.println(areaName + "loaded.");
+        } catch (InvalidArea e){
+            System.out.println("Bounds" + areaName + "does not exists.");
+        }
+    }
+
+    /**
+     * Creates and adds a new service in the app
+     * @param app the region manager (app object)
+     * @param in the scanner to read input from
+     */
+    private static void newService(HomeAwayApp app, Scanner in) {
+        //TODO
     }
 }
