@@ -5,6 +5,10 @@ import java.util.Scanner;
 
 public class Main {
 
+    private static final String EATING = "eating";
+    private static final String LODGING = "lodging";
+    private static final String LEISURE = "leisure";
+
 
     private static final String HELP = "help";
     private static final String EXIT = "exit";
@@ -53,6 +57,11 @@ public class Main {
     private static final String INVALID_BOUNDS = "Invalid bounds.";
     private static final String AREA_EXISTS_ALREADY = "Bounds already exists. Please load it!";
     private static final String NO_CURRENT_AREA = "System bounds not defined.";
+    private static final String INVALID_TYPE = "Invalid service type!";
+    private static final String INVALID_LOCATION = "Invalid location.";
+    private static final String INVALID_MENU_PRICE = "Invalid menu price!";
+    private static final String INVALID_DISCOUNT_PRICE = "Invalid discount price!";
+    private static final String ALREADY_EXISTS = " already exists!";
 
 
     public static void main(String[] args){
@@ -158,6 +167,60 @@ public class Main {
      * @param in the scanner to read input from
      */
     private static void newService(HomeAwayApp app, Scanner in) {
+        String type = in.next();
+        switch(type){
+            case EATING -> newEatingService(app, in);
+            case LODGING -> newLodgingService(app, in);
+            case LEISURE -> newLeisureService(app, in);
+            default -> System.out.println(INVALID_TYPE);
+        }
+    }
+
+    /**
+     * Creates and adds a new eating service in the app
+     * @param app the region manager (app object)
+     * @param in the scanner to read input from
+     */
+    private static void newEatingService(HomeAwayApp app, Scanner in) {
+        String name = "";
+        try {
+            int latitude = in.nextInt();
+            int longitude = in.nextInt();
+            int price = in.nextInt();
+            int value = in.nextInt();
+            name = in.next();
+
+            app.newEatingService(latitude, longitude, price, value, name);
+
+            System.out.println("Eating " + name + " added   .");
+        } catch (InvalidType e){
+            System.out.println(INVALID_TYPE);
+        } catch (InvalidLocation e){
+            System.out.println(INVALID_LOCATION);
+        } catch (InvalidPrice e){
+            System.out.println(INVALID_MENU_PRICE);
+        } catch (InvalidValue e){
+            System.out.println(INVALID_DISCOUNT_PRICE);
+        } catch (AlreadyExists e){
+            System.out.println(name + ALREADY_EXISTS);
+        }
+    }
+
+    /**
+     * Creates and adds a new leisure service in the app
+     * @param app the region manager (app object)
+     * @param in the scanner to read input from
+     */
+    private static void newLeisureService(HomeAwayApp app, Scanner in) {
+        //TODO
+    }
+
+    /**
+     * Creates and adds a new lodging service in the app
+     * @param app the region manager (app object)
+     * @param in the scanner to read input from
+     */
+    private static void newLodgingService(HomeAwayApp app, Scanner in) {
         //TODO
     }
 }
