@@ -29,4 +29,20 @@ public interface HomeAwayApp {
      * @throws InvalidArea if the area does not exist
      */
     void loadArea(String areaName);
+
+
+    /**
+     * Creates and adds a new service in the app
+     * @param latitude the latitude of the service
+     * @param longitude the longitude of the service
+     * @param price the price of the service
+     * @param value the discount of the service
+     * @param name the name of the service
+     * @throws InvalidType if there is no type that matches
+     * @throws InvalidLocation if the location is invalid
+     * @throws InvalidPrice if the price is less or equal to 0
+     * @throws InvalidValue if the discount on the menu is less than 0 or greater than 100
+     * @throws AlreadyExists if the service already exists
+     */
+    void newEatingService(int latitude, int longitude, int price, int value, String name);
 }
