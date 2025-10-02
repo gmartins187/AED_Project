@@ -45,4 +45,10 @@ public interface HomeAwayApp {
      * @throws AlreadyExists if the service already exists
      */
     void newEatingService(int latitude, int longitude, int price, int value, String name);
+
+    /**
+     * Lists all services in the current region
+     * @throws NoCurrentArea if there is no current area defined
+     */
+    void ListAllServices();
 }

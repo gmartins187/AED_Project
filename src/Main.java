@@ -62,6 +62,7 @@ public class Main {
     private static final String INVALID_MENU_PRICE = "Invalid menu price!";
     private static final String INVALID_DISCOUNT_PRICE = "Invalid discount price!";
     private static final String ALREADY_EXISTS = " already exists!";
+    private static final String NO_SERVICES = "No services yet!";
 
 
     public static void main(String[] args){
@@ -86,7 +87,7 @@ public class Main {
                 case SAVE -> saveArea(app);
                 case LOAD -> loadArea(app, in);
                 case SERVICE -> newService(app, in);
-                case SERVICES ->
+                case SERVICES -> allServices(app);
                 case STUDENT ->
                 case STUDENTS ->
                 case LEAVE ->
@@ -222,5 +223,17 @@ public class Main {
      */
     private static void newLodgingService(HomeAwayApp app, Scanner in) {
         //TODO
+    }
+
+    /**
+     * Lists all services in the app
+     * @param app the region manager (app object)
+     */
+    private static void allServices(HomeAwayApp app) {
+        try{
+            app.ListAllServices();
+        } catch (DoesntExist e){
+            System.out.println(NO_SERVICES);
+        }
     }
 }
