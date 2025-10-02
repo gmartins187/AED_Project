@@ -1,4 +1,5 @@
-import App.*;
+import App.HomeAwayApp;
+import App.homeAwayAppClass;
 import Exceptions.*;
 
 import java.util.Scanner;
