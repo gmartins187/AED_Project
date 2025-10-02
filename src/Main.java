@@ -192,7 +192,7 @@ public class Main {
 
             app.newEatingService(latitude, longitude, price, value, name);
 
-            System.out.println("Eating " + name + " added   .");
+            System.out.println("Eating " + name + " added.");
         } catch (InvalidType e){
             System.out.println(INVALID_TYPE);
         } catch (InvalidLocation e){
