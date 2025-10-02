@@ -1,5 +1,4 @@
-import App.HomeAwayApp;
-import App.homeAwayAppClass;
+import App.*;
 import Exceptions.*;
 
 import java.util.Scanner;
@@ -21,6 +20,9 @@ public class Main {
     private static final String INVALID_DISCOUNT_PRICE = "Invalid discount price!";
     private static final String ALREADY_EXISTS = " already exists!";
     private static final String NO_SERVICES = "No services yet!";
+    private static final String INVALID_STU_TYPE = "Invalid student type!";
+    private static final String INVALID_LODGING = "Lodging %s does not exist!";
+    private static final String LODGING_FULL = "Lodging %s is full!";
 
 
     public static void main(String[] args){
@@ -45,9 +47,9 @@ public class Main {
                 case LOAD -> loadArea(app, in);
                 case SERVICE -> newService(app, in);
                 case SERVICES -> allServices(app);
-                case STUDENT ->
-                case STUDENTS ->
-                case LEAVE ->
+                case STUDENT -> newStudent(app, in);
+                case LEAVE -> removeStudent(app, in);
+                case STUDENTS -> listStudents(app);
                 case GO ->
                 case MOVE ->
                 case USERS ->
@@ -217,5 +219,56 @@ public class Main {
         } catch (DoesntExist e){
             System.out.println(NO_SERVICES);
         }
+    }
+
+
+    /**
+     * Creates and adds a new student in the app
+     * @param app the region manager (app object)
+     * @param in the scanner to read input from
+     */
+    private static void newStudent(HomeAwayApp app, Scanner in) {
+        String name = "";
+        String lodgingName = "";
+        try{
+            String type = in.next().trim();
+            name = in.next();
+            String country = in.next().trim();
+            lodgingName = in.next();
+
+            app.newStudent(type, name, country, lodgingName);
+        } catch (InvalidType e){
+            System.out.println(INVALID_STU_TYPE);
+        }
+        //TEST PRINTF
+        catch (InvalidLocation e){
+            System.out.printf(INVALID_LODGING, lodgingName);
+        } catch (ServiceFull e){
+            System.out.printf(LODGING_FULL, lodgingName);
+        } catch (AlreadyExists e){
+            System.out.println(name + ALREADY_EXISTS);
+        }
+    }
+
+    /**
+     * Removes a student from the app
+     * @param app the region manager (app object)
+     * @param in the scanner to read input from
+     */
+    private static void removeStudent(HomeAwayApp app, Scanner in) {
+        String name = in.next();
+        try{
+            app.removeStudent(name);
+        } catch (DoesntExist e){
+            System.out.println(name + " does not exist!");
+        }
+    }
+
+    /**
+     * Lists all students in the app
+     * @param app the region manager (app object)
+     */
+    private static void listStudents(HomeAwayApp app) {
+        //TODO
     }
 }

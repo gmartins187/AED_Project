@@ -51,4 +51,23 @@ public interface HomeAwayApp {
      * @throws NoCurrentArea if there is no current area defined
      */
     void listAllServices();
+
+    /**
+     * Creates and adds a new student in the app
+     * @param type the type of lodging (hostel, hotel, apartment)
+     * @param name the name of the student
+     * @param country the country of the student
+     * @param lodgingName the name of the lodging
+     * @throws InvalidType if there is no type that matches
+     * @throws InvalidLocation if the location is invalid
+     * @throws AlreadyExists if the student already exists
+     */
+    void newStudent(String type, String name, String country, String lodgingName);
+
+    /**
+     * Removes a student from the app
+     * @param name the name of the student to remove
+     * @throws DoesntExist if the student does not exist
+     */
+    void removeStudent(String name);
 }
