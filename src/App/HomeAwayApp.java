@@ -70,4 +70,21 @@ public interface HomeAwayApp {
      * @throws DoesntExist if the student does not exist
      */
     void removeStudent(String name);
+
+
+    /**
+     * Change the location of a student
+     * @param name the name of the student
+     * @param locationName the name of the new location
+     * @throws DoesntExist if the student or location do not exist
+     */
+    void changeStudentLocation(String name, String locationName);
+
+    /**
+     * Lists all students in the app, or only those from a specific country if provided
+     * @param from the country to filter by, or null to list all students
+     * @throws DoesntExist if there are no students
+     * @throws InvalidArea if there are no students in the app from that specific country
+     */
+    void listStudents(String from);
 }

@@ -22,19 +22,24 @@ public class Main {
     private static final String NO_SERVICES = "No services yet!";
     private static final String INVALID_STU_TYPE = "Invalid student type!";
     private static final String INVALID_LODGING = "Lodging %s does not exist!";
-    private static final String LODGING_FULL = "Lodging %s is full!";
+    private static final String SERVICE_FULL = "%S %s is full!";
+    private static final String UNKNOWN = "Unknown %s!";
+    private static final String DOES_NOT_EXIST = "%s does not exist!";
+    private static final String INVALID_SERVICE = "%s is not a valid service!";
+    private static final String ALREADY_THERE = "Already there!";
+    private static final String NO_STUDENTS = "No students yet!";
+    private static final String NO_STUDENTS_FROM = "No students from %s!";
 
 
-    public static void main(String[] args){
-        commands();
-    }
+
+    public static void main(String[] args){commands();}
 
     /**
      * Handles all commands.
      */
     private static void commands() {
         Scanner in = new Scanner(System.in);
-        HomeAwayApp app = new homeAwayAppClass();
+        HomeAwayApp App = new homeAwayAppClass();
 
         Command command;
         do{
@@ -42,30 +47,32 @@ public class Main {
             switch (command){
                 case EXIT -> System.out.println(EXIT_TEXT);
                 case HELP -> {executeHelp();in.nextLine();}
-                case BOUNDS -> newArea(app, in);
-                case SAVE -> saveArea(app);
-                case LOAD -> loadArea(app, in);
-                case SERVICE -> newService(app, in);
-                case SERVICES -> allServices(app);
-                case STUDENT -> newStudent(app, in);
-                case LEAVE -> removeStudent(app, in);
-                case STUDENTS -> listStudents(app);
-                case GO ->
-                case MOVE ->
-                case USERS ->
-                case STAR ->
-                case WHERE ->
-                case VISITED ->
-                case RANKING ->
-                case RANKED ->
-                case TAG ->
-                case FIND ->
+                case BOUNDS -> newArea(App, in);
+                case SAVE -> saveArea(App);
+                case LOAD -> loadArea(App, in);
+                case SERVICE -> newService(App, in);
+                case SERVICES -> allServices(App);
+                case STUDENT -> newStudent(App, in);
+                case LEAVE -> removeStudent(App, in);
+                case STUDENTS -> listStudents(App, in);
+                case GO -> changeStudentLocation(App, in);
+                case MOVE -> changeStudentHome(App, in);
+                case USERS -> listUsersInService(App, in);
+                case WHERE -> locateStudent(App, in);
+                case VISITED -> listVisitedLocations(App, in);
+                case STAR -> rateService(App, in);
+                case RANKING -> listServicesByRating(App);
+                case RANKED -> listServicesByTypeAndRating(App, in);
+                case TAG -> allServicesWithTag(App, in);
+                case FIND -> mostRelevantService(App, in);
                 case UNKNOWN -> {System.out.println(NOT_COMMAND_TEXT);
                     in.nextLine();}
             }
         } while(!command.equals(Command.EXIT));
         in.close();
     }
+
+
 
 
     /**
@@ -91,7 +98,6 @@ public class Main {
         for(int i=0; i<help.length-1;i++)
             System.out.println(help[i].getMsg());
     }
-
 
 
     /**
@@ -152,7 +158,7 @@ public class Main {
      * @param in the scanner to read input from
      */
     private static void newService(HomeAwayApp app, Scanner in) {
-        String type = in.next();
+        String type = in.next().toLowerCase();
         switch(type){
             case EATING -> newEatingService(app, in);
             case LODGING -> newLodgingService(app, in);
@@ -244,7 +250,7 @@ public class Main {
         catch (InvalidLocation e){
             System.out.printf(INVALID_LODGING, lodgingName);
         } catch (ServiceFull e){
-            System.out.printf(LODGING_FULL, lodgingName);
+            System.out.printf(SERVICE_FULL, LODGING, lodgingName);
         } catch (AlreadyExists e){
             System.out.println(name + ALREADY_EXISTS);
         }
@@ -268,7 +274,131 @@ public class Main {
      * Lists all students in the app
      * @param app the region manager (app object)
      */
-    private static void listStudents(HomeAwayApp app) {
+    private static void listStudents(HomeAwayApp app, Scanner in) {
+        String from = "";
+        try{
+            from = in.next();
+
+            app.listStudents(from);
+        } catch (DoesntExist e){
+            System.out.println(NO_STUDENTS);
+        } catch (InvalidArea e){
+            System.out.printf(NO_STUDENTS_FROM, from);
+        }
+    }
+
+
+    /**
+     * change the location of a student to an eating or leisure place
+     * @param app the region manager (app object)
+     * @param in the scanner to read input from
+     */
+    private static void changeStudentLocation(HomeAwayApp app, Scanner in) {
+        String name = "";
+        String locationName = "";
+        try{
+            name = in.next();
+            locationName = in.next();
+
+            app.changeStudentLocation(name, locationName);
+        } catch (InvalidLocation e){
+            System.out.printf(UNKNOWN, locationName);
+        } catch (DoesntExist e){
+            System.out.printf(DOES_NOT_EXIST, name);
+        } catch (InvalidService e){
+            System.out.printf(INVALID_SERVICE, locationName);
+        } catch (AlreadyThere e){
+            System.out.println(ALREADY_THERE);
+        } catch (ServiceFull e){
+            System.out.printf(SERVICE_FULL, EATING, locationName);
+        }
+    }
+
+
+    /**
+     * change the home of a student to a lodging place
+     * @param app the region manager (app object)
+     * @param in the scanner to read input from
+     */
+    private static void changeStudentHome(HomeAwayApp app, Scanner in) {
+        //TODO
+    }
+
+
+    /**
+     * List users in a service (eating or lodging)
+     * @param app the region manager (app object)
+     * @param in the scanner to read input from
+     */
+    private static void listUsersInService(HomeAwayApp app, Scanner in) {
+        //TODO
+    }
+
+
+    /**
+     * Locates a student (current service location)
+     * @param app the region manager (app object)
+     * @param in the scanner to read input from
+     */
+    private static void locateStudent(HomeAwayApp app, Scanner in) {
+        //TODO
+    }
+
+
+    /**
+     * Lists locations visited by one student
+     * @param app the region manager (app object)
+     * @param in the scanner to read input from
+     */
+    private static void listVisitedLocations(HomeAwayApp app, Scanner in) {
+        //TODO
+    }
+
+
+    /**
+     * Rates a service with a star and a comment
+     * @param app the region manager (app object)
+     * @param in the scanner to read input from
+     */
+    private static void rateService(HomeAwayApp app, Scanner in) {
+        //TODO
+    }
+
+
+    /**
+     * Lists services ordered by rating
+     * @param app the region manager (app object)
+     */
+    private static void listServicesByRating(HomeAwayApp app) {
+        //TODO
+    }
+
+    /**
+     * Lists the service(s) of the indicated type with the given score that are closer to the student location.
+     * @param app the region manager (app object)
+     * @param in the scanner to read input from
+     */
+    private static void listServicesByTypeAndRating(HomeAwayApp app, Scanner in) {
+        //TODO
+    }
+
+
+    /**
+     * Lists all services that have at least one review whose description contains the specified word.
+     * @param app the region manager (app object)
+     * @param in the scanner to read input from
+     */
+    private static void allServicesWithTag(HomeAwayApp app, Scanner in) {
+        //TODO
+    }
+
+
+    /**
+     * Displays the most relevant service of a certain type, for a specific student
+     * @param app the region manager (app object)
+     * @param in the scanner to read input from
+     */
+    private static void mostRelevantService(HomeAwayApp app, Scanner in) {
         //TODO
     }
 }
