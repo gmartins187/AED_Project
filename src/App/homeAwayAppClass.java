@@ -15,7 +15,7 @@ public class homeAwayAppClass implements HomeAwayApp{
 
 
     @Override
-    public void newArea(int top, int left, int bottom, int right) {
+    public void newArea(int top, int left, int bottom, int right, String name) {
 
     }
 
@@ -57,5 +57,9 @@ public class homeAwayAppClass implements HomeAwayApp{
     @Override
     public void listStudents(String from) {
 
+    }
+
+    @Override
+    public void changeStudentHome(String name, String lodgingName) {
     }
 }

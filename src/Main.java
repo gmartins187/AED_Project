@@ -29,6 +29,9 @@ public class Main {
     private static final String ALREADY_THERE = "Already there!";
     private static final String NO_STUDENTS = "No students yet!";
     private static final String NO_STUDENTS_FROM = "No students from %s!";
+    private static final String CURRENT_HOME = "That is %s's home!";
+    private static final String LODGING_FULL = "Lodging %s is full!";
+    private static final String INVALID_MOVE = "Move is not acceptable for %s!";
 
 
 
@@ -105,7 +108,7 @@ public class Main {
      * @param app the region manager (app object)
      * @param in the scanner to read input from
      */
-    private static void newArea(HomeAwayApp app, Scanner in) {
+    private static void newArea(HomeAwayApp app, Scanner in){
         try {
             int top = in.nextInt();
             int left = in.nextInt();
@@ -114,7 +117,7 @@ public class Main {
 
             String areaName = in.next();
 
-            app.newArea(top,left,bottom,right);
+            app.newArea(top,left,bottom,right, areaName);
 
             System.out.println(areaName + "created.");
         } catch (InvalidArea e){
@@ -321,7 +324,24 @@ public class Main {
      * @param in the scanner to read input from
      */
     private static void changeStudentHome(HomeAwayApp app, Scanner in) {
-        //TODO
+        String name = "";
+        String lodgingName = "";
+        try{
+            name = in.next();
+            lodgingName = in.next();
+
+            app.changeStudentHome(name, lodgingName);
+        } catch (InvalidLocation e){
+            System.out.printf(INVALID_LODGING, lodgingName);
+        } catch (DoesntExist e){
+            System.out.printf(DOES_NOT_EXIST, name);
+        } catch (AlreadyThere e){
+            System.out.printf(CURRENT_HOME, name);
+        } catch (ServiceFull e){
+            System.out.printf(LODGING_FULL, lodgingName);
+        } catch (InvalidService e){
+            System.out.printf(INVALID_MOVE, name);
+        }
     }
 
 

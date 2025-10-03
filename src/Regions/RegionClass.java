@@ -42,13 +42,13 @@ public class RegionClass implements Region {
         this.rightBound = rightBound;
         this.regionName = regionName;
 
-        this.students = new DoublyLinkedList<Student>();
-        this.services = new DoublyLinkedList<Service>();
-
         this.numOfEthnicities = 0;
         this.ethnicityList = new ListInArray<>(numOfEthnicities);
 
         this.numOfStudents = 0;
         this.numOfServices = 0;
+
+        this.students = new DoublyLinkedList<Student>();
+        this.services = new DoublyLinkedList<Service>();
     }
 }

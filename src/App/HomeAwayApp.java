@@ -11,10 +11,11 @@ public interface HomeAwayApp {
      * @param left the left boundary
      * @param bottom the bottom boundary
      * @param right the right boundary
+     * @param name the name of the area
      * @throws InvalidArea if the area is invalid
      * @throws AlreadyExists if the area already exists
      */
-    void newArea(int top, int left, int bottom, int right);
+    void newArea(int top, int left, int bottom, int right, String name);
 
     /**
      * Saves the current region to a text file
@@ -87,4 +88,16 @@ public interface HomeAwayApp {
      * @throws InvalidArea if there are no students in the app from that specific country
      */
     void listStudents(String from);
+
+    /**
+     * Change the home of a student
+     * @param name the name of the student
+     * @param lodgingName the name of the new lodging
+     * @throws InvalidLocation if the lodging does not exist or is not a lodging
+     * @throws DoesntExist if the student do not exist
+     * @throws AlreadyThere if the student is already at that lodging
+     * @throws ServiceFull if the lodging is full
+     * @throws InvalidService if the lodging is not valid for the student type
+     */
+    void changeStudentHome(String name, String lodgingName);
 }
