@@ -32,6 +32,18 @@ public class Main {
     private static final String CURRENT_HOME = "That is %s's home!";
     private static final String LODGING_FULL = "Lodging %s is full!";
     private static final String INVALID_MOVE = "Move is not acceptable for %s!";
+    private static final String INVALID_CAPACITY = "Invalid capacity!";
+    private static final String INVALID_ROOM_PRICE = "Invalid room price!";
+    private static final String INVALID_TICKET_PRICE = "Invalid ticket price!";
+    private static final String DOES_NOT_CONTROL = "%s does not control student entry and exit!";
+    private static final String HAS_NOT_VISITED = "%s has not visited any locations!";
+    private static final String IS_THRIFTY = "%s is thrifty!";
+    private static final String INVALID_RATE = "Invalid evaluation!";
+    private static final String NO_SERVICES_SYS = "No services in the system.";
+    private static final String INVALID_STARS = "Invalid stars!";
+    private static final String NO_TYPE_SERVICES = "No %s services!";
+    private static final String NO_TYPE_SERVICES_AVG = "No %s services with average!";
+    private static final String NO_TAG = "There are no services with this tag!";
 
 
 
@@ -155,36 +167,24 @@ public class Main {
         }
     }
 
+
     /**
      * Creates and adds a new service in the app
      * @param app the region manager (app object)
      * @param in the scanner to read input from
      */
     private static void newService(HomeAwayApp app, Scanner in) {
-        String type = in.next().toLowerCase();
-        switch(type){
-            case EATING -> newEatingService(app, in);
-            case LODGING -> newLodgingService(app, in);
-            case LEISURE -> newLeisureService(app, in);
-            default -> System.out.println(INVALID_TYPE);
-        }
-    }
-
-    /**
-     * Creates and adds a new eating service in the app
-     * @param app the region manager (app object)
-     * @param in the scanner to read input from
-     */
-    private static void newEatingService(HomeAwayApp app, Scanner in) {
         String name = "";
+        String type = "";
         try {
+            type = in.next().trim();
             int latitude = in.nextInt();
             int longitude = in.nextInt();
-            int price = in.nextInt();
-            int value = in.nextInt();
+            int value1 = in.nextInt();
+            int value2 = in.nextInt();
             name = in.next();
 
-            app.newEatingService(latitude, longitude, price, value, name);
+            app.newService(latitude, longitude, value1, value2, name);
 
             System.out.println("Eating " + name + " added.");
         } catch (InvalidType e){
@@ -192,31 +192,20 @@ public class Main {
         } catch (InvalidLocation e){
             System.out.println(INVALID_LOCATION);
         } catch (InvalidPrice e){
-            System.out.println(INVALID_MENU_PRICE);
+            switch(type){
+                case EATING -> System.out.println(INVALID_MENU_PRICE);
+                case LODGING -> System.out.println(INVALID_ROOM_PRICE);
+                case LEISURE -> System.out.println(INVALID_TICKET_PRICE);
+            }
         } catch (InvalidValue e){
             System.out.println(INVALID_DISCOUNT_PRICE);
+        } catch (ServiceFull e) {
+            System.out.println(INVALID_CAPACITY);
         } catch (AlreadyExists e){
             System.out.println(name + ALREADY_EXISTS);
         }
     }
 
-    /**
-     * Creates and adds a new leisure service in the app
-     * @param app the region manager (app object)
-     * @param in the scanner to read input from
-     */
-    private static void newLeisureService(HomeAwayApp app, Scanner in) {
-        //TODO
-    }
-
-    /**
-     * Creates and adds a new lodging service in the app
-     * @param app the region manager (app object)
-     * @param in the scanner to read input from
-     */
-    private static void newLodgingService(HomeAwayApp app, Scanner in) {
-        //TODO
-    }
 
     /**
      * Lists all services in the app
@@ -225,7 +214,7 @@ public class Main {
     private static void allServices(HomeAwayApp app) {
         try{
             app.listAllServices();
-        } catch (DoesntExist e){
+        } catch (DoesNotExist e){
             System.out.println(NO_SERVICES);
         }
     }
@@ -268,7 +257,7 @@ public class Main {
         String name = in.next();
         try{
             app.removeStudent(name);
-        } catch (DoesntExist e){
+        } catch (DoesNotExist e){
             System.out.println(name + " does not exist!");
         }
     }
@@ -283,7 +272,7 @@ public class Main {
             from = in.next();
 
             app.listStudents(from);
-        } catch (DoesntExist e){
+        } catch (DoesNotExist e){
             System.out.println(NO_STUDENTS);
         } catch (InvalidArea e){
             System.out.printf(NO_STUDENTS_FROM, from);
@@ -306,7 +295,7 @@ public class Main {
             app.changeStudentLocation(name, locationName);
         } catch (InvalidLocation e){
             System.out.printf(UNKNOWN, locationName);
-        } catch (DoesntExist e){
+        } catch (DoesNotExist e){
             System.out.printf(DOES_NOT_EXIST, name);
         } catch (InvalidService e){
             System.out.printf(INVALID_SERVICE, locationName);
@@ -333,7 +322,7 @@ public class Main {
             app.changeStudentHome(name, lodgingName);
         } catch (InvalidLocation e){
             System.out.printf(INVALID_LODGING, lodgingName);
-        } catch (DoesntExist e){
+        } catch (DoesNotExist e){
             System.out.printf(DOES_NOT_EXIST, name);
         } catch (AlreadyThere e){
             System.out.printf(CURRENT_HOME, name);
@@ -351,7 +340,19 @@ public class Main {
      * @param in the scanner to read input from
      */
     private static void listUsersInService(HomeAwayApp app, Scanner in) {
-        //TODO
+        String serviceName = "";
+        try{
+            String order = in.next();
+            serviceName = in.next();
+
+            app.listUsersInService(order, serviceName);
+        } catch (InvalidOrder e){
+            System.out.println("This order does not exist!");
+        } catch (DoesNotExist e){
+            System.out.printf(DOES_NOT_EXIST, serviceName);
+        } catch (InvalidType e){
+            System.out.printf(DOES_NOT_CONTROL, serviceName);
+        }
     }
 
 
@@ -361,7 +362,14 @@ public class Main {
      * @param in the scanner to read input from
      */
     private static void locateStudent(HomeAwayApp app, Scanner in) {
-        //TODO
+        String name = "";
+        try{
+            name = in.next();
+
+            app.locateStudent(name);
+        } catch (DoesNotExist e){
+            System.out.printf(DOES_NOT_EXIST, name);
+        }
     }
 
 
@@ -371,7 +379,18 @@ public class Main {
      * @param in the scanner to read input from
      */
     private static void listVisitedLocations(HomeAwayApp app, Scanner in) {
-        //TODO
+        String name = "";
+        try{
+            name = in.next();
+
+            app.listVisitedLocations(name);
+        } catch (DoesNotExist e){
+            System.out.printf(DOES_NOT_EXIST, name);
+        } catch (InvalidType e){
+            System.out.printf(IS_THRIFTY, name);
+        } catch (Untouched e){
+            System.out.printf(HAS_NOT_VISITED, name);
+        }
     }
 
 
@@ -381,7 +400,18 @@ public class Main {
      * @param in the scanner to read input from
      */
     private static void rateService(HomeAwayApp app, Scanner in) {
-        //TODO
+        String name = "";
+        try {
+            int numericRate = in.nextInt();
+            name = in.next();
+            String tag = in.next();
+
+            app.rateService(name, numericRate, tag);
+        } catch (InvalidValue e){
+            System.out.println(INVALID_RATE);
+        } catch (DoesNotExist e){
+            System.out.printf(DOES_NOT_EXIST, name);
+        }
     }
 
 
@@ -390,8 +420,13 @@ public class Main {
      * @param app the region manager (app object)
      */
     private static void listServicesByRating(HomeAwayApp app) {
-        //TODO
+        try {
+            app.listServicesByRating();
+        } catch (DoesNotExist e){
+            System.out.println(NO_SERVICES_SYS);
+        }
     }
+
 
     /**
      * Lists the service(s) of the indicated type with the given score that are closer to the student location.
@@ -399,7 +434,25 @@ public class Main {
      * @param in the scanner to read input from
      */
     private static void listServicesByTypeAndRating(HomeAwayApp app, Scanner in) {
-        //TODO
+        String type = "";
+        String name = "";
+        try {
+            int numericRate = in.nextInt();
+            type = in.next().trim();
+            name = in.next();
+
+            app.listServicesByTypeAndRating(numericRate, type, name);
+        } catch (InvalidValue e) {
+            System.out.println(INVALID_STARS);
+        } catch (DoesNotExist e) {
+            System.out.printf(DOES_NOT_EXIST, name);
+        } catch (InvalidType e) {
+            System.out.println(INVALID_TYPE);
+        } catch (Untouched e) {
+            System.out.printf(NO_TYPE_SERVICES, type);
+        } catch (ServiceFull e) {
+            System.out.printf(NO_TYPE_SERVICES_AVG, type);
+        }
     }
 
 
@@ -409,7 +462,13 @@ public class Main {
      * @param in the scanner to read input from
      */
     private static void allServicesWithTag(HomeAwayApp app, Scanner in) {
-        //TODO
+        try {
+            String tag = in.next();
+
+            app.allServicesWithTag(tag);
+        } catch (Untouched e) {
+            System.out.println(NO_TAG);
+        }
     }
 
 
@@ -419,6 +478,19 @@ public class Main {
      * @param in the scanner to read input from
      */
     private static void mostRelevantService(HomeAwayApp app, Scanner in) {
-        //TODO
+        String name = "";
+        String type = "";
+        try {
+            name = in.next();
+            type = in.next().trim();
+
+            app.mostRelevantService(name, type);
+        } catch (InvalidType e) {
+            System.out.println(INVALID_TYPE);
+        } catch (DoesNotExist e) {
+            System.out.printf(DOES_NOT_EXIST, name);
+        } catch (Untouched e) {
+            System.out.printf(NO_TYPE_SERVICES, type);
+        }
     }
 }

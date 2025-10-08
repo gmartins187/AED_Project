@@ -33,21 +33,6 @@ public interface HomeAwayApp {
 
 
     /**
-     * Creates and adds a new service in the app
-     * @param latitude the latitude of the service
-     * @param longitude the longitude of the service
-     * @param price the price of the service
-     * @param value the discount of the service
-     * @param name the name of the service
-     * @throws InvalidType if there is no type that matches
-     * @throws InvalidLocation if the location is invalid
-     * @throws InvalidPrice if the price is less or equal to 0
-     * @throws InvalidValue if the discount on the menu is less than 0 or greater than 100
-     * @throws AlreadyExists if the service already exists
-     */
-    void newEatingService(int latitude, int longitude, int price, int value, String name);
-
-    /**
      * Lists all services in the current area
      * @throws NoCurrentArea if there is no current area defined
      */
@@ -68,7 +53,7 @@ public interface HomeAwayApp {
     /**
      * Removes a student from the app
      * @param name the name of the student to remove
-     * @throws DoesntExist if the student does not exist
+     * @throws DoesNotExist if the student does not exist
      */
     void removeStudent(String name);
 
@@ -77,14 +62,14 @@ public interface HomeAwayApp {
      * Change the location of a student
      * @param name the name of the student
      * @param locationName the name of the new location
-     * @throws DoesntExist if the student or location do not exist
+     * @throws DoesNotExist if the student or location do not exist
      */
     void changeStudentLocation(String name, String locationName);
 
     /**
      * Lists all students in the app, or only those from a specific country if provided
      * @param from the country to filter by, or null to list all students
-     * @throws DoesntExist if there are no students
+     * @throws DoesNotExist if there are no students
      * @throws InvalidArea if there are no students in the app from that specific country
      */
     void listStudents(String from);
@@ -94,10 +79,107 @@ public interface HomeAwayApp {
      * @param name the name of the student
      * @param lodgingName the name of the new lodging
      * @throws InvalidLocation if the lodging does not exist or is not a lodging
-     * @throws DoesntExist if the student do not exist
+     * @throws DoesNotExist if the student do not exist
      * @throws AlreadyThere if the student is already at that lodging
      * @throws ServiceFull if the lodging is full
      * @throws InvalidService if the lodging is not valid for the student type
      */
     void changeStudentHome(String name, String lodgingName);
+
+
+    /**
+     * Creates and adds a new service in the app
+     * @param latitude the latitude of the service
+     * @param longitude the longitude of the service
+     * @param value1 the price of the service
+     * @param value2 the discount or the capacity of the service
+     * @param name the name of the service
+     * @throws InvalidType if there is no type that matches
+     * @throws InvalidLocation if the location is invalid
+     * @throws InvalidPrice if the price is invalid
+     * @throws InvalidValue if the value is invalid
+     * @throws ServiceFull if the service is full
+     * @throws AlreadyExists if the service already exists
+     */
+    void newService(int latitude, int longitude, int value1, int value2, String name);
+
+
+    /**
+     * Lists all users that have used a specific service, ordered by first or last.
+     * @param order the order to list the users (name or times)
+     * @param serviceName the name of the service
+     * @throws InvalidOrder if the sign order is not valid
+     * @throws DoesNotExist if the service does not exist or has no users
+     * @throws InvalidType if the order is not valid
+     */
+    void listUsersInService(String order, String serviceName);
+
+    /**
+     * Locates a student and shows their details
+     * @param name the name of the student
+     * @throws DoesNotExist if the student does not exist
+     */
+    void locateStudent(String name);
+
+    /**
+     * Lists all locations a student has visited
+     * @param name the name of the student
+     * @throws DoesNotExist if the student does not exist or has not visited any locationsq
+     * @throws InvalidType if the student is thrifty
+     * @throws Untouched if the student has not visited any locations
+     */
+    void listVisitedLocations(String name);
+
+    /**
+     * Rates a service
+     * @param name the name of the service
+     * @param numericRate the numeric rate (1-5)
+     * @param tag the tag to add to the service along the numeric rate
+     */
+    void rateService(String name, int numericRate, String tag);
+
+    /**
+     * List all services ordered by their average rating (from highest to lowest).
+     * If two services have the same average rating, order them by the time they were updated to the system.
+     * @throws DoesNotExist if there are no services in the system
+     */
+    void listServicesByRating()
+            throws DoesNotExist;
+
+    /**
+     * Lists the service(s) of the indicated type with the given score that are closer to the student location.
+     *
+     * @param numericRate The desired average star rating (between 1 and 5).
+     * @param type The service type to search for.
+     * @param studentName The student's name to calculate the distance from.
+     * @throws InvalidValue If the number of stars is invalid.
+     * @throws DoesNotExist If the student does not exist.
+     * @throws InvalidType If the service type is invalid.
+     * @throws Untouched If no services of that type exist.
+     * @throws ServiceFull If no services of that type with the specified average rating exist.
+     */
+    void listServicesByTypeAndRating(int numericRate, String type, String studentName)
+            throws InvalidValue, DoesNotExist, InvalidType, Untouched, ServiceFull;
+
+    /**
+     * Lists all services that have the specified 'tag' in their reviews.
+     *
+     * @param tag The word (case-insensitive) to search for in the review descriptions.
+     * @throws Untouched If there are no services with reviews containing the 'tag'.
+     */
+    void allServicesWithTag(String tag) throws Untouched;
+
+    /**
+     * Finds the most relevant service of a certain type for a specific student.
+     * Relevance is determined by the student's type (best average for 'bookish'/'outgoing', least expensive for 'thrifty').
+     *
+     * @param studentName The student's name.
+     * @param type The service type (eating, lodging, or leisure).
+     * @throws InvalidType If the service type is invalid.
+     * @throws DoesNotExist If the student does not exist.
+     * @throws Untouched If no services of the specified type exist.
+     */
+    void mostRelevantService(String studentName, String type)
+            throws InvalidType, DoesNotExist, Untouched;
+
 }
