@@ -11,10 +11,10 @@ import java.io.File;
 
 public class RegionClass implements Region {
 
-    private int topBound;
-    private int lowBound;
-    private int leftBound;
-    private int rightBound;
+    private long topBound;
+    private long lowBound;
+    private long leftBound;
+    private long rightBound;
 
     private String regionName;
 
@@ -37,7 +37,7 @@ public class RegionClass implements Region {
      * @param rightBound the right boundary of the region
      * @param regionName the name of the region
      */
-    public RegionClass(int topBound, int lowBound, int leftBound, int rightBound, String regionName) {
+    public RegionClass(long topBound, long lowBound, long leftBound, long rightBound, String regionName) {
         this.topBound = topBound;
         this.lowBound = lowBound;
         this.leftBound = leftBound;
@@ -55,12 +55,17 @@ public class RegionClass implements Region {
     }
 
     @Override
-    public void save(File file) {
+    public String getName() {
+        return this.regionName;
+    }
+
+    @Override
+    public void save(String name) {
         //TODO
     }
 
     @Override
-    public String getName() {
-        return this.regionName;
+    public void loadRegion() {
+        this.topBound = 2;
     }
 }

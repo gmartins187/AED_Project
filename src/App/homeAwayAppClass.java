@@ -3,8 +3,7 @@ package App;
 import Exceptions.*;
 import Regions.*;
 
-import java.io.File;
-import java.io.FileOutputStream;
+import java.io.*;
 
 public class homeAwayAppClass implements HomeAwayApp{
 
@@ -19,7 +18,7 @@ public class homeAwayAppClass implements HomeAwayApp{
 
 
     @Override
-    public void newArea(int top, int left, int bottom, int right, String name) throws InvalidArea, AlreadyExists{
+    public void newArea(long top, long left, long bottom, long right, String name) throws InvalidArea, AlreadyExists{
         if(getFile(name).exists()){
             throw new AlreadyExists("");
         }else if(validArea(top,left,bottom,right)){
@@ -31,19 +30,47 @@ public class homeAwayAppClass implements HomeAwayApp{
 
 
     @Override
-    public void saveArea() {
+    public void saveArea() throws NoCurrentArea {
         if(currentRegion == null)
             throw new NoCurrentArea("");
         else {
-            currentRegion.save(getFile(currentRegion.getName()));
+
+
+            //try (FileOutputStream fileOut =
+            //             new FileOutputStream(getFile(currentRegion.getName()).getName());
+            //     ObjectOutputStream out =
+            //             new ObjectOutputStream(fileOut)) {
+            //
+            //    out.writeObject(currentRegion);
+            //    currentRegion = null;
+            //
+            //} catch (IOException _) {}
+
+
+            currentRegion.save(getFile(currentRegion.getName()).getName());
             currentRegion = null;
         }
     }
 
     @Override
-    public void loadArea(String areaName) {
+    public void loadArea(String regionName) {
+        if(!hasRegion(regionName))
+            throw new InvalidArea("");
+        else {
 
+
+            //try (
+            //        FileInputStream fileIn = new FileInputStream(getFile(regionName).getName());
+            //        ObjectInputStream in = new ObjectInputStream(fileIn)
+            //) //    //
+            //    currentRegion = (Region) in.readObject()//    //
+            //} catch (IOException | ClassNotFoundException _) {}
+
+            //TODO
+        }
     }
+
+
 
     @Override
     public void listAllServices() {
@@ -119,6 +146,11 @@ public class homeAwayAppClass implements HomeAwayApp{
 
     }
 
+    @Override
+    public String getAreaName() {
+        return currentRegion.getName();
+    }
+
 
     /**
      * @param name the name of the possible new region
@@ -136,7 +168,15 @@ public class homeAwayAppClass implements HomeAwayApp{
      * @param right the right bound
      * @return if the area is valid
      */
-    private boolean validArea(int top, int left, int bottom, int right) {
+    private boolean validArea(long top, long left, long bottom, long right) {
         return top <= bottom && left <= right;
+    }
+
+    /**
+     * @param regioName the name of the region
+     * @return if the region exists
+     */
+    private boolean hasRegion(String regioName) {
+        return getFile(regioName).exists();
     }
 }

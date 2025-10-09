@@ -15,7 +15,7 @@ public interface HomeAwayApp {
      * @throws InvalidArea if the area is invalid
      * @throws AlreadyExists if the area already exists
      */
-    void newArea(int top, int left, int bottom, int right, String name)
+    void newArea(long top, long left, long bottom, long right, String name)
         throws InvalidArea, AlreadyExists;
 
     /**
@@ -183,4 +183,8 @@ public interface HomeAwayApp {
     void mostRelevantService(String studentName, String type)
             throws InvalidType, DoesNotExist, Untouched;
 
+    /**
+     * @return the name of the current region.
+     */
+    String getAreaName();
 }
