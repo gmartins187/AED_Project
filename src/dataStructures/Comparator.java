@@ -1,4 +1,7 @@
 package dataStructures;
+
+import java.io.Serializable;
+
 /**
  *  Comparator interface
  * @author AED  Team
