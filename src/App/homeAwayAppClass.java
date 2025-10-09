@@ -3,6 +3,9 @@ package App;
 import Exceptions.*;
 import Regions.*;
 
+import java.io.File;
+import java.io.FileOutputStream;
+
 public class homeAwayAppClass implements HomeAwayApp{
 
     private static Region currentRegion;
@@ -16,13 +19,25 @@ public class homeAwayAppClass implements HomeAwayApp{
 
 
     @Override
-    public void newArea(int top, int left, int bottom, int right, String name) {
-
+    public void newArea(int top, int left, int bottom, int right, String name) throws InvalidArea, AlreadyExists{
+        if(getFile(name).exists()){
+            throw new AlreadyExists("");
+        }else if(validArea(top,left,bottom,right)){
+            throw new InvalidArea("");
+        }else {
+            currentRegion = new RegionClass(top, bottom, left, right, name);
+        }
     }
+
 
     @Override
     public void saveArea() {
-
+        if(currentRegion == null)
+            throw new NoCurrentArea("");
+        else {
+            currentRegion.save(getFile(currentRegion.getName()));
+            currentRegion = null;
+        }
     }
 
     @Override
@@ -102,5 +117,26 @@ public class homeAwayAppClass implements HomeAwayApp{
     @Override
     public void mostRelevantService(String studentName, String type) throws InvalidType, DoesNotExist, Untouched {
 
+    }
+
+
+    /**
+     * @param name the name of the possible new region
+     * @return the
+     */
+    private File getFile(String name) {
+        String fileName = name.replace(" ", "");
+        return new File ("data" + File.separator + fileName + ".ser");
+    }
+
+    /**
+     * @param top the top bound
+     * @param left the left bound
+     * @param bottom the bottom bound
+     * @param right the right bound
+     * @return if the area is valid
+     */
+    private boolean validArea(int top, int left, int bottom, int right) {
+        return top <= bottom && left <= right;
     }
 }

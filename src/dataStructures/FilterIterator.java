@@ -12,7 +12,21 @@ import dataStructures.exceptions.NoSuchElementException;
  */
 public class FilterIterator<E> implements Iterator<E> {
 
-    //TODO: Left as an exercise.
+    /**
+     *  Iterator of elements to filter.
+     */
+    Iterator<E> iterator;
+
+    /**
+     *  Filter.
+     */
+    Predicate<E> criterion;
+
+    /**
+     * Node with the next element in the iteration.
+     */
+    E nextToReturn;
+
 
     /**
      *

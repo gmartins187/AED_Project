@@ -15,7 +15,8 @@ public interface HomeAwayApp {
      * @throws InvalidArea if the area is invalid
      * @throws AlreadyExists if the area already exists
      */
-    void newArea(int top, int left, int bottom, int right, String name);
+    void newArea(int top, int left, int bottom, int right, String name)
+        throws InvalidArea, AlreadyExists;
 
     /**
      * Saves the current region to a text file

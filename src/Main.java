@@ -61,7 +61,7 @@ public class Main {
             command = getCommand(in);
             switch (command){
                 case EXIT -> System.out.println(EXIT_TEXT);
-                case HELP -> {executeHelp();in.nextLine();}
+                case HELP -> {executeHelp();}
                 case BOUNDS -> newArea(App, in);
                 case SAVE -> saveArea(App);
                 case LOAD -> loadArea(App, in);
