@@ -1,0 +1,11 @@
+Data directory info file
+
+ -> File name
+    - all space characters are erased (Ex. "Lisbon Area" -> "LisbonArea")
+
+ -> Saves info on:
+    - The name of the area
+    - All the services
+    - All the students
+    - The cheapest Places thrifty students have been
+    - The visited places by the students

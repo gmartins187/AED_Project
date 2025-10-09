@@ -7,24 +7,26 @@ import dataStructures.DoublyLinkedList;
 import dataStructures.List;
 import dataStructures.ListInArray;
 
+import java.io.File;
+
 public class RegionClass implements Region {
 
-    int topBound;
-    int lowBound;
-    int leftBound;
-    int rightBound;
+    private int topBound;
+    private int lowBound;
+    private int leftBound;
+    private int rightBound;
 
-    String regionName;
+    private String regionName;
 
 
-    DoublyLinkedList<Student> students;
-    DoublyLinkedList<Service> services;
+    private DoublyLinkedList<Student> students;
+    private DoublyLinkedList<Service> services;
 
     private int numOfEthnicities;
     private List<Ethnicity> ethnicityList;
 
-    int numOfStudents;
-    int numOfServices;
+    private int numOfStudents;
+    private int numOfServices;
 
 
     /**
@@ -50,5 +52,15 @@ public class RegionClass implements Region {
 
         this.students = new DoublyLinkedList<Student>();
         this.services = new DoublyLinkedList<Service>();
+    }
+
+    @Override
+    public void save(File file) {
+        //TODO
+    }
+
+    @Override
+    public String getName() {
+        return this.regionName;
     }
 }
