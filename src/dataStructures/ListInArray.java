@@ -1,5 +1,7 @@
 package dataStructures;
 import dataStructures.exceptions.*;
+
+
 /**
  * List in Array
  * @author AED  Team
@@ -10,10 +12,13 @@ import dataStructures.exceptions.*;
 public class ListInArray<E> implements List<E> {
 
     private static final int FACTOR = 2;
+
+
     /**
      * Array of generic elements E.
      */
     private E[] elems;
+
 
     /**
      * Number of elements in array.
@@ -30,6 +35,8 @@ public class ListInArray<E> implements List<E> {
         elems = (E[]) new Object[dimension];
         counter = 0;
     }
+
+
     /**
      * Returns true iff the list contains no elements.
      *
@@ -38,6 +45,7 @@ public class ListInArray<E> implements List<E> {
     public boolean isEmpty() {
         return counter==0;
     }
+
 
     /**
      * Returns the number of elements in the list.
@@ -48,6 +56,7 @@ public class ListInArray<E> implements List<E> {
         return counter;
     }
 
+
     /**
      * Returns an iterator of the elements in the list (in proper sequence).
      *
@@ -57,6 +66,7 @@ public class ListInArray<E> implements List<E> {
         return new ArrayIterator<>(elems,counter);
     }
 
+
     /**
      * Returns the first element of the list.
      *
@@ -64,9 +74,12 @@ public class ListInArray<E> implements List<E> {
      * @throws NoSuchElementException - if size() == 0
      */
     public E getFirst() {
-        //TODO: Left as an exercise.
-        return null;
+        if (size() == 0 ){
+            throw new NoSuchElementException();
+        }
+        return elems[0];
     }
+
 
     /**
      * Returns the last element of the list.
@@ -75,9 +88,12 @@ public class ListInArray<E> implements List<E> {
      * @throws NoSuchElementException - if size() == 0
      */
     public E getLast() {
-        //TODO: Left as an exercise.
-        return null;
+        if (size() == 0 ){
+            throw new NoSuchElementException();
+        }
+        return elems[size()-1];
     }
+
 
     /**
      * Returns the element at the specified position in the list.
@@ -107,6 +123,7 @@ public class ListInArray<E> implements List<E> {
         return 0;
     }
 
+
     /**
      * Inserts the specified element at the first position in the list.
      *
@@ -116,6 +133,7 @@ public class ListInArray<E> implements List<E> {
         //TODO: Left as an exercise.
     }
 
+
     /**
      * Inserts the specified element at the last position in the list.
      *
@@ -124,6 +142,7 @@ public class ListInArray<E> implements List<E> {
     public void addLast(E element) {
         //TODO: Left as an exercise.
     }
+
 
     /**
      * Inserts the specified element at the specified position in the list.
@@ -139,6 +158,7 @@ public class ListInArray<E> implements List<E> {
         //TODO: Left as an exercise.
     }
 
+
     /**
      * Removes and returns the element at the first position in the list.
      *
@@ -150,6 +170,7 @@ public class ListInArray<E> implements List<E> {
         return null;
     }
 
+
     /**
      * Removes and returns the element at the last position in the list.
      *
@@ -160,6 +181,7 @@ public class ListInArray<E> implements List<E> {
         //TODO: Left as an exercise.
         return null;
     }
+
 
     /**
      * Removes and returns the element at the specified position in the list.
