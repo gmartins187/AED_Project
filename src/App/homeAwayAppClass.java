@@ -1,13 +1,31 @@
 package App;
 
+import Ethnicities.Ethnicity;
+import Ethnicities.EthnicityClass;
 import Exceptions.*;
 import Regions.*;
+import Services.EatingClass;
+import Services.LeisureClass;
+import Services.LodgingClass;
+import Services.Service;
+import Students.BookishClass;
+import Students.OutgoingClass;
+import Students.ThriftyClass;
 
 import java.io.*;
 
 public class homeAwayAppClass implements HomeAwayApp{
 
-    private static Region currentRegion;
+    private Region currentRegion;
+
+    private final String EATING = "eating";
+    private final String LODGING = "lodging";
+    private final String LEISURE = "leisure";
+
+    private final String THRIFTY = "thrifty";
+    private final String BOOKISH = "bookish";
+    private final String OUTGOING = "outgoing";
+
 
     /**
      * Constructor for homeAwayAppClass (App)
@@ -27,7 +45,6 @@ public class homeAwayAppClass implements HomeAwayApp{
             currentRegion = new RegionClass(top, bottom, left, right, name);
         }
     }
-
 
     @Override
     public void saveArea() throws NoCurrentArea {
@@ -73,13 +90,70 @@ public class homeAwayAppClass implements HomeAwayApp{
 
 
     @Override
-    public void listAllServices() {
+    public void newService(String type, long latitude, long longitude, int price, int value2, String name) {
+        if(!isSerTypeValid(type))
+            throw new InvalidService("");
+        else if(!this.currentRegion.isValid(latitude,longitude))
+            throw new InvalidLocation("");
+        else if(price == 0)
+            throw new InvalidPrice("");
+        else if(type.equals(LEISURE))
+            if(!(0 <= value2 && value2 <= 100)) throw new InvalidValue("");
+        else if(value2 == 0)
+            throw new InvalidValue("");
+        if(this.currentRegion.getService(name) == null)
+            throw new AlreadyExists("");
+        else {
+            switch (type) {
+                case LEISURE -> this.currentRegion.addService(new LeisureClass(latitude, longitude, price, value2, name, type));
+                case EATING -> this.currentRegion.addService(new EatingClass(latitude,longitude,price,value2,name, type));
+                case LODGING -> this.currentRegion.addService(new LodgingClass(latitude,longitude,price,value2,name, type));
+            }
+        }
+    }
 
+    /**
+     * @param type the type to check
+     * @return if the type of service is valid
+     */
+    private boolean isSerTypeValid(String type) {
+        return type.equals(EATING) || type.equals(LODGING) || type.equals(LEISURE);
+    }
+
+
+    @Override
+    public void listAllServices() {
+        if(!this.currentRegion.hasServices())
+            throw new DoesNotExist("");
+        else
+            this.currentRegion.listAllServices();
     }
 
     @Override
     public void newStudent(String type, String name, String country, String lodgingName) {
+        if(!isStuTypeValid(type))
+            throw new InvalidType("");
+        //else if(TODO filter iterator)
+        //    throw new InvalidLocation("");
+        else if(this.currentRegion.isServiceFull(lodgingName))
+            throw new ServiceFull("");
+        else if(this.currentRegion.getStudent(name) == null)
+            throw new AlreadyExists("");
+        else {
+            Service lodgingService = this.currentRegion.getService(lodgingName);
+            Ethnicity ethnicity = this.currentRegion.getEthnicity(country);
+            switch (type){
+                case OUTGOING -> this.currentRegion.addStudent(new OutgoingClass(name, ethnicity, lodgingService));
+            }
+        }
+    }
 
+    /**
+     * @param type the type to check
+     * @return if this student type is valid
+     */
+    private boolean isStuTypeValid(String type) {
+        return type.equals(BOOKISH) || type.equals(OUTGOING) || type.equals(THRIFTY);
     }
 
     @Override
@@ -101,10 +175,7 @@ public class homeAwayAppClass implements HomeAwayApp{
     public void changeStudentHome(String name, String lodgingName) {
     }
 
-    @Override
-    public void newService(int latitude, int longitude, int value1, int value2, String name) {
 
-    }
 
     @Override
     public void listUsersInService(String order, String serviceName) {

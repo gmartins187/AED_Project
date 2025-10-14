@@ -9,8 +9,9 @@ public class LeisureClass extends ServiceAbstractClass implements Leisure{
      * @param price     the price of the service
      * @param value     the value of the service
      * @param name      the name of the service
+     * @param type      the type of the service
      */
-    public LeisureClass(int latitude, int longitude, int price, int value, String name) {
-        super(latitude, longitude, price, value, name);
+    public LeisureClass(long latitude, long longitude, int price, int value, String name, String type) {
+        super(latitude, longitude, price, value, name, type);
     }
 }
