@@ -6,8 +6,9 @@ import dataStructures.ListInArray;
 
 public abstract class ServiceAbstractClass implements Service {
 
-    private final int latitude;
-    private final int longitude;
+    private final long latitude;
+    private final long longitude;
+    private final String type;
 
 
     private final int price;
@@ -27,15 +28,36 @@ public abstract class ServiceAbstractClass implements Service {
      * @param value the value of the service
      * @param name the name of the service
      */
-    public ServiceAbstractClass(int latitude, int longitude, int price, int value, String name) {
+    public ServiceAbstractClass(long latitude, long longitude, int price, int value, String name, String type) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.price = price;
         this.value = value;
         this.name = name;
+        this.type = type;
 
         this.numberOfRatings = 0;
 
         reviews = new ListInArray<>(numberOfRatings);
+    }
+
+    @Override
+    public String getName(){
+        return this.name;
+    }
+
+    @Override
+    public String getType(){
+        return type;
+    }
+
+    @Override
+    public long getLatitude(){
+        return this.latitude;
+    }
+
+    @Override
+    public long getLongitude(){
+        return this.longitude;
     }
 }

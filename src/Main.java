@@ -10,6 +10,7 @@ public class Main {
     private static final String LEISURE = "leisure";
 
     private static final String EXIT_TEXT = "Bye!";
+    private static final String SAVED = "%s saved.";
     private static final String NOT_COMMAND_TEXT = "Unknown command. Type help to see available commands.";
     private static final String INVALID_BOUNDS = "Invalid bounds.";
     private static final String AREA_EXISTS_ALREADY = "Bounds already exists. Please load it!";
@@ -102,6 +103,7 @@ public class Main {
         } catch (IllegalArgumentException e) {
             return Command.UNKNOWN;
         }
+
     }
 
 
@@ -122,16 +124,16 @@ public class Main {
      */
     private static void newArea(HomeAwayApp app, Scanner in){
         try {
-            int top = in.nextInt();
-            int left = in.nextInt();
-            int bottom = in.nextInt();
-            int right = in.nextInt();
+            long top = in.nextLong();
+            long left = in.nextLong();
+            long bottom = in.nextLong();
+            long right = in.nextLong();
 
-            String areaName = in.next();
+            String areaName = in.nextLine().trim();
 
             app.newArea(top,left,bottom,right, areaName);
 
-            System.out.println(areaName + "created.");
+            System.out.println(areaName + " created.");
         } catch (InvalidArea e){
             System.out.println(INVALID_BOUNDS);
         } catch (AlreadyExists e){
@@ -146,7 +148,7 @@ public class Main {
     private static void saveArea(HomeAwayApp app) {
         try{
             app.saveArea();
-            System.out.println("saved.");
+            System.out.printf(SAVED, app.getAreaName());
         } catch (NoCurrentArea e){
             System.out.println(NO_CURRENT_AREA);
         }
@@ -163,7 +165,7 @@ public class Main {
             app.loadArea(areaName);
             System.out.println(areaName + "loaded.");
         } catch (InvalidArea e){
-            System.out.println("Bounds" + areaName + "does not exists.");
+            System.out.println("Bounds " + areaName + " does not exists.");
         }
     }
 
@@ -177,17 +179,15 @@ public class Main {
         String name = "";
         String type = "";
         try {
-            type = in.next().trim();
-            int latitude = in.nextInt();
-            int longitude = in.nextInt();
+            type = in.next().trim().toLowerCase();
+            long latitude = in.nextLong();
+            long longitude = in.nextLong();
             int value1 = in.nextInt();
             int value2 = in.nextInt();
             name = in.next();
-
-            app.newService(latitude, longitude, value1, value2, name);
-
+            app.newService(type, latitude, longitude, value1, value2, name);
             System.out.println("Eating " + name + " added.");
-        } catch (InvalidType e){
+        } catch (InvalidService e){
             System.out.println(INVALID_TYPE);
         } catch (InvalidLocation e){
             System.out.println(INVALID_LOCATION);
@@ -202,8 +202,7 @@ public class Main {
         } catch (ServiceFull e) {
             System.out.println(INVALID_CAPACITY);
         } catch (AlreadyExists e){
-            System.out.println(name + ALREADY_EXISTS);
-        }
+            System.out.println(name + ALREADY_EXISTS); }
     }
 
 
@@ -229,7 +228,7 @@ public class Main {
         String name = "";
         String lodgingName = "";
         try{
-            String type = in.next().trim();
+            String type = in.next().trim().toLowerCase();
             name = in.next();
             String country = in.next().trim();
             lodgingName = in.next();

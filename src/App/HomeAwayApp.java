@@ -15,7 +15,7 @@ public interface HomeAwayApp {
      * @throws InvalidArea if the area is invalid
      * @throws AlreadyExists if the area already exists
      */
-    void newArea(int top, int left, int bottom, int right, String name)
+    void newArea(long top, long left, long bottom, long right, String name)
         throws InvalidArea, AlreadyExists;
 
     /**
@@ -90,19 +90,20 @@ public interface HomeAwayApp {
 
     /**
      * Creates and adds a new service in the app
+     * @param type the type of service
      * @param latitude the latitude of the service
      * @param longitude the longitude of the service
      * @param value1 the price of the service
      * @param value2 the discount or the capacity of the service
      * @param name the name of the service
-     * @throws InvalidType if there is no type that matches
+     * @throws InvalidService if there is no type that matches
      * @throws InvalidLocation if the location is invalid
      * @throws InvalidPrice if the price is invalid
      * @throws InvalidValue if the value is invalid
      * @throws ServiceFull if the service is full
      * @throws AlreadyExists if the service already exists
      */
-    void newService(int latitude, int longitude, int value1, int value2, String name);
+    void newService(String type, long latitude, long longitude, int value1, int value2, String name);
 
 
     /**
@@ -183,4 +184,8 @@ public interface HomeAwayApp {
     void mostRelevantService(String studentName, String type)
             throws InvalidType, DoesNotExist, Untouched;
 
+    /**
+     * @return the name of the current region.
+     */
+    String getAreaName();
 }
