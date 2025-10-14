@@ -10,25 +10,31 @@ import java.io.Serializable;
      * 
      */
 class DoublyListNode<E> implements Serializable {
+
+
     	/**
     	 * Serial Version UID of the Class
     	 */
         static final long serialVersionUID = 0L;
-        
+
+
     	/**
          * Element stored in the node.
          */
         private E element;
+
 
         /**
          * (Pointer to) the previous node.
          */
         private DoublyListNode<E> previous;
 
+
         /**
          * (Pointer to) the next node.
          */
         private DoublyListNode<E> next;
+
 
         /**
          * 
@@ -38,18 +44,22 @@ class DoublyListNode<E> implements Serializable {
          */
         public DoublyListNode(E theElement, DoublyListNode<E> thePrevious,
                               DoublyListNode<E> theNext ) {
-            //TODO: Left as an exercise.
-
+            //TODO:
+                this.element = theElement;
+                this.previous = thePrevious;
+                this.next = theNext;
         }
+
 
         /**
          * 
          * @param theElement to be contained in the node
          */
         public DoublyListNode(E theElement ) {
-            //TODO: Left as an exercise.
-
+            //TODO
+                this.element = theElement;
         }
+
 
         /**
          * 
@@ -59,6 +69,7 @@ class DoublyListNode<E> implements Serializable {
             return element;
         }
 
+
         /**
          * 
          * @return the previous node
@@ -66,6 +77,7 @@ class DoublyListNode<E> implements Serializable {
         public DoublyListNode<E> getPrevious( ) {
             return previous;
         }
+
 
         /**
          * 
@@ -75,30 +87,33 @@ class DoublyListNode<E> implements Serializable {
             return next;
         }
 
+
         /**
          * 
          * @param newElement - New element to replace the current element
          */
         public void setElement( E newElement ) {
-            //TODO: Left as an exercise.
-
+            //TODO
+                this.element = newElement;
         }
+
 
         /**
          * 
          * @param newPrevious - node to replace the current previous node
          */
         public void setPrevious( DoublyListNode<E> newPrevious ) {
-            //TODO: Left as an exercise.
-
+            //TODO
+                this.previous = newPrevious;
         }
+
 
         /**
          * 
          * @param newNext - node to replace the next node
          */
         public void setNext( DoublyListNode<E> newNext ) {
-            //TODO: Left as an exercise.
-
+            //TODO
+                this.next = newNext;
         }
     }
