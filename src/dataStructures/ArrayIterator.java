@@ -1,4 +1,6 @@
 package dataStructures;
+
+
 /**
  * Array Iterator
  * @author AED  Team
@@ -16,22 +18,25 @@ class ArrayIterator<E> implements Iterator<E> {
         this.counter = counter;
         rewind();
     }
-    
+
+
     @Override
     public void rewind() {
-        //TODO: Left as an exercise.
+        //TODO:
+        this.counter = 0;
     }
+
 
     @Override
     public boolean hasNext() {
-	//TODO: Left as an exercise.
-        return false;
+	    //TODO
+        return counter>current;
     }
+
 
     @Override
     public E next() {
-	//TODO: Left as an exercise.
-        return null;
+	    //TODO
+        return elems[current++];
     }
-
 }

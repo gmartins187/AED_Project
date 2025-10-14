@@ -1,6 +1,7 @@
 package dataStructures;
 import dataStructures.exceptions.NoSuchElementException;
 
+
 /**
  * Implementation of Two Way Iterator for DLList 
  * @author AED  Team
@@ -26,9 +27,12 @@ class DoublyIterator<E> implements Iterator<E> {
      * @param first - Node with the first element of the iteration
      */
     public DoublyIterator(DoublyListNode<E> first) {
-        //TODO: Left as an exercise.
-
+        //TODO:
+        this.firstNode = first;
+        this.nextToReturn = first;
     }
+
+
     /**
      * Returns the next element in the iteration.
      *
@@ -36,26 +40,31 @@ class DoublyIterator<E> implements Iterator<E> {
      * @throws NoSuchElementException - if call is made without verifying pre-condition
      */
     public E next( ){
-        //TODO: Left as an exercise.
-        return null;
+        //TODO:
+        if (!hasNext())
+            throw new NoSuchElementException();
+        E element = nextToReturn.getElement();
+        nextToReturn = nextToReturn.getNext();
+        return element;
     }
+
 
     /**
      * Restart the iterator
      */
     public void rewind() {
-        //TODO: Left as an exercise.
-
+        //TODO:
+        this.nextToReturn = this.firstNode;
     }
+
+
     /**
      * Returns true if next would return an element
      * rather than throwing an exception.
      * @return true iff the iteration has more elements
      */
     public boolean hasNext( ) {
-        //TODO: Left as an exercise.
-        return true;
+        //TODO:
+        return this.nextToReturn != null;
     }
-
-
 }

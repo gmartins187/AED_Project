@@ -12,15 +12,18 @@ import dataStructures.exceptions.NoSuchElementException;
  */
 public class FilterIterator<E> implements Iterator<E> {
 
+
     /**
      *  Iterator of elements to filter.
      */
     Iterator<E> iterator;
 
+
     /**
      *  Filter.
      */
-    Predicate<E> criterion;
+    Predicate<E> filter;
+
 
     /**
      * Node with the next element in the iteration.
@@ -34,8 +37,12 @@ public class FilterIterator<E> implements Iterator<E> {
      * @param criterion filter
      */
     public FilterIterator(Iterator<E> list, Predicate<E> criterion) {
-        //TODO: Left as an exercise.
+        //TODO
+        this.iterator = list;
+        this.filter = filter;
+        advance();
     }
+
 
     /**
      * Returns true if next would return an element
@@ -43,9 +50,10 @@ public class FilterIterator<E> implements Iterator<E> {
      * @return true iff the iteration has more elements
      */
     public boolean hasNext() {
-        //TODO: Left as an exercise.
-        return true;
+        //TODO
+        return nextToReturn != null;
     }
+
 
     /**
      * Returns the next element in the iteration.
@@ -54,16 +62,39 @@ public class FilterIterator<E> implements Iterator<E> {
      * @throws NoSuchElementException - if call is made without verifying pre-condition
      */
     public E next() {
-        //TODO: Left as an exercise.
-        return null;
+        //TODO
+        if(!hasNext()){
+            throw new NoSuchElementException();
+        }else{
+            E current = nextToReturn;
+            advance();
+            return current;
+        }
     }
+
 
     /**
      * Restarts the iteration.
      * After rewind, if the iteration is not empty, next will return the first element.
      */
     public void rewind() {
-        //TODO: Left as an exercise.
+        //TODO
+        iterator.rewind();
+        advance();
     }
 
+
+    /**
+     * private method to find the next element.
+     */
+    private void advance() {
+        nextToReturn = null;
+        while (iterator.hasNext()) {
+            E candidate = iterator.next();
+            if (filter.check(candidate)) {
+                nextToReturn = candidate;
+                break;
+            }
+        }
+    }
 }

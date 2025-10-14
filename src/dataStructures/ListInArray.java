@@ -74,6 +74,7 @@ public class ListInArray<E> implements List<E> {
      * @throws NoSuchElementException - if size() == 0
      */
     public E getFirst() {
+        //TODO
         if (size() == 0 ){
             throw new NoSuchElementException();
         }
@@ -88,6 +89,7 @@ public class ListInArray<E> implements List<E> {
      * @throws NoSuchElementException - if size() == 0
      */
     public E getLast() {
+        //TODO
         if (size() == 0 ){
             throw new NoSuchElementException();
         }
@@ -106,9 +108,19 @@ public class ListInArray<E> implements List<E> {
      * @throws InvalidPositionException if position is not valid in the list
      */
     public E get(int position) {
-        //TODO: Left as an exercise.
-        return null;
+        //TODO
+        if (position < 0 || position > size()){
+            throw new InvalidPositionException();
+        }
+        else if (position == 0){
+            return getFirst();
+        }
+        else if (position == size()-1){
+            return getLast();
+        }
+        else return elems[position];
     }
+
 
     /**
      * Returns the position of the first occurrence of the specified element
@@ -130,7 +142,9 @@ public class ListInArray<E> implements List<E> {
      * @param element to be inserted
      */
     public void addFirst(E element) {
-        //TODO: Left as an exercise.
+        //TODO
+        elems[0] = element;
+        counter++;
     }
 
 
@@ -140,7 +154,9 @@ public class ListInArray<E> implements List<E> {
      * @param element to be inserted
      */
     public void addLast(E element) {
-        //TODO: Left as an exercise.
+        //TODO
+        elems[counter] = element;
+        counter++;
     }
 
 
@@ -155,7 +171,18 @@ public class ListInArray<E> implements List<E> {
      * @throws InvalidPositionException - if position is not valid in the list
      */
     public void add(int position, E element) {
-        //TODO: Left as an exercise.
+        //TODO
+        if (position < 0 || position > size()){
+            throw new InvalidPositionException();
+        }
+        else if (position == 0){
+            addFirst(element);
+        }
+        else if (position == size()){
+            addLast(element);
+        }
+        else elems[position] = element;
+        counter++;
     }
 
 
@@ -166,8 +193,16 @@ public class ListInArray<E> implements List<E> {
      * @throws NoSuchElementException - if size() == 0
      */
     public E removeFirst() {
-        //TODO: Left as an exercise.
-        return null;
+        //TODO
+        E firstElem = getFirst();
+        if (size() == 0 ){
+            throw new NoSuchElementException();
+        }
+        else { for (int i = 0; i < size()-1; i++){
+            elems[i] = elems[i-1]; }
+            counter--;
+        }
+        return firstElem;
     }
 
 
@@ -178,8 +213,16 @@ public class ListInArray<E> implements List<E> {
      * @throws NoSuchElementException - if size() == 0
      */
     public E removeLast() {
-        //TODO: Left as an exercise.
-        return null;
+        //TODO
+        E lastElem = getLast();
+        if (size() == 0 ){
+            throw new NoSuchElementException();
+        }
+        else { for (int i = 0; i < size()-1; i++){
+            elems[i] = elems[i+1]; }
+            counter--;
+        }
+        return lastElem;
     }
 
 
