@@ -1,8 +1,9 @@
 package Regions;
 
 import java.io.File;
+import java.io.Serializable;
 
-public interface Region {
+public interface Region extends Serializable {
 
 
     /**
@@ -12,9 +13,8 @@ public interface Region {
 
     /**
      * Saves the current region to a file in data/ path directory
-     * @param name the name of the region
      */
-    void save(String name);
+    void save();
 
     /**
      * Loads a region to the memory

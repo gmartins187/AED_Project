@@ -18,8 +18,9 @@ public class homeAwayAppClass implements HomeAwayApp{
 
 
     @Override
-    public void newArea(long top, long left, long bottom, long right, String name) throws InvalidArea, AlreadyExists{
-        if(getFile(name).exists()){
+    public void newArea(long top, long left, long bottom, long right, String name)
+            throws InvalidArea, AlreadyExists{
+        if(fileExists(name)){
             throw new AlreadyExists("");
         }else if(validArea(top,left,bottom,right)){
             throw new InvalidArea("");
@@ -28,45 +29,49 @@ public class homeAwayAppClass implements HomeAwayApp{
         }
     }
 
-
     @Override
-    public void saveArea() throws NoCurrentArea {
+    public String saveArea() throws NoCurrentArea {
         if(currentRegion == null)
             throw new NoCurrentArea("");
         else {
+            String areaName = currentRegion.getName();
+            try {
+                File dataFolder = new File("data");
 
+                if (!dataFolder.exists()) dataFolder.mkdir();
 
-            //try (FileOutputStream fileOut =
-            //             new FileOutputStream(getFile(currentRegion.getName()).getName());
-            //     ObjectOutputStream out =
-            //             new ObjectOutputStream(fileOut)) {
-            //
-            //    out.writeObject(currentRegion);
-            //    currentRegion = null;
-            //
-            //} catch (IOException _) {}
+                File file = new File(dataFolder, currentRegion.getName().replace(" ",""));
 
+                FileOutputStream output = new FileOutputStream(file);
+                ObjectOutputStream out = new ObjectOutputStream(output);
 
-            currentRegion.save(getFile(currentRegion.getName()).getName());
+                out.writeObject(currentRegion);
+
+                out.close();
+                output.close();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             currentRegion = null;
+            return areaName;
         }
     }
 
     @Override
-    public void loadArea(String regionName) {
-        if(!hasRegion(regionName))
-            throw new InvalidArea("");
-        else {
+    public void loadArea(String regionName) throws NoCurrentArea{
+        File file = new File("data", regionName.replace(" ", ""));
 
+        if (!file.exists()) throw new NoCurrentArea("");
 
-            //try (
-            //        FileInputStream fileIn = new FileInputStream(getFile(regionName).getName());
-            //        ObjectInputStream in = new ObjectInputStream(fileIn)
-            //) //    //
-            //    currentRegion = (Region) in.readObject()//    //
-            //} catch (IOException | ClassNotFoundException _) {}
+        try (FileInputStream input = new FileInputStream(file);
+             ObjectInputStream in = new ObjectInputStream(input)) {
 
-            //TODO
+            // Lê o objeto
+            currentRegion = (Region) in.readObject();
+
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
@@ -153,12 +158,13 @@ public class homeAwayAppClass implements HomeAwayApp{
 
 
     /**
-     * @param name the name of the possible new region
-     * @return the
+     * Função privada que verifica se o ficheiro existe na pasta "data"
+     * @param fileName nome do ficheiro
+     * @return true se existir, false caso contrário
      */
-    private File getFile(String name) {
-        String fileName = name.replace(" ", "");
-        return new File ("data" + File.separator + fileName + ".ser");
+    private static boolean fileExists(String fileName) {
+        File file = new File("data", fileName);
+        return file.exists();
     }
 
     /**
@@ -170,13 +176,5 @@ public class homeAwayAppClass implements HomeAwayApp{
      */
     private boolean validArea(long top, long left, long bottom, long right) {
         return top <= bottom && left <= right;
-    }
-
-    /**
-     * @param regioName the name of the region
-     * @return if the region exists
-     */
-    private boolean hasRegion(String regioName) {
-        return getFile(regioName).exists();
     }
 }

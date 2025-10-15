@@ -8,6 +8,9 @@ import dataStructures.List;
 import dataStructures.ListInArray;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 
 public class RegionClass implements Region {
 
@@ -60,8 +63,7 @@ public class RegionClass implements Region {
     }
 
     @Override
-    public void save(String name) {
-        //TODO
+    public void save() {
     }
 
     @Override

@@ -147,8 +147,9 @@ public class Main {
      */
     private static void saveArea(HomeAwayApp app) {
         try{
-            app.saveArea();
-            System.out.printf(SAVED, app.getAreaName());
+
+            String areaName = app.saveArea();
+            System.out.printf(SAVED, areaName);
         } catch (NoCurrentArea e){
             System.out.println(NO_CURRENT_AREA);
         }
@@ -160,7 +161,7 @@ public class Main {
      * @param in the scanner to read input from
      */
     private static void loadArea(HomeAwayApp app, Scanner in) {
-        String areaName = in.next();
+        String areaName = in.nextLine().trim();
         try{
             app.loadArea(areaName);
             System.out.println(areaName + "loaded.");
