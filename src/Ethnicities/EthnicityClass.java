@@ -23,4 +23,9 @@ public class EthnicityClass implements Ethnicity {
 
         this.students = new ListInArray<>(numOfStudents);
     }
+
+    @Override
+    public String getName() {
+        return ethnicityName;
+    }
 }

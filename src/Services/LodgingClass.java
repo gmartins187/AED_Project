@@ -9,8 +9,9 @@ public class LodgingClass extends ServiceAbstractClass implements Service {
      * @param price     the price of the service
      * @param value     the value of the service
      * @param name      the name of the service
+     * @param type      the type of the service
      */
-    public LodgingClass(int latitude, int longitude, int price, int value, String name) {
-        super(latitude, longitude, price, value, name);
+    public LodgingClass(long latitude, long longitude, int price, int value, String name, String type) {
+        super(latitude, longitude, price, value, name, type);
     }
 }

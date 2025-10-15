@@ -1,9 +1,11 @@
 package Regions;
 
 import Ethnicities.*;
+import Services.Lodging;
 import Services.Service;
 import Students.Student;
 import dataStructures.DoublyLinkedList;
+import dataStructures.Iterator;
 import dataStructures.List;
 import dataStructures.ListInArray;
 
@@ -14,12 +16,18 @@ import java.io.ObjectOutputStream;
 
 public class RegionClass implements Region {
 
-    private long topBound;
-    private long lowBound;
-    private long leftBound;
-    private long rightBound;
+    private final String THRIFTY = "thrifty";
+    private final String BOOKISH = "bookish";
+    private final String OUTGOING = "outgoing";
 
-    private String regionName;
+
+
+    private final long topBound;
+    private final long lowBound;
+    private final long leftBound;
+    private final long rightBound;
+
+    private final String regionName;
 
 
     private DoublyLinkedList<Student> students;
@@ -68,6 +76,72 @@ public class RegionClass implements Region {
 
     @Override
     public void loadRegion() {
-        this.topBound = 2;
+        //TODO
+    }
+
+    @Override
+    public boolean isValid(long latitude, long longitude) {
+        return this.topBound > latitude
+                && latitude > this.lowBound
+                && this.leftBound < longitude
+                && longitude < this.rightBound;
+    }
+
+    @Override
+    public Service getService(String name) {
+        Iterator<Service> iterator = services.iterator();
+        while(iterator.hasNext()) {
+            Service next = iterator.next();
+            if (next.getName().equals(name)) return next;
+        }
+
+        return null;
+    }
+
+    @Override
+    public void addService(Service service) {
+        services.addFirst(service);
+        numOfServices++;
+    }
+
+    @Override
+    public boolean hasServices() {
+        return numOfServices == 0;
+    }
+
+    @Override
+    public void listAllServices() {
+        Iterator<Service> iterator = services.iterator();
+        while(iterator.hasNext()) {
+            Service next = iterator.next();
+            System.out.println(next.getName() + ": " + next.getType() + " " + next.getLatitude() + " -" + next.getLongitude() + ".");
+        }
+    }
+
+    @Override
+    public Student getStudent(String studentName) {
+        //TODO;
+    }
+
+    @Override
+    public void addStudent(Student student) {
+        //TODO
+    }
+
+    @Override
+    public Ethnicity getEthnicity(String country) {
+        Iterator<Ethnicity> ethnicityIterator = ethnicityList.iterator();
+        while (ethnicityIterator.hasNext()) {
+            Ethnicity next = ethnicityIterator.next();
+            if (next.getName().equals(country)) return next;
+        }
+        ethnicityList.addFirst(new EthnicityClass(country));
+        return getEthnicity(country);
+    }
+
+    @Override
+    public boolean isServiceFull(String name) {
+        Lodging lodgingService = (Lodging) getService(name);
+        return lodgingService.isFull();
     }
 }

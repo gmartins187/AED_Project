@@ -180,17 +180,15 @@ public class Main {
         String name = "";
         String type = "";
         try {
-            type = in.next().trim();
-            int latitude = in.nextInt();
-            int longitude = in.nextInt();
+            type = in.next().trim().toLowerCase();
+            long latitude = in.nextLong();
+            long longitude = in.nextLong();
             int value1 = in.nextInt();
             int value2 = in.nextInt();
             name = in.next();
-
-            app.newService(latitude, longitude, value1, value2, name);
-
+            app.newService(type, latitude, longitude, value1, value2, name);
             System.out.println("Eating " + name + " added.");
-        } catch (InvalidType e){
+        } catch (InvalidService e){
             System.out.println(INVALID_TYPE);
         } catch (InvalidLocation e){
             System.out.println(INVALID_LOCATION);
@@ -205,8 +203,7 @@ public class Main {
         } catch (ServiceFull e) {
             System.out.println(INVALID_CAPACITY);
         } catch (AlreadyExists e){
-            System.out.println(name + ALREADY_EXISTS);
-        }
+            System.out.println(name + ALREADY_EXISTS); }
     }
 
 
@@ -232,7 +229,7 @@ public class Main {
         String name = "";
         String lodgingName = "";
         try{
-            String type = in.next().trim();
+            String type = in.next().trim().toLowerCase();
             name = in.next();
             String country = in.next().trim();
             lodgingName = in.next();
