@@ -1,7 +1,6 @@
 package App;
 
 import Ethnicities.Ethnicity;
-import Ethnicities.EthnicityClass;
 import Exceptions.*;
 import Regions.*;
 import Services.EatingClass;
@@ -85,7 +84,6 @@ public class homeAwayAppClass implements HomeAwayApp{
         try (FileInputStream input = new FileInputStream(file);
              ObjectInputStream in = new ObjectInputStream(input)) {
 
-            // Lê o objeto
             currentRegion = (Region) in.readObject();
 
         } catch (IOException | ClassNotFoundException e) {
@@ -139,17 +137,20 @@ public class homeAwayAppClass implements HomeAwayApp{
     public void newStudent(String type, String name, String country, String lodgingName) {
         if(!isStuTypeValid(type))
             throw new InvalidType("");
-        //else if(TODO filter iterator)
-        //    throw new InvalidLocation("");
+        else if(currentRegion.hasLodging(lodgingName))
+            throw new InvalidLocation("");
         else if(this.currentRegion.isServiceFull(lodgingName))
             throw new ServiceFull("");
-        else if(this.currentRegion.getStudent(name) == null)
+        else if(this.currentRegion.getStudent(name) != null)
             throw new AlreadyExists("");
         else {
             Service lodgingService = this.currentRegion.getService(lodgingName);
+            if(this.currentRegion.getEthnicity(country) != null) this.currentRegion.addEthnicity(country);
             Ethnicity ethnicity = this.currentRegion.getEthnicity(country);
             switch (type){
                 case OUTGOING -> this.currentRegion.addStudent(new OutgoingClass(name, ethnicity, lodgingService));
+                case BOOKISH -> this.currentRegion.addStudent(new BookishClass(name, ethnicity, lodgingService));
+                case THRIFTY -> this.currentRegion.addStudent(new ThriftyClass(name, ethnicity, lodgingService));
             }
         }
     }
@@ -164,7 +165,22 @@ public class homeAwayAppClass implements HomeAwayApp{
 
     @Override
     public void removeStudent(String name) {
+        if(this.currentRegion.getStudent(name) == null)
+            throw new DoesNotExist("");
+        else {
+            this.currentRegion.removeStudent(name);
+        }
+    }
 
+    @Override
+    public void listStudents(String from) {
+        if(this.currentRegion.hasStudents()){
+            throw new DoesNotExist("");
+        } else if(this.currentRegion.getEthnicity(from) == null){
+            throw new InvalidArea("");
+        } else{
+            this.currentRegion.listStudents(from);
+        }
     }
 
     @Override
@@ -172,10 +188,6 @@ public class homeAwayAppClass implements HomeAwayApp{
 
     }
 
-    @Override
-    public void listStudents(String from) {
-
-    }
 
     @Override
     public void changeStudentHome(String name, String lodgingName) {
@@ -230,9 +242,9 @@ public class homeAwayAppClass implements HomeAwayApp{
 
 
     /**
-     * Função privada que verifica se o ficheiro existe na pasta "data"
-     * @param fileName nome do ficheiro
-     * @return true se existir, false caso contrário
+     * Private function that checks if the file exists in the folder data
+     * @param fileName the name of the file
+     * @return if the file exists
      */
     private static boolean fileExists(String fileName) {
         File file = new File("data", fileName);

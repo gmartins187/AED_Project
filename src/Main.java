@@ -46,6 +46,7 @@ public class Main {
     private static final String NO_TYPE_SERVICES = "No %s services!";
     private static final String NO_TYPE_SERVICES_AVG = "No %s services with average!";
     private static final String NO_TAG = "There are no services with this tag!";
+    private static final String HAS_LEFT = " has left.";
 
 
 
@@ -237,9 +238,7 @@ public class Main {
             app.newStudent(type, name, country, lodgingName);
         } catch (InvalidType e){
             System.out.println(INVALID_STU_TYPE);
-        }
-        //TEST PRINTF
-        catch (InvalidLocation e){
+        } catch (InvalidLocation e){
             System.out.printf(INVALID_LODGING, lodgingName);
         } catch (ServiceFull e){
             System.out.printf(SERVICE_FULL, LODGING, lodgingName);
@@ -257,6 +256,7 @@ public class Main {
         String name = in.next();
         try{
             app.removeStudent(name);
+            System.out.println(name + HAS_LEFT);
         } catch (DoesNotExist e){
             System.out.println(name + " does not exist!");
         }
