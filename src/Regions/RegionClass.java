@@ -71,15 +71,6 @@ public class RegionClass implements Region {
     }
 
     @Override
-    public void save() {
-    }
-
-    @Override
-    public void loadRegion() {
-        //TODO
-    }
-
-    @Override
     public boolean isValid(long latitude, long longitude) {
         return this.topBound > latitude
                 && latitude > this.lowBound
