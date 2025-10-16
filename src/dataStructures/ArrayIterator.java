@@ -16,7 +16,7 @@ class ArrayIterator<E> implements Iterator<E> {
     public ArrayIterator(E[] elems, int counter) {
         this.elems = elems;
         this.counter = counter;
-        rewind();d
+        rewind();
     }
 
 
