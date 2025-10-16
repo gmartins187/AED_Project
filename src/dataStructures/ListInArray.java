@@ -109,16 +109,16 @@ public class ListInArray<E> implements List<E> {
      */
     public E get(int position) {
         //TODO
-        if (position < 0 || position > size()){
+        if (position < 0 || position > counter){
             throw new InvalidPositionException();
         }
         else if (position == 0){
             return getFirst();
         }
-        else if (position == size()-1){
+        else if (position == counter-1){
             return getLast();
         }
-        else return elems[position];
+        return elems[position];
     }
 
 
@@ -131,8 +131,17 @@ public class ListInArray<E> implements List<E> {
      * @return position of the first occurrence of the element in the list (or -1)
      */
     public int indexOf(E element) {
-        //TODO: Left as an exercise.
-        return 0;
+        //TODO:
+        for (int i = 0; i < counter; i++) {
+            if (element == null) {
+                if (elems[i] == null) {
+                    return i;
+                }
+            } else if (element.equals(elems[i])) {
+                return i;
+            }
+        }
+        return -1;
     }
 
 
@@ -143,6 +152,12 @@ public class ListInArray<E> implements List<E> {
      */
     public void addFirst(E element) {
         //TODO
+        if (counter == elems.length){
+            reallocate();
+        }
+        for (int i = counter; i > 0; i--){
+            elems[i] = elems[i-1];
+        }
         elems[0] = element;
         counter++;
     }
@@ -155,6 +170,9 @@ public class ListInArray<E> implements List<E> {
      */
     public void addLast(E element) {
         //TODO
+        if (counter == elems.length){
+            reallocate();
+        }
         elems[counter] = element;
         counter++;
     }
@@ -172,16 +190,23 @@ public class ListInArray<E> implements List<E> {
      */
     public void add(int position, E element) {
         //TODO
-        if (position < 0 || position > size()){
+        if (position < 0 || position > counter){
             throw new InvalidPositionException();
         }
         else if (position == 0){
             addFirst(element);
         }
-        else if (position == size()){
+        else if (position == counter){
             addLast(element);
+            return;
         }
-        else elems[position] = element;
+        if (counter == elems.length){
+            reallocate();
+        }
+        for (int i = counter; i > position; i--){
+            elems[i] = elems[i-1];
+        }
+        elems[position] = element;
         counter++;
     }
 
@@ -194,14 +219,15 @@ public class ListInArray<E> implements List<E> {
      */
     public E removeFirst() {
         //TODO
-        E firstElem = getFirst();
         if (size() == 0 ){
             throw new NoSuchElementException();
         }
-        else { for (int i = 0; i < size()-1; i++){
-            elems[i] = elems[i-1]; }
-            counter--;
+        E firstElem = elems[0];
+        for (int i = 0; i < counter-1; i++){
+            elems[i] = elems[i+1];
         }
+        elems[counter-1] = null;
+        counter--;
         return firstElem;
     }
 
@@ -214,14 +240,12 @@ public class ListInArray<E> implements List<E> {
      */
     public E removeLast() {
         //TODO
-        E lastElem = getLast();
         if (size() == 0 ){
             throw new NoSuchElementException();
         }
-        else { for (int i = 0; i < size()-1; i++){
-            elems[i] = elems[i+1]; }
-            counter--;
-        }
+        E lastElem = elems[counter-1];
+        elems[counter-1] = null;
+        counter--;
         return lastElem;
     }
 
@@ -237,7 +261,35 @@ public class ListInArray<E> implements List<E> {
      * @throws InvalidPositionException - if position is not valid in the list
      */
     public E remove(int position) {
-        //TODO: Left as an exercise.
-        return null;
+        //TODO:
+        if (position < 0 || position >= counter){
+            throw new InvalidPositionException();
+        }
+        else if (position == 0){
+            return removeFirst();
+        }
+        else if (position == counter-1){
+            return removeLast();
+        }
+        E removedElem = elems[position];
+        for (int i = position; i < counter - 1; i++){
+            elems[i] = elems[i+1];
+        }
+        elems[counter-1] = null;
+        counter--;
+        return removedElem;
+    }
+
+
+    /**
+     * Reallocates the array, multiplying its size by 2.
+     */
+    private void reallocate(){
+        @SuppressWarnings("unchecked")
+        E[] newElems = (E[]) new Object[elems.length*FACTOR];
+        for (int i = 0; i < counter; i++){
+            newElems[i] = this.elems[i];
+        }
+        this.elems = newElems;
     }
 }
