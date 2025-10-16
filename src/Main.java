@@ -500,24 +500,12 @@ public class Main {
     public static void clearDataFolder() {
         File dataFolder = new File("data");
 
-        // Verifica se a pasta existe
-        if (!dataFolder.exists() || !dataFolder.isDirectory()) {
-            System.out.println("A pasta 'data' não existe.");
-            return;
-        }
-
-        // Lista todos os ficheiros dentro da pasta
         File[] files = dataFolder.listFiles();
 
         if (files != null) {
             for (File file : files) {
                 if (file.isFile()) {
                     boolean deleted = file.delete();
-                    if (deleted) {
-                        System.out.println("Ficheiro apagado: " + file.getName());
-                    } else {
-                        System.out.println("Não foi possível apagar: " + file.getName());
-                    }
                 }
             }
         }

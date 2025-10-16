@@ -5,7 +5,9 @@ import Services.Service;
 import Students.Student;
 import dataStructures.Predicate;
 
-public interface Region {
+import java.io.Serializable;
+
+public interface Region extends Serializable {
 
 
     /**
