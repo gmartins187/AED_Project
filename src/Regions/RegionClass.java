@@ -119,6 +119,7 @@ public class RegionClass implements Region {
     @Override
     public Student getStudent(String studentName) {
         //TODO;
+        return null;
     }
 
     @Override

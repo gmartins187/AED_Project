@@ -30,13 +30,15 @@ class ArrayIterator<E> implements Iterator<E> {
     @Override
     public boolean hasNext() {
 	    //TODO
-        return counter>current;
+        return this.counter > this.current;
     }
 
 
     @Override
     public E next() {
 	    //TODO
-        return elems[current++];
+        E elemToReturn = this.elems[this.current];
+        this.current++;
+        return elemToReturn;
     }
 }
