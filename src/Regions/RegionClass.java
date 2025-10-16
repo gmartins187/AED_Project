@@ -4,20 +4,15 @@ import Ethnicities.*;
 import Services.Lodging;
 import Services.Service;
 import Students.Student;
-import dataStructures.DoublyLinkedList;
-import dataStructures.Iterator;
-import dataStructures.List;
-import dataStructures.ListInArray;
-
-import java.io.File;
+import dataStructures.*;
 
 public class RegionClass implements Region {
 
-    private final String THRIFTY = "thrifty";
-    private final String BOOKISH = "bookish";
-    private final String OUTGOING = "outgoing";
+    //private final String THRIFTY = "thrifty";
+    //private final String BOOKISH = "bookish";
+    //private final String OUTGOING = "outgoing";
 
-
+    private final String LODGING = "lodging";
 
     private final long topBound;
     private final long lowBound;
@@ -26,15 +21,12 @@ public class RegionClass implements Region {
 
     private final String regionName;
 
-
-    private DoublyLinkedList<Student> students;
-    private DoublyLinkedList<Service> services;
+    private final DoublyLinkedList<Student> students;
+    private final DoublyLinkedList<Service> services;
 
     private int numOfEthnicities;
     private List<Ethnicity> ethnicityList;
 
-    private int numOfStudents;
-    private int numOfServices;
 
 
     /**
@@ -55,26 +47,15 @@ public class RegionClass implements Region {
         this.numOfEthnicities = 0;
         this.ethnicityList = new ListInArray<>(numOfEthnicities);
 
-        this.numOfStudents = 0;
-        this.numOfServices = 0;
-
         this.students = new DoublyLinkedList<Student>();
         this.services = new DoublyLinkedList<Service>();
     }
 
+
+
     @Override
     public String getName() {
         return this.regionName;
-    }
-
-    @Override
-    public void save(String name) {
-        //TODO
-    }
-
-    @Override
-    public void loadRegion() {
-        //TODO
     }
 
     @Override
@@ -99,12 +80,11 @@ public class RegionClass implements Region {
     @Override
     public void addService(Service service) {
         services.addFirst(service);
-        numOfServices++;
     }
 
     @Override
     public boolean hasServices() {
-        return numOfServices == 0;
+        return services.isEmpty();
     }
 
     @Override
@@ -117,30 +97,68 @@ public class RegionClass implements Region {
     }
 
     @Override
-    public Student getStudent(String studentName) {
-        //TODO;
-        return null;
-    }
-
-    @Override
     public void addStudent(Student student) {
-        //TODO
+        students.addFirst(student);
     }
 
     @Override
     public Ethnicity getEthnicity(String country) {
         Iterator<Ethnicity> ethnicityIterator = ethnicityList.iterator();
+
         while (ethnicityIterator.hasNext()) {
             Ethnicity next = ethnicityIterator.next();
             if (next.getName().equals(country)) return next;
         }
-        ethnicityList.addFirst(new EthnicityClass(country));
-        return getEthnicity(country);
+
+        return null;
     }
 
     @Override
     public boolean isServiceFull(String name) {
         Lodging lodgingService = (Lodging) getService(name);
         return lodgingService.isFull();
+    }
+
+    @Override
+    public Student getStudent(String name) {
+        Iterator<Student> iterator = students.iterator();
+        while (iterator.hasNext()) {
+            Student next = iterator.next();
+            if (next.getName().equals(name)) return next;
+        }
+
+        return null;
+    }
+
+    @Override
+    public void removeStudent(String name) {
+        students.remove(students.indexOf(getStudent(name)));
+    }
+
+    @Override
+    public boolean hasLodging(String lodgingName) {
+        Iterator<Service> iterator = services.iterator();
+        while(iterator.hasNext()) {
+            Service next = iterator.next();
+            if (next.getType().equals(LODGING) && next.getName().equals(lodgingName))
+                return true;
+        }
+        return false;
+    } //TODO filter iterator
+
+    @Override
+    public boolean hasStudents() {
+        return students.isEmpty();
+    }
+
+    @Override
+    public void addEthnicity(String country) {
+        ethnicityList.addFirst(getEthnicity(country));
+    }
+
+    @Override
+    public void listStudents(String from) {
+        //TODO
+        //Iterator<Student> iterator = new FilterIterator<>(students.iterator(), new IsFrom(from));
     }
 }

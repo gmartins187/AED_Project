@@ -30,4 +30,9 @@ public abstract class StudentAbstractClass implements Student{
         this.ethnicity = ethnicity;
         visitedServices = new ListInArray<>(numberOfServicesVisited);
     }
+
+    @Override
+    public String getName(){
+        return this.name;
+    }
 }

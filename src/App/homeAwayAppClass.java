@@ -1,7 +1,6 @@
 package App;
 
 import Ethnicities.Ethnicity;
-import Ethnicities.EthnicityClass;
 import Exceptions.*;
 import Regions.*;
 import Services.EatingClass;
@@ -36,8 +35,9 @@ public class homeAwayAppClass implements HomeAwayApp{
 
 
     @Override
-    public void newArea(long top, long left, long bottom, long right, String name) throws InvalidArea, AlreadyExists{
-        if(getFile(name).exists()){
+    public void newArea(long top, long left, long bottom, long right, String name)
+            throws InvalidArea, AlreadyExists{
+        if(fileExists(name)){
             throw new AlreadyExists("");
         }else if(validArea(top,left,bottom,right)){
             throw new InvalidArea("");
@@ -47,43 +47,47 @@ public class homeAwayAppClass implements HomeAwayApp{
     }
 
     @Override
-    public void saveArea() throws NoCurrentArea {
+    public String saveArea() throws NoCurrentArea {
         if(currentRegion == null)
             throw new NoCurrentArea("");
         else {
+            String areaName = currentRegion.getName();
+            try {
+                File dataFolder = new File("data");
 
+                if (!dataFolder.exists()) dataFolder.mkdir();
 
-            //try (FileOutputStream fileOut =
-            //             new FileOutputStream(getFile(currentRegion.getName()).getName());
-            //     ObjectOutputStream out =
-            //             new ObjectOutputStream(fileOut)) {
-            //
-            //    out.writeObject(currentRegion);
-            //    currentRegion = null;
-            //
-            //} catch (IOException _) {}
+                File file = new File(dataFolder, currentRegion.getName().replace(" ",""));
 
+                FileOutputStream output = new FileOutputStream(file);
+                ObjectOutputStream out = new ObjectOutputStream(output);
 
-            currentRegion.save(getFile(currentRegion.getName()).getName());
+                out.writeObject(currentRegion);
+
+                out.close();
+                output.close();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             currentRegion = null;
+            return areaName;
         }
     }
 
     @Override
-    public void loadArea(String regionName) {
-        if(!hasRegion(regionName))
-            throw new InvalidArea("");
-        else {
+    public void loadArea(String regionName) throws NoCurrentArea{
+        File file = new File("data", regionName.replace(" ", ""));
 
+        if (!file.exists()) throw new NoCurrentArea("");
 
-            //try (
-            //        FileInputStream fileIn = new FileInputStream(getFile(regionName).getName());
-            //        ObjectInputStream in = new ObjectInputStream(fileIn)
-            //) //    //
-            //    currentRegion = (Region) in.readObject()//    //
-            //} catch (IOException | ClassNotFoundException _) {}
+        try (FileInputStream input = new FileInputStream(file);
+             ObjectInputStream in = new ObjectInputStream(input)) {
 
-            //TODO
+            currentRegion = (Region) in.readObject();
+
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
@@ -133,17 +137,20 @@ public class homeAwayAppClass implements HomeAwayApp{
     public void newStudent(String type, String name, String country, String lodgingName) {
         if(!isStuTypeValid(type))
             throw new InvalidType("");
-        //else if(TODO filter iterator)
-        //    throw new InvalidLocation("");
+        else if(currentRegion.hasLodging(lodgingName))
+            throw new InvalidLocation("");
         else if(this.currentRegion.isServiceFull(lodgingName))
             throw new ServiceFull("");
-        else if(this.currentRegion.getStudent(name) == null)
+        else if(this.currentRegion.getStudent(name) != null)
             throw new AlreadyExists("");
         else {
             Service lodgingService = this.currentRegion.getService(lodgingName);
+            if(this.currentRegion.getEthnicity(country) != null) this.currentRegion.addEthnicity(country);
             Ethnicity ethnicity = this.currentRegion.getEthnicity(country);
             switch (type){
                 case OUTGOING -> this.currentRegion.addStudent(new OutgoingClass(name, ethnicity, lodgingService));
+                case BOOKISH -> this.currentRegion.addStudent(new BookishClass(name, ethnicity, lodgingService));
+                case THRIFTY -> this.currentRegion.addStudent(new ThriftyClass(name, ethnicity, lodgingService));
             }
         }
     }
@@ -158,7 +165,22 @@ public class homeAwayAppClass implements HomeAwayApp{
 
     @Override
     public void removeStudent(String name) {
+        if(this.currentRegion.getStudent(name) == null)
+            throw new DoesNotExist("");
+        else {
+            this.currentRegion.removeStudent(name);
+        }
+    }
 
+    @Override
+    public void listStudents(String from) {
+        if(this.currentRegion.hasStudents()){
+            throw new DoesNotExist("");
+        } else if(this.currentRegion.getEthnicity(from) == null){
+            throw new InvalidArea("");
+        } else{
+            this.currentRegion.listStudents(from);
+        }
     }
 
     @Override
@@ -166,10 +188,6 @@ public class homeAwayAppClass implements HomeAwayApp{
 
     }
 
-    @Override
-    public void listStudents(String from) {
-
-    }
 
     @Override
     public void changeStudentHome(String name, String lodgingName) {
@@ -224,12 +242,13 @@ public class homeAwayAppClass implements HomeAwayApp{
 
 
     /**
-     * @param name the name of the possible new region
-     * @return the
+     * Private function that checks if the file exists in the folder data
+     * @param fileName the name of the file
+     * @return if the file exists
      */
-    private File getFile(String name) {
-        String fileName = name.replace(" ", "");
-        return new File ("data" + File.separator + fileName + ".ser");
+    private static boolean fileExists(String fileName) {
+        File file = new File("data", fileName);
+        return file.exists();
     }
 
     /**
@@ -241,13 +260,5 @@ public class homeAwayAppClass implements HomeAwayApp{
      */
     private boolean validArea(long top, long left, long bottom, long right) {
         return top <= bottom && left <= right;
-    }
-
-    /**
-     * @param regioName the name of the region
-     * @return if the region exists
-     */
-    private boolean hasRegion(String regioName) {
-        return getFile(regioName).exists();
     }
 }

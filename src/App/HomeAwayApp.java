@@ -21,8 +21,9 @@ public interface HomeAwayApp {
     /**
      * Saves the current region to a text file
      * @throws NoCurrentArea if there is no current area defined
+     * @return the name of the area
      */
-    void saveArea();
+    String saveArea();
 
 
     /**

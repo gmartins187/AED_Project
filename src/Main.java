@@ -1,6 +1,7 @@
 import App.*;
 import Exceptions.*;
 
+import java.io.File;
 import java.util.Scanner;
 
 public class Main {
@@ -45,6 +46,7 @@ public class Main {
     private static final String NO_TYPE_SERVICES = "No %s services!";
     private static final String NO_TYPE_SERVICES_AVG = "No %s services with average!";
     private static final String NO_TAG = "There are no services with this tag!";
+    private static final String HAS_LEFT = " has left.";
 
 
 
@@ -85,10 +87,9 @@ public class Main {
                     in.nextLine();}
             }
         } while(!command.equals(Command.EXIT));
+        clearDataFolder();
         in.close();
     }
-
-
 
 
     /**
@@ -147,8 +148,9 @@ public class Main {
      */
     private static void saveArea(HomeAwayApp app) {
         try{
-            app.saveArea();
-            System.out.printf(SAVED, app.getAreaName());
+
+            String areaName = app.saveArea();
+            System.out.printf(SAVED, areaName);
         } catch (NoCurrentArea e){
             System.out.println(NO_CURRENT_AREA);
         }
@@ -160,7 +162,7 @@ public class Main {
      * @param in the scanner to read input from
      */
     private static void loadArea(HomeAwayApp app, Scanner in) {
-        String areaName = in.next();
+        String areaName = in.nextLine().trim();
         try{
             app.loadArea(areaName);
             System.out.println(areaName + "loaded.");
@@ -236,9 +238,7 @@ public class Main {
             app.newStudent(type, name, country, lodgingName);
         } catch (InvalidType e){
             System.out.println(INVALID_STU_TYPE);
-        }
-        //TEST PRINTF
-        catch (InvalidLocation e){
+        } catch (InvalidLocation e){
             System.out.printf(INVALID_LODGING, lodgingName);
         } catch (ServiceFull e){
             System.out.printf(SERVICE_FULL, LODGING, lodgingName);
@@ -256,6 +256,7 @@ public class Main {
         String name = in.next();
         try{
             app.removeStudent(name);
+            System.out.println(name + HAS_LEFT);
         } catch (DoesNotExist e){
             System.out.println(name + " does not exist!");
         }
@@ -490,6 +491,35 @@ public class Main {
             System.out.printf(DOES_NOT_EXIST, name);
         } catch (Untouched e) {
             System.out.printf(NO_TYPE_SERVICES, type);
+        }
+    }
+
+    /**
+     * Deletes all the folder info after the app is exited.
+     */
+    public static void clearDataFolder() {
+        File dataFolder = new File("data");
+
+        // Verifica se a pasta existe
+        if (!dataFolder.exists() || !dataFolder.isDirectory()) {
+            System.out.println("A pasta 'data' não existe.");
+            return;
+        }
+
+        // Lista todos os ficheiros dentro da pasta
+        File[] files = dataFolder.listFiles();
+
+        if (files != null) {
+            for (File file : files) {
+                if (file.isFile()) {
+                    boolean deleted = file.delete();
+                    if (deleted) {
+                        System.out.println("Ficheiro apagado: " + file.getName());
+                    } else {
+                        System.out.println("Não foi possível apagar: " + file.getName());
+                    }
+                }
+            }
         }
     }
 }

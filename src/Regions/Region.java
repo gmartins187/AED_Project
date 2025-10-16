@@ -2,30 +2,19 @@ package Regions;
 
 import Ethnicities.Ethnicity;
 import Services.Service;
-import Students.OutgoingClass;
 import Students.Student;
+import dataStructures.Predicate;
 
 public interface Region {
 
 
     /**
-     * @return 's the name of the file
+     * @return the name of the region
      */
     String getName();
 
     /**
-     * Saves the current region to a file in data/ path directory
-     * @param name the name of the region
-     */
-    void save(String name);
-
-    /**
-     * Loads a region to the memory
-     */
-    void loadRegion();
-
-    /**
-     * @param latitude the latitude of the service
+     * @param latitude  the latitude of the service
      * @param longitude the longitude of the service
      * @return if a service is in the region
      */
@@ -39,6 +28,7 @@ public interface Region {
 
     /**
      * adds a service to the region
+     *
      * @param service the service to add to the region
      */
     void addService(Service service);
@@ -54,13 +44,8 @@ public interface Region {
     void listAllServices();
 
     /**
-     * @param studentName the name of the student
-     * @return the student
-     */
-    Student getStudent(String studentName);
-
-    /**
      * adds a student to the region
+     *
      * @param student the student to add to the region
      */
     void addStudent(Student student);
@@ -75,4 +60,38 @@ public interface Region {
      * @return if a service is full
      */
     boolean isServiceFull(String name);
+
+    /**
+     * @param name the name of the student to check
+     * @return true if student exists
+     */
+    Student getStudent(String name);
+
+    /**
+     * removes student from the current region
+     * @param name the name of the student to remove
+     */
+    void removeStudent(String name);
+
+    /**
+     * @param lodgingName the name of the lodge
+     * @return true if it exists
+     */
+    boolean hasLodging(String lodgingName);
+
+    /**
+     * @return true if it has students
+     */
+    boolean hasStudents();
+
+    /**
+     * @param country the 'ethnicity' to add
+     */
+    void addEthnicity(String country);
+
+    /**
+     * list all the students from the region
+     * @param from the ethnicity of the students to iterate
+     */
+    void listStudents(String from);
 }
