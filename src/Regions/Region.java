@@ -64,8 +64,7 @@ public interface Region extends Serializable {
     boolean isServiceFull(String name);
 
     /**
-     * @param name the name of the student to check
-     * @return true if student exists
+     * @return the student ub the region by name
      */
     Student getStudent(String name);
 

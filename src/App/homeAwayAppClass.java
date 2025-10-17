@@ -3,15 +3,14 @@ package App;
 import Ethnicities.Ethnicity;
 import Exceptions.*;
 import Regions.*;
-import Services.EatingClass;
-import Services.LeisureClass;
-import Services.LodgingClass;
-import Services.Service;
+import Services.*;
 import Students.BookishClass;
 import Students.OutgoingClass;
+import Students.Thrifty;
 import Students.ThriftyClass;
 
 import java.io.*;
+import java.util.Objects;
 
 public class homeAwayAppClass implements HomeAwayApp{
 
@@ -91,8 +90,6 @@ public class homeAwayAppClass implements HomeAwayApp{
         }
     }
 
-
-
     @Override
     public void newService(String type, long latitude, long longitude, int price, int value2, String name) {
         if(!isSerTypeValid(type))
@@ -124,7 +121,6 @@ public class homeAwayAppClass implements HomeAwayApp{
         return type.equals(EATING) || type.equals(LODGING) || type.equals(LEISURE);
     }
 
-
     @Override
     public void listAllServices() {
         if(!this.currentRegion.hasServices())
@@ -134,7 +130,7 @@ public class homeAwayAppClass implements HomeAwayApp{
     }
 
     @Override
-    public void newStudent(String type, String name, String country, String lodgingName) {
+    public void newStudent(String type, String name, String country, String lodgingName){
         if(!isStuTypeValid(type))
             throw new InvalidType("");
         else if(currentRegion.hasLodging(lodgingName))
@@ -148,10 +144,11 @@ public class homeAwayAppClass implements HomeAwayApp{
             if(this.currentRegion.getEthnicity(country) != null) this.currentRegion.addEthnicity(country);
             Ethnicity ethnicity = this.currentRegion.getEthnicity(country);
             switch (type){
-                case OUTGOING -> this.currentRegion.addStudent(new OutgoingClass(name, ethnicity, lodgingService));
-                case BOOKISH -> this.currentRegion.addStudent(new BookishClass(name, ethnicity, lodgingService));
-                case THRIFTY -> this.currentRegion.addStudent(new ThriftyClass(name, ethnicity, lodgingService));
+                case OUTGOING -> this.currentRegion.addStudent(new OutgoingClass(name, ethnicity, lodgingService, type));
+                case BOOKISH -> this.currentRegion.addStudent(new BookishClass(name, ethnicity, lodgingService, type));
+                case THRIFTY -> this.currentRegion.addStudent(new ThriftyClass(name, ethnicity, lodgingService, type));
             }
+            if(!(lodgingService instanceof LeisureClass))lodgingService.addStudent();
         }
     }
 
@@ -185,15 +182,39 @@ public class homeAwayAppClass implements HomeAwayApp{
 
     @Override
     public void changeStudentLocation(String name, String locationName) {
-
+        if(currentRegion.getService(locationName) == null)
+            throw new InvalidLocation("");
+        else if(currentRegion.getStudent(name) == null)
+            throw new DoesNotExist("");
+        else if(currentRegion.getService(locationName)instanceof LodgingClass)
+            throw new InvalidService("");
+        else if(currentRegion.getStudent(name).getLocation() == currentRegion.getService(locationName))
+            throw new AlreadyThere("");
+        else if(this.currentRegion.getService(locationName) instanceof Eating){
+            if(((Eating) this.currentRegion.getService(locationName)).isFull())
+                throw new ServiceFull("");
+        }else{
+            this.currentRegion.getStudent(name).setLocation(this.currentRegion.getService(locationName));
+        }
     }
-
 
     @Override
     public void changeStudentHome(String name, String lodgingName) {
+        if(this.currentRegion.getService(lodgingName) == null)
+            throw new InvalidLocation("");
+        else if(this.currentRegion.getStudent(name) == null)
+            throw new DoesNotExist("");
+        else if(this.currentRegion.getStudent(name).getHome().equals(this.currentRegion.getService(lodgingName)))
+            throw new AlreadyThere("");
+        else if(((Lodging)this.currentRegion.getService(lodgingName)).isFull())
+            throw new ServiceFull("");
+        else if(this.currentRegion.getStudent(name) instanceof Thrifty) {
+            if (this.currentRegion.getService(lodgingName).getPrice() > this.currentRegion.getStudent(name).getHome().getPrice())
+                throw new InvalidService("");
+        } else{
+            this.currentRegion.getStudent(name).setHome((Lodging) this.currentRegion.getService(lodgingName));
+        }
     }
-
-
 
     @Override
     public void listUsersInService(String order, String serviceName) {

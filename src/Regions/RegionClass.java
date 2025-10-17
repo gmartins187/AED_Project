@@ -144,7 +144,7 @@ public class RegionClass implements Region {
                 return true;
         }
         return false;
-    } //TODO filter iterator
+    }
 
     @Override
     public boolean hasStudents() {
@@ -159,6 +159,10 @@ public class RegionClass implements Region {
     @Override
     public void listStudents(String from) {
         //TODO
-        //Iterator<Student> iterator = new FilterIterator<>(students.iterator(), new IsFrom(from));
+        Iterator<Student> iterator = new FilterIterator<>(((Iterator) students.iterator()), new IsFrom(from));
+        while (iterator.hasNext()){
+            Student next = iterator.next();
+            System.out.println(next.getName() + ": " + next.getType() + " at " + next.getLodging().getName());
+        }
     }
 }

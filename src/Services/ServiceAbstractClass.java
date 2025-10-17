@@ -12,7 +12,6 @@ public abstract class ServiceAbstractClass implements Service {
 
 
     private final int price;
-    private final int value;
     private final String name;
 
 
@@ -25,14 +24,12 @@ public abstract class ServiceAbstractClass implements Service {
      * @param latitude the latitude of the service
      * @param longitude the longitude of the service
      * @param price the price of the service
-     * @param value the value of the service
      * @param name the name of the service
      */
-    public ServiceAbstractClass(long latitude, long longitude, int price, int value, String name, String type) {
+    public ServiceAbstractClass(long latitude, long longitude, int price, String name, String type) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.price = price;
-        this.value = value;
         this.name = name;
         this.type = type;
 
@@ -59,5 +56,10 @@ public abstract class ServiceAbstractClass implements Service {
     @Override
     public long getLongitude(){
         return this.longitude;
+    }
+
+    @Override
+    public int getPrice(){
+        return this.price;
     }
 }

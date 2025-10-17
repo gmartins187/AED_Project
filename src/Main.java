@@ -285,7 +285,7 @@ public class Main {
      * @param app the region manager (app object)
      * @param in the scanner to read input from
      */
-    private static void changeStudentLocation(HomeAwayApp app, Scanner in) {
+    private static void changeStudentLocation(HomeAwayApp app, Scanner in)  {
         String name = "";
         String locationName = "";
         try{

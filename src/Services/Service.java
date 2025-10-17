@@ -21,4 +21,19 @@ public interface Service {
      * @return the longitude of the service
      */
     long getLongitude();
+
+    /**
+     * @return the price of the service
+     */
+    int getPrice();
+
+    /**
+     * adds a student to the counter
+     */
+    void addStudent();
+
+    /**
+     * removes a student to the counter
+     */
+    void removeStudent();
 }
