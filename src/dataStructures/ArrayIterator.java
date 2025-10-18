@@ -22,7 +22,7 @@ class ArrayIterator<E> implements Iterator<E> {
 
     @Override
     public void rewind() {
-        //TODO:
+        //TODO
         this.counter = 0;
     }
 

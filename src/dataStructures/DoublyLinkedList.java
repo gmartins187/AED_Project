@@ -1,7 +1,7 @@
 package dataStructures;
-
 import dataStructures.exceptions.InvalidPositionException;
 import dataStructures.exceptions.NoSuchElementException;
+
 
 /**
  * Implementation of Doubly Linked List
@@ -37,7 +37,7 @@ public class DoublyLinkedList<E> implements TwoWayList<E> {
      * currentSize is initialized as 0.
      */
     public DoublyLinkedList( ) {
-        //TODO:
+        //TODO
         this.currentSize = 0;
         this.tail = null;
         this.head = null;
@@ -49,7 +49,7 @@ public class DoublyLinkedList<E> implements TwoWayList<E> {
      * @return true if list is empty
      */
     public boolean isEmpty() {
-        //TODO:
+        //TODO
         return currentSize == 0;
     }
 
@@ -59,7 +59,7 @@ public class DoublyLinkedList<E> implements TwoWayList<E> {
      * @return number of elements in the list
      */
     public int size() {
-        //TODO:
+        //TODO
         return currentSize;
     }
 
@@ -88,7 +88,7 @@ public class DoublyLinkedList<E> implements TwoWayList<E> {
      * @param element - Element to be inserted
      */
     public void addFirst( E element ) {
-        //TODO:
+        //TODO
         DoublyListNode<E> node = new DoublyListNode<>(element);
         if(isEmpty()){
             this.head = node;
@@ -108,7 +108,7 @@ public class DoublyLinkedList<E> implements TwoWayList<E> {
      * @param element - Element to be inserted
      */
     public void addLast( E element ) {
-        //TODO:
+        //TODO
         DoublyListNode<E> node = new DoublyListNode<>(element);
         if(isEmpty()){
             this.head = node;

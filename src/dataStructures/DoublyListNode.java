@@ -1,6 +1,6 @@
 package dataStructures;
-
 import java.io.Serializable;
+
 
 /**
      * Double List Node Implementation
@@ -44,7 +44,7 @@ class DoublyListNode<E> implements Serializable {
          */
         public DoublyListNode(E theElement, DoublyListNode<E> thePrevious,
                               DoublyListNode<E> theNext ) {
-            //TODO:
+            //TODO
                 this.element = theElement;
                 this.previous = thePrevious;
                 this.next = theNext;

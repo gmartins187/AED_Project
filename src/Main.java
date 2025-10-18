@@ -1,8 +1,8 @@
 import App.*;
 import Exceptions.*;
-
 import java.io.File;
 import java.util.Scanner;
+
 
 public class Main {
 
@@ -49,8 +49,8 @@ public class Main {
     private static final String HAS_LEFT = " has left.";
 
 
-
     public static void main(String[] args){commands();}
+
 
     /**
      * Handles all commands.
@@ -142,6 +142,7 @@ public class Main {
         }
     }
 
+
     /**
      * Saves the current region to a text file
      * @param app the region manager (app object)
@@ -155,6 +156,7 @@ public class Main {
             System.out.println(NO_CURRENT_AREA);
         }
     }
+
 
     /**
      * Loads the region from a text file
@@ -247,6 +249,7 @@ public class Main {
         }
     }
 
+
     /**
      * Removes a student from the app
      * @param app the region manager (app object)
@@ -261,6 +264,7 @@ public class Main {
             System.out.println(name + " does not exist!");
         }
     }
+
 
     /**
      * Lists all students in the app
@@ -493,6 +497,7 @@ public class Main {
             System.out.printf(NO_TYPE_SERVICES, type);
         }
     }
+
 
     /**
      * Deletes all the folder info after the app is exited.

@@ -261,7 +261,7 @@ public class ListInArray<E> implements List<E> {
      * @throws InvalidPositionException - if position is not valid in the list
      */
     public E remove(int position) {
-        //TODO:
+        //TODO
         if (position < 0 || position >= counter){
             throw new InvalidPositionException();
         }

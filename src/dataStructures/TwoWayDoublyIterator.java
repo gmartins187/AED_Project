@@ -1,5 +1,4 @@
 package dataStructures;
-
 import dataStructures.exceptions.NoSuchElementException;
 
 
