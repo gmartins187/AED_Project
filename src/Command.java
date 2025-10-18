@@ -22,6 +22,7 @@ public enum Command {
     EXIT("exit - Terminates the execution of the program"),
     UNKNOWN("");
 
+
     String helpMsg;
 
     Command(String s) {
