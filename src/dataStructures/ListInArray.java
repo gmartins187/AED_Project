@@ -131,7 +131,7 @@ public class ListInArray<E> implements List<E> {
      * @return position of the first occurrence of the element in the list (or -1)
      */
     public int indexOf(E element) {
-        //TODO:
+        //TODO
         for (int i = 0; i < counter; i++) {
             if (element == null) {
                 if (elems[i] == null) {
