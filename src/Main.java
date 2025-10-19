@@ -346,8 +346,8 @@ public class Main {
     private static void listUsersInService(HomeAwayApp app, Scanner in) {
         String serviceName = "";
         try{
-            String order = in.next();
-            serviceName = in.next();
+            String order = in.next().trim();
+            serviceName = in.nextLine();
 
             app.listUsersInService(order, serviceName);
         } catch (InvalidOrder e){

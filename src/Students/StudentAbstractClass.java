@@ -1,6 +1,5 @@
 package Students;
 
-import Ethnicities.Ethnicity;
 import Services.*;
 import dataStructures.*;
 
@@ -11,7 +10,7 @@ public abstract class StudentAbstractClass implements Student{
 
     private String type;
     private String name;
-    private Ethnicity ethnicity;
+    private String ethnicity;
 
     private int numberOfServicesVisited;
     private List<Service> visitedServices;
@@ -23,7 +22,7 @@ public abstract class StudentAbstractClass implements Student{
      * @param ethnicity the ethnicity of the student
      * @param currentService the current service the student is at and their home
      */
-    public StudentAbstractClass(String name, Ethnicity ethnicity, Service currentService, String type){
+    public StudentAbstractClass(String name, String ethnicity, Service currentService, String type){
         this.name = name;
         this.home = (Lodging) currentService;
         this.Location = currentService;
@@ -70,5 +69,11 @@ public abstract class StudentAbstractClass implements Student{
         this.home.removeStudent();
         this.home = home;
         this.home.addStudent();
+    }
+
+
+    @Override
+    public String getEthnicity(){
+        return ethnicity;
     }
 }

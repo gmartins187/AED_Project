@@ -1,6 +1,4 @@
 package dataStructures;
-import Ethnicities.IsFrom;
-import Students.Student;
 import dataStructures.exceptions.NoSuchElementException;
 
 
@@ -41,7 +39,7 @@ public class FilterIterator<E> implements Iterator<E> {
     public FilterIterator(Iterator<E> list, Predicate<E> criterion) {
         //TODO
         this.iterator = list;
-        this.filter = filter;
+        this.filter = criterion;
         advance();
     }
 

@@ -42,5 +42,10 @@ public interface Student {
      * @param service the new home of the student
      */
     void setHome(Lodging service);
+
+    /**
+     * @return the ethnicity from which the student is
+     */
+    String getEthnicity();
 }
 

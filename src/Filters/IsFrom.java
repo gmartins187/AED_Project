@@ -1,8 +1,9 @@
-package Ethnicities;
+package Filters;
 
+import Students.Student;
 import dataStructures.Predicate;
 
-public class IsFrom implements Predicate<Ethnicity>{
+public class IsFrom implements Predicate<Student>{
 
     private final String from;
 
@@ -11,10 +12,10 @@ public class IsFrom implements Predicate<Ethnicity>{
     }
 
     @Override
-    public boolean check(Ethnicity from) {
+    public boolean check(Student student) {
         if(this.from.equals("all")) return true;
         else{
-            return from.getName().equals(this.from);
+            return this.from.equals(student.getEthnicity());
         }
     }
 }

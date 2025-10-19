@@ -1,6 +1,5 @@
 package Students;
 
-import Ethnicities.Ethnicity;
 import Services.Service;
 
 public class ThriftyClass extends StudentAbstractClass implements Thrifty {
@@ -11,7 +10,7 @@ public class ThriftyClass extends StudentAbstractClass implements Thrifty {
      * @param ethnicity      the ethnicity of the student
      * @param currentService the current service the student is at and their home
      */
-    public ThriftyClass(String name, Ethnicity ethnicity, Service currentService, String type) {
+    public ThriftyClass(String name, String ethnicity, Service currentService, String type) {
         super(name, ethnicity, currentService, type);
     }
 }

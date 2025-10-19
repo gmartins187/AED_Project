@@ -1,6 +1,5 @@
 package App;
 
-import Ethnicities.Ethnicity;
 import Exceptions.*;
 import Regions.*;
 import Services.*;
@@ -10,7 +9,6 @@ import Students.Thrifty;
 import Students.ThriftyClass;
 
 import java.io.*;
-import java.util.Objects;
 
 public class homeAwayAppClass implements HomeAwayApp{
 
@@ -141,12 +139,11 @@ public class homeAwayAppClass implements HomeAwayApp{
             throw new AlreadyExists("");
         else {
             Service lodgingService = this.currentRegion.getService(lodgingName);
-            if(this.currentRegion.getEthnicity(country) != null) this.currentRegion.addEthnicity(country);
-            Ethnicity ethnicity = this.currentRegion.getEthnicity(country);
+            if(this.currentRegion.hasEthnicity(country)) this.currentRegion.addEthnicity(country);
             switch (type){
-                case OUTGOING -> this.currentRegion.addStudent(new OutgoingClass(name, ethnicity, lodgingService, type));
-                case BOOKISH -> this.currentRegion.addStudent(new BookishClass(name, ethnicity, lodgingService, type));
-                case THRIFTY -> this.currentRegion.addStudent(new ThriftyClass(name, ethnicity, lodgingService, type));
+                case OUTGOING -> this.currentRegion.addStudent(new OutgoingClass(name, country, lodgingService, type));
+                case BOOKISH -> this.currentRegion.addStudent(new BookishClass(name, country, lodgingService, type));
+                case THRIFTY -> this.currentRegion.addStudent(new ThriftyClass(name, country, lodgingService, type));
             }
             if(!(lodgingService instanceof LeisureClass))lodgingService.addStudent();
         }
@@ -173,7 +170,7 @@ public class homeAwayAppClass implements HomeAwayApp{
     public void listStudents(String from) {
         if(this.currentRegion.hasStudents()){
             throw new DoesNotExist("");
-        } else if(this.currentRegion.getEthnicity(from) == null){
+        } else if(this.currentRegion.hasEthnicity(from)){
             throw new InvalidArea("");
         } else{
             this.currentRegion.listStudents(from);
@@ -218,12 +215,25 @@ public class homeAwayAppClass implements HomeAwayApp{
 
     @Override
     public void listUsersInService(String order, String serviceName) {
-
+        if(!order.equals(">") && !order.equals("<")){
+            throw new InvalidOrder("");
+        }else if(this.currentRegion.getService(serviceName) == null){
+            throw new DoesNotExist("");
+        } else if(!(this.currentRegion.getService(serviceName) instanceof Leisure)){
+            throw new InvalidType("");
+        } else{
+            Service service= this.currentRegion.getService(serviceName);
+            this.currentRegion.listUsersIn(service, order);
+        }
     }
 
     @Override
     public void locateStudent(String name) {
-
+        if(this.currentRegion.getStudent(name) == null)
+            throw new DoesNotExist("");
+        else{
+            this.currentRegion.whereStudent(this.currentRegion.getStudent(name));
+        }
     }
 
     @Override
@@ -256,11 +266,11 @@ public class homeAwayAppClass implements HomeAwayApp{
 
     }
 
+
     @Override
     public String getAreaName() {
         return currentRegion.getName();
     }
-
 
     /**
      * Private function that checks if the file exists in the folder data

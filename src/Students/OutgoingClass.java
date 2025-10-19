@@ -1,6 +1,5 @@
 package Students;
 
-import Ethnicities.Ethnicity;
 import Services.Service;
 
 public class OutgoingClass extends StudentAbstractClass implements Outgoing {
@@ -11,7 +10,7 @@ public class OutgoingClass extends StudentAbstractClass implements Outgoing {
      * @param ethnicity      the ethnicity of the student
      * @param currentService the current service the student is at and their home
      */
-    public OutgoingClass(String name, Ethnicity ethnicity, Service currentService, String type) {
+    public OutgoingClass(String name, String ethnicity, Service currentService, String type) {
         super(name, ethnicity, currentService, type);
     }
 }

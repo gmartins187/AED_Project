@@ -1,9 +1,7 @@
 package Regions;
 
-import Ethnicities.Ethnicity;
 import Services.Service;
 import Students.Student;
-import dataStructures.Predicate;
 
 import java.io.Serializable;
 
@@ -55,7 +53,8 @@ public interface Region extends Serializable {
     /**
      * @return the ethnicity object
      */
-    Ethnicity getEthnicity(String country);
+
+    boolean hasEthnicity(String country);
 
     /**
      * @param name the name of the service
@@ -95,4 +94,17 @@ public interface Region extends Serializable {
      * @param from the ethnicity of the students to iterate
      */
     void listStudents(String from);
+
+    /**
+     * lists all the users in a service by a specific order
+     * @param service the users must be in this service
+     * @param order the specific order to iterate(from oldest to newest or reverse)
+     */
+    void listUsersIn(Service service, String order);
+
+    /**
+     * prints to the console where is the student
+     * @param student the student to search for
+     */
+    void whereStudent(Student student);
 }

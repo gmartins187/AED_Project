@@ -1,6 +1,7 @@
 package Regions;
 
-import Ethnicities.*;
+import Filters.*;
+import Filters.InService;
 import Services.Lodging;
 import Services.Service;
 import Students.Student;
@@ -25,7 +26,7 @@ public class RegionClass implements Region {
     private final DoublyLinkedList<Service> services;
 
     private int numOfEthnicities;
-    private List<Ethnicity> ethnicityList;
+    private List<String> ethnicityList;
 
 
 
@@ -102,15 +103,12 @@ public class RegionClass implements Region {
     }
 
     @Override
-    public Ethnicity getEthnicity(String country) {
-        Iterator<Ethnicity> ethnicityIterator = ethnicityList.iterator();
+    public boolean hasEthnicity(String country) {
+        Iterator<String> it = ethnicityList.iterator();
+        while(it.hasNext())
+            if(it.next().equals(country)) return true;
 
-        while (ethnicityIterator.hasNext()) {
-            Ethnicity next = ethnicityIterator.next();
-            if (next.getName().equals(country)) return next;
-        }
-
-        return null;
+        return false;
     }
 
     @Override
@@ -153,16 +151,42 @@ public class RegionClass implements Region {
 
     @Override
     public void addEthnicity(String country) {
-        ethnicityList.addFirst(getEthnicity(country));
+        ethnicityList.addLast(country);
     }
 
     @Override
     public void listStudents(String from) {
-        //TODO
         Iterator<Student> iterator = new FilterIterator<>(((Iterator) students.iterator()), new IsFrom(from));
         while (iterator.hasNext()){
             Student next = iterator.next();
             System.out.println(next.getName() + ": " + next.getType() + " at " + next.getLodging().getName());
         }
+    }
+
+    @Override
+    public void listUsersIn(Service service, String order) {
+        if(order.equals(">")){
+            Iterator<Student> it = new FilterIterator<>((Iterator)students.iterator(), new InService(service));
+            while(it.hasNext()){
+                Student next = it.next();
+                System.out.println(next.getName() + ": " + next.getType());
+            }
+        } else {//order.equals("<")
+            TwoWayIterator<Student> iterator = students.twoWayiterator();
+            while (iterator.hasPrevious()){
+                Student previous = iterator.previous();
+                if(previous.getLocation() == service)
+                    System.out.println(previous.getName() + ": " + previous.getType());
+            }
+        }
+    }
+
+    @Override
+    public void whereStudent(Student student) {
+        Service location = student.getLocation();
+        System.out.printf("%s is at %s %s (%d, %d).",
+                student.getName(), location.getName(),
+                location.getType(), location.getLatitude(),
+                location.getLongitude());
     }
 }
