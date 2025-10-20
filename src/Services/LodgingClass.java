@@ -1,9 +1,16 @@
 package Services;
 
+import dataStructures.List;
+import Students.Student;
+import dataStructures.ListInArray;
+
 public class LodgingClass extends ServiceAbstractClass implements Lodging {
 
-    private int numOfPeople;
     private final int capacity;
+    private int numOfPeople;
+
+    List<Student> visited;
+
 
     /**
      * Constructor for ServiceAbstractClass.
@@ -16,10 +23,12 @@ public class LodgingClass extends ServiceAbstractClass implements Lodging {
      */
     public LodgingClass(long latitude, long longitude, int price, int capacity, String name, String type) {
         super(latitude, longitude, price, name, type);
-        this.capacity = capacity;
-        this.numOfPeople = 0;
-    }
 
+        this.numOfPeople = 0;
+        this.capacity = capacity;
+
+        visited = new ListInArray<>(capacity);
+    }
 
     @Override
     public boolean isFull() {
@@ -27,12 +36,14 @@ public class LodgingClass extends ServiceAbstractClass implements Lodging {
     }
 
     @Override
-    public void addStudent() {
-        this.numOfPeople++;
+    public void addStudent(Student student) {
+        numOfPeople++;
+        visited.add(numOfPeople++, student);
     }
 
     @Override
-    public void removeStudent() {
-        this.numOfPeople--;
+    public void removeStudent(Student student) {
+        numOfPeople--;
+        visited.remove(visited.indexOf(student));
     }
 }

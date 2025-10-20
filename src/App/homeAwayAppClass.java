@@ -3,10 +3,7 @@ package App;
 import Exceptions.*;
 import Regions.*;
 import Services.*;
-import Students.BookishClass;
-import Students.OutgoingClass;
-import Students.Thrifty;
-import Students.ThriftyClass;
+import Students.*;
 
 import java.io.*;
 
@@ -138,14 +135,14 @@ public class homeAwayAppClass implements HomeAwayApp{
         else if(this.currentRegion.getStudent(name) != null)
             throw new AlreadyExists("");
         else {
-            Service lodgingService = this.currentRegion.getService(lodgingName);
+            Lodging lodgingService = (Lodging) this.currentRegion.getService(lodgingName);
             if(this.currentRegion.hasEthnicity(country)) this.currentRegion.addEthnicity(country);
             switch (type){
                 case OUTGOING -> this.currentRegion.addStudent(new OutgoingClass(name, country, lodgingService, type));
                 case BOOKISH -> this.currentRegion.addStudent(new BookishClass(name, country, lodgingService, type));
                 case THRIFTY -> this.currentRegion.addStudent(new ThriftyClass(name, country, lodgingService, type));
             }
-            if(!(lodgingService instanceof LeisureClass))lodgingService.addStudent();
+            if(!(lodgingService instanceof LeisureClass)) lodgingService.addStudent(this.currentRegion.getStudent(name));
         }
     }
 
@@ -188,10 +185,11 @@ public class homeAwayAppClass implements HomeAwayApp{
         else if(currentRegion.getStudent(name).getLocation() == currentRegion.getService(locationName))
             throw new AlreadyThere("");
         else if(this.currentRegion.getService(locationName) instanceof Eating){
-            if(((Eating) this.currentRegion.getService(locationName)).isFull())
+            if((this.currentRegion.getService(locationName)).isFull())
                 throw new ServiceFull("");
         }else{
             this.currentRegion.getStudent(name).setLocation(this.currentRegion.getService(locationName));
+            this.currentRegion.getStudent(name).pingService(this.currentRegion.getService(locationName));
         }
     }
 
@@ -210,6 +208,7 @@ public class homeAwayAppClass implements HomeAwayApp{
                 throw new InvalidService("");
         } else{
             this.currentRegion.getStudent(name).setHome((Lodging) this.currentRegion.getService(lodgingName));
+            this.currentRegion.getStudent(name).pingService(this.currentRegion.getService(lodgingName));
         }
     }
 
@@ -238,7 +237,17 @@ public class homeAwayAppClass implements HomeAwayApp{
 
     @Override
     public void listVisitedLocations(String name) {
+        if(this.currentRegion.getStudent(name) == null)
+            throw new DoesNotExist("");
+        else if(this.currentRegion.getStudent(name) instanceof Thrifty)
+            throw new InvalidType("");
+        else if(this.currentRegion.getStudent(name).hasVisited())
+            throw new Untouched("");
+        else{
+            Student student = this.currentRegion.getStudent(name);
 
+            student.getVisitedPlaces();
+        }
     }
 
     @Override
@@ -265,6 +274,7 @@ public class homeAwayAppClass implements HomeAwayApp{
     public void mostRelevantService(String studentName, String type) throws InvalidType, DoesNotExist, Untouched {
 
     }
+
 
 
     @Override

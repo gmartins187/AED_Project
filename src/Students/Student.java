@@ -47,5 +47,20 @@ public interface Student {
      * @return the ethnicity from which the student is
      */
     String getEthnicity();
+
+    /**
+     * @return if the student has visited any places
+     */
+    boolean hasVisited();
+
+    /**
+     * iterates all the places visited by the student
+     */
+    void getVisitedPlaces();
+
+    /**
+     * register that I have visited this place
+     */
+    void pingService(Service service);
 }
 

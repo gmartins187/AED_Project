@@ -12,9 +12,6 @@ public abstract class StudentAbstractClass implements Student{
     private String name;
     private String ethnicity;
 
-    private int numberOfServicesVisited;
-    private List<Service> visitedServices;
-
 
     /**
      * Constructor for StudentAbstractClass.
@@ -26,9 +23,7 @@ public abstract class StudentAbstractClass implements Student{
         this.name = name;
         this.home = (Lodging) currentService;
         this.Location = currentService;
-        this.numberOfServicesVisited = 0;
         this.ethnicity = ethnicity;
-        visitedServices = new ListInArray<>(numberOfServicesVisited);
         this.type = type;
     }
 
@@ -49,9 +44,9 @@ public abstract class StudentAbstractClass implements Student{
 
     @Override
     public void setLocation(Service newLocation){
-        this.Location.removeStudent();
+        this.Location.removeStudent(this);
         this.Location = newLocation;
-        this.Location.addStudent();
+        this.Location.addStudent(this);
     }
 
     @Override
@@ -66,9 +61,9 @@ public abstract class StudentAbstractClass implements Student{
 
     @Override
     public void setHome(Lodging home){
-        this.home.removeStudent();
+        this.home.removeStudent(this);
         this.home = home;
-        this.home.addStudent();
+        this.home.addStudent(this);
     }
 
 

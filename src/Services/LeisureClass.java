@@ -1,5 +1,7 @@
 package Services;
 
+import Students.Student;
+
 public class LeisureClass extends ServiceAbstractClass implements Leisure{
     /**
      * Constructor for ServiceAbstractClass.
@@ -14,11 +16,18 @@ public class LeisureClass extends ServiceAbstractClass implements Leisure{
         super(latitude, longitude, price, name, type);
     }
 
+
+
     @Override
-    public void addStudent() {
+    public boolean isFull() {
+        return false;
     }
 
     @Override
-    public void removeStudent() {
+    public void addStudent(Student student) {
+    }
+
+    @Override
+    public void removeStudent(Student student) {
     }
 }

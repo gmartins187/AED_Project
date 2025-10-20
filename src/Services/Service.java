@@ -1,5 +1,7 @@
 package Services;
 
+import Students.Student;
+
 public interface Service {
 
     /**
@@ -28,12 +30,19 @@ public interface Service {
     int getPrice();
 
     /**
-     * adds a student to the counter
+     * @return if the service is full
      */
-    void addStudent();
+    boolean isFull();
 
     /**
+     * @param student the student to add
+     * adds a student to the counter
+     */
+    void addStudent(Student student);
+
+    /**
+     * @param student the student to remove
      * removes a student to the counter
      */
-    void removeStudent();
+    void removeStudent(Student student);
 }
