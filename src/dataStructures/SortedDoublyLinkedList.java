@@ -162,7 +162,7 @@ public class SortedDoublyLinkedList<E extends Comparable <E>> implements SortedL
      * @param element to be inserted
      */
     public void add(E element) {
-        //TODO: Left as an exercise.
+        //TODO
         if (head == null) {
             DoublyListNode<E> newNode = new DoublyListNode<>(element);
             head = newNode;
@@ -220,8 +220,48 @@ public class SortedDoublyLinkedList<E extends Comparable <E>> implements SortedL
      * @return element removed from the list or null if !belongs(element)
      */
     public E remove(E element) {
-        //TODO: Left as an exercise.
-        return null;
+        //TODO
+        if (head == null) {
+            return null;
+        }
+        DoublyListNode<E> current = head;
+        int comparison;
+        while (current != null) {
+            comparison = compareElements(element, current.getElement());
+
+            if (comparison == 0) {
+                break;
+            }
+
+            if (comparison < 0) {
+                return null;
+            }
+            current = current.getNext();
+        }
+        if (current == null) {
+            return null;
+        }
+        E elementRemoved = current.getElement();
+        DoublyListNode<E> previous = current.getPrevious();
+        DoublyListNode<E> next = current.getNext();
+        if (current == head) {
+            head = next;
+            if (head != null) {
+                head.setPrevious(null);
+            } else {
+                tail = null;
+            }
+        }
+        else if (current == tail) {
+            tail = previous;
+            tail.setNext(null);
+        }
+        else {
+            previous.setNext(next);
+            next.setPrevious(previous);
+        }
+        currentSize--;
+        return elementRemoved;
     }
 
 
@@ -230,7 +270,8 @@ public class SortedDoublyLinkedList<E extends Comparable <E>> implements SortedL
      * If comparator is null, uses natural order.
      * @param element1 first element.
      * @param element2 second element.
-     * @return negative value if first is less than second, zero if first is equal to second or positive value if first is greater than second.
+     * @return negative value if first is less than second, zero if first is equal to second
+     * or positive value if first is greater than second.
      */
     private int compareElements(E element1, E element2) {
         if (comparator == null) {
