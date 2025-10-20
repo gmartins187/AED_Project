@@ -13,7 +13,6 @@ import java.io.Serializable;
  * @param <E> Generic Element
  *
  */
-
 public interface SortedList<E> extends Serializable {
 
     /**
