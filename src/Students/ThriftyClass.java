@@ -13,4 +13,19 @@ public class ThriftyClass extends StudentAbstractClass implements Thrifty {
     public ThriftyClass(String name, String ethnicity, Service currentService, String type) {
         super(name, ethnicity, currentService, type);
     }
+
+
+
+    @Override
+    public boolean hasVisited() {
+        return false;
+    }
+
+    @Override
+    public void getVisitedPlaces() {
+    }
+
+    @Override
+    public void pingService(Service service) {
+    }
 }

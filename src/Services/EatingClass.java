@@ -1,9 +1,17 @@
 package Services;
 
+import Students.Student;
+import dataStructures.List;
+import dataStructures.ListInArray;
+
 public class EatingClass extends ServiceAbstractClass implements Eating{
 
-    private int numOfPeople;
+    List<Student> visited;
+
     private final int capacity;
+    private int numOfPeople;
+
+
     /**
      * Constructor for ServiceAbstractClass.
      *
@@ -16,22 +24,27 @@ public class EatingClass extends ServiceAbstractClass implements Eating{
      */
     public EatingClass(long latitude, long longitude, int price, int capacity, String name, String type) {
         super(latitude, longitude, price, name, type);
+
         this.numOfPeople = 0;
         this.capacity = capacity;
+
+        visited = new ListInArray<>(capacity);
     }
 
     @Override
     public boolean isFull() {
-        return this.numOfPeople == capacity;
+        return numOfPeople == capacity;
     }
 
     @Override
-    public void addStudent() {
-        this.numOfPeople++;
+    public void addStudent(Student student) {
+        numOfPeople++;
+        visited.add(numOfPeople++, student);
     }
 
     @Override
-    public void removeStudent() {
-        this.numOfPeople--;
+    public void removeStudent(Student student) {
+        numOfPeople--;
+        visited.remove(visited.indexOf(student));
     }
 }
