@@ -1,6 +1,6 @@
 package App.Services;
 
-import App.Services.Reviews.Review;
+import dataStructures.Iterator;
 import dataStructures.List;
 import dataStructures.ListInArray;
 
@@ -75,6 +75,16 @@ public abstract class ServiceAbstractClass implements Service {
         calculateAverage(review);
     }
 
+    @Override
+    public int getOrder(){
+        return this.myOrder;
+    }
+
+    @Override
+    public long getAverageRating(){
+        return this.averageRating;
+    }
+
     /**
      * calculates and updates the average review
      */
@@ -84,5 +94,14 @@ public abstract class ServiceAbstractClass implements Service {
             averageRating = newAverage;
             this.myOrder = orderOfInsertion;
         }
+    }
+
+    @Override
+    public boolean isTagged(String tag){
+        Iterator<Review> it = reviews.iterator();
+        while(it.hasNext())
+            if(it.next().getTag().equals(tag)) return true;
+
+        return false;
     }
 }

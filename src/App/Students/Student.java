@@ -2,8 +2,9 @@ package App.Students;
 
 import App.Services.Lodging;
 import App.Services.Service;
+import dataStructures.Comparator;
 
-public interface Student {
+public interface Student extends Comparator<Student> {
 
     /**
      * @return the name of the student

@@ -1,6 +1,5 @@
 package App.Services;
 
-import App.Services.Reviews.Review;
 import App.Students.Student;
 
 public interface Service {
@@ -36,20 +35,36 @@ public interface Service {
     boolean isFull();
 
     /**
+     * adds a student to the service
      * @param student the student to add
-     * adds a student to the counter
      */
     void addStudent(Student student);
 
     /**
+     * removes student from the service in the service
      * @param student the student to remove
-     * removes a student to the counter
      */
     void removeStudent(Student student);
 
     /**
      * adds a review to the service
-     * @param review the review which is composed by a numeric and text review
+     * @param review the one to add to the service
      */
     void addReview(Review review);
+
+    /**
+     * @return the average rating
+     */
+    long getAverageRating();
+
+    /**
+     * @return the order in which they got the average rating
+     */
+    int getOrder();
+
+    /**
+     * @param tag the tag to check for
+     * return if the service is tagged with the tag
+     */
+    boolean isTagged(String tag);
 }

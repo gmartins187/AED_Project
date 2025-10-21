@@ -1,10 +1,10 @@
-package App.Regions;
+package App;
 
-import App.Filters.*;
-import App.Filters.InService;
 import App.Services.Lodging;
 import App.Services.Service;
+import App.Services.ServicesComparator;
 import App.Students.Student;
+import App.Students.StudentsComparator;
 import dataStructures.*;
 
 public class RegionClass implements Region {
@@ -12,7 +12,10 @@ public class RegionClass implements Region {
     //private final String THRIFTY = "thrifty";
     //private final String BOOKISH = "bookish";
     //private final String OUTGOING = "outgoing";
-    //private final String LODGING = "lodging";
+
+    private final String LODGING = "lodging";
+    private final String LEISURE = "leisure";
+    private final String EATING = "eating";
 
     private final long topBound;
     private final long lowBound;
@@ -23,6 +26,9 @@ public class RegionClass implements Region {
 
     private final List<Student> students;
     private final List<Service> services;
+
+    private final SortedList<Student> sortedStudents;
+    private final SortedList<Service> sortedRatingServices;
 
     private int numOfEthnicities;
     private List<String> ethnicityList;
@@ -49,6 +55,9 @@ public class RegionClass implements Region {
 
         this.students = new DoublyLinkedList<>();
         this.services = new DoublyLinkedList<>();
+
+        this.sortedStudents = new SortedDoublyLinkedList<>(new StudentsComparator());
+        this.sortedRatingServices = new SortedDoublyLinkedList<>(new ServicesComparator());
     }
 
 
@@ -80,6 +89,7 @@ public class RegionClass implements Region {
     @Override
     public void addService(Service service) {
         services.addFirst(service);
+        sortedRatingServices.add(service);
     }
 
     @Override
@@ -99,6 +109,7 @@ public class RegionClass implements Region {
     @Override
     public void addStudent(Student student) {
         students.addFirst(student);
+        sortedStudents.add(student);
     }
 
     @Override
@@ -130,6 +141,7 @@ public class RegionClass implements Region {
     @Override
     public void removeStudent(String name) {
         students.remove(students.indexOf(getStudent(name)));
+        sortedStudents.remove(getStudent(name));
     }
 
     @Override
@@ -155,7 +167,7 @@ public class RegionClass implements Region {
 
     @Override
     public void listStudents(String from) {
-        Iterator<Student> iterator = new FilterIterator<>((students.iterator()), new IsFrom(from));
+        Iterator<Student> iterator = new FilterIterator<>(students.iterator(), new IsFrom(from));
         while (iterator.hasNext()){
             Student next = iterator.next();
             System.out.println(next.getName() + ": " + next.getType() + " at " + next.getLodging().getName());
@@ -164,20 +176,20 @@ public class RegionClass implements Region {
 
     @Override
     public void listUsersIn(Service service, String order) {
-        if(order.equals(">")){
-            Iterator<Student> it = new FilterIterator<>(students.iterator(), new InService(service));
-            while(it.hasNext()){
-                Student next = it.next();
-                System.out.println(next.getName() + ": " + next.getType());
-            }
-        } else {//order.equals("<")
-            TwoWayIterator<Student> iterator = students.//twoWayIterator();
-            while (iterator.hasPrevious()){
-                Student previous = iterator.previous();
-                if(previous.getLocation() == service)
-                    System.out.println(previous.getName() + ": " + previous.getType());
-            }
-        }
+       // if(order.equals(">")){
+       //     return new FilterIterator<>(students.iterator(), new InService(service));
+       //     while(it.hasNext()){
+       //         Student next = it.next();
+       //         System.out.println(next.getName() + ": " + next.getType());
+       //     }
+       // } else {//order.equals("<")
+       //     return new TwoWayDoublyIterator<>(students.getFirst(), students.getLast());
+       //     while (iterator.hasPrevious()){
+       //         Student previous = iterator.previous();
+       //         if(previous.getLocation() == service)
+       //             System.out.println(previous.getName() + ": " + previous.getType());
+       //     }
+       // }
     }
 
     @Override
@@ -190,7 +202,56 @@ public class RegionClass implements Region {
     }
 
     @Override
-    public void listServicesByReview() {
+    public Iterator<Service> listServicesByReview() {
+        return sortedRatingServices.iterator();
+    }
 
+    @Override
+    public boolean hasServicesType(String type) {
+        Iterator<Service> it = services.iterator();
+        while (it.hasNext())
+            if(it.next().getType().equals(type)) return true;
+
+        return false;
+    }
+
+    @Override
+    public boolean hasServicesTypeRate(String type, int numericRate) {
+        Iterator<Service> it = services.iterator();
+        while (it.hasNext()) {
+            Service next = it.next();
+            if (next.getType().equals(type))
+                if (next.getAverageRating() == numericRate) return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean hasServicesWithTag(String tag) {
+        Iterator<Service> it = services.iterator();
+        while (it.hasNext())
+            if(it.next().isTagged(tag)) return true;
+
+        return false;
+    }
+
+    @Override
+    public Iterator<Service> getRankedServices(int numericRate, String type, Student student) {
+            //TODO return ;
+    }
+
+    @Override
+    public Iterator<Service> listServicesWithTag() {
+        return services.iterator();
+    }
+
+    @Override
+    public String findMostRelevantService(Student student, String type) {
+        //TODO
+        switch (type.toLowerCase()) {
+            LODGING ->
+            LEISURE ->
+            EATING ->
+        }
     }
 }

@@ -1,7 +1,8 @@
-package App.Regions;
+package App;
 
 import App.Services.Service;
 import App.Students.Student;
+import dataStructures.Iterator;
 
 import java.io.Serializable;
 
@@ -110,6 +111,45 @@ public interface Region extends Serializable {
 
     /**
      * list the services by the review. in case of the same review
+     * @return the iterator for the main to iterate for
      */
-    void listServicesByReview();
+    Iterator<Service> listServicesByReview();
+
+    /**
+     * @param type the type to check for
+     * @return yes if it has any service in the region with the current type
+     */
+    boolean hasServicesType(String type);
+
+    /**
+     * @param type the type
+     * @param numericRate the rating average
+     * @return if it has any services of a certain type and rating average
+     */
+    boolean hasServicesTypeRate(String type, int numericRate);
+
+    /**
+     * @param tag the tag to check for
+     * @return if is there any service with a certain tag
+     */
+    boolean hasServicesWithTag(String tag);
+
+    /**
+     * @param numericRate the numeric rating of the service
+     * @param type the type of the service
+     * @param student the student
+     * @return an iterator sorted by ranking and distance to the student
+     */
+    Iterator<Service> getRankedServices(int numericRate, String type, Student student);
+
+    /**
+     * @return an iterator with the services by rating
+     */
+    Iterator<Service> listServicesWithTag();
+
+    /**
+     * @param student the student
+     * @return the most relevant service to the student
+     */
+    String findMostRelevantService(Student student, String type);
 }

@@ -1,5 +1,7 @@
 package App;
 import App.Exceptions.*;
+import App.Services.Service;
+import dataStructures.Iterator;
 
 
 public interface HomeAwayApp {
@@ -146,7 +148,7 @@ public interface HomeAwayApp {
      * If two services have the same average rating, order them by the time they were updated to the system.
      * @throws DoesNotExist if there are no services in the system
      */
-    void listServicesByRating()
+    Iterator<Service> getServicesIteratorByRating()
             throws DoesNotExist;
 
     /**
@@ -161,7 +163,7 @@ public interface HomeAwayApp {
      * @throws Untouched If no services of that type exist.
      * @throws ServiceFull If no services of that type with the specified average rating exist.
      */
-    void listServicesByTypeAndRating(int numericRate, String type, String studentName)
+    Iterator<Service> listServicesByTypeAndRating(int numericRate, String type, String studentName)
             throws InvalidValue, DoesNotExist, InvalidType, Untouched, ServiceFull;
 
     /**
@@ -170,7 +172,7 @@ public interface HomeAwayApp {
      * @param tag The word (case-insensitive) to search for in the review descriptions.
      * @throws Untouched If there are no services with reviews containing the 'tag'.
      */
-    void allServicesWithTag(String tag) throws Untouched;
+    Iterator<Service> getServicesWithTag(String tag) throws Untouched;
 
     /**
      * Finds the most relevant service of a certain type for a specific student.
@@ -181,8 +183,9 @@ public interface HomeAwayApp {
      * @throws InvalidType If the service type is invalid.
      * @throws DoesNotExist If the student does not exist.
      * @throws Untouched If no services of the specified type exist.
+     * @return the most relevant service to the student
      */
-    void mostRelevantService(String studentName, String type)
+    String mostRelevantService(String studentName, String type)
             throws InvalidType, DoesNotExist, Untouched;
 
     /**

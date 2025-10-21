@@ -1,4 +1,4 @@
-package App.Services.Reviews;
+package App.Services;
 
 public class ReviewClass implements Review{
 
@@ -19,5 +19,10 @@ public class ReviewClass implements Review{
     @Override
     public int getNumRate() {
         return numericRating;
+    }
+
+    @Override
+    public String getTag() {
+        return textReview;
     }
 }

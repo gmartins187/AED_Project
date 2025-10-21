@@ -1,4 +1,4 @@
-package App.Filters;
+package App;
 
 import App.Students.Student;
 import dataStructures.Predicate;

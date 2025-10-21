@@ -1,5 +1,8 @@
 import App.*;
 import App.Exceptions.*;
+import App.Services.Service;
+import dataStructures.Iterator;
+
 import java.io.File;
 import java.util.Scanner;
 
@@ -47,6 +50,8 @@ public class Main {
     private static final String NO_TYPE_SERVICES_AVG = "No %s services with average!";
     private static final String NO_TAG = "There are no services with this tag!";
     private static final String HAS_LEFT = " has left.";
+    private static final String RANKED = "Services sorted in descending order";
+    private static final String RANKING = "%s services closer with %d average";
 
 
     public static void main(String[] args){commands();}
@@ -425,7 +430,12 @@ public class Main {
      */
     private static void listServicesByRating(HomeAwayApp app) {
         try {
-            app.listServicesByRating();
+            Iterator<Service> it = app.getServicesIteratorByRating();
+            System.out.println(RANKED);
+            while(it.hasNext()){
+                Service next = it.next();
+                System.out.println(next.getName() + ": " + next.getAverageRating());
+            }
         } catch (DoesNotExist e){
             System.out.println(NO_SERVICES_SYS);
         }
@@ -445,7 +455,11 @@ public class Main {
             type = in.next().trim();
             name = in.next();
 
-            app.listServicesByTypeAndRating(numericRate, type, name);
+            Iterator<Service> it = app.listServicesByTypeAndRating(numericRate, type, name);
+            System.out.printf(RANKING, type, numericRate);
+            while(it.hasNext()){
+                System.out.println(it.next().getName());
+            }
         } catch (InvalidValue e) {
             System.out.println(INVALID_STARS);
         } catch (DoesNotExist e) {
@@ -469,7 +483,7 @@ public class Main {
         try {
             String tag = in.next();
 
-            app.allServicesWithTag(tag);
+            Iterator<Service> it = app.getServicesWithTag(tag);
         } catch (Untouched e) {
             System.out.println(NO_TAG);
         }
@@ -488,7 +502,7 @@ public class Main {
             name = in.next();
             type = in.next().trim();
 
-            app.mostRelevantService(name, type);
+            System.out.println(app.mostRelevantService(name, type));
         } catch (InvalidType e) {
             System.out.println(INVALID_TYPE);
         } catch (DoesNotExist e) {
