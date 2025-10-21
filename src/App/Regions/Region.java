@@ -107,4 +107,9 @@ public interface Region extends Serializable {
      * @param student the student to search for
      */
     void whereStudent(Student student);
+
+    /**
+     * list the services by the review. in case of the same review
+     */
+    void listServicesByReview();
 }

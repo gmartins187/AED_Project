@@ -274,17 +274,43 @@ public class homeAwayAppClass implements HomeAwayApp{
     @Override
     public void listServicesByTypeAndRating(int numericRate, String type, String studentName)
             throws InvalidValue, DoesNotExist, InvalidType, Untouched, ServiceFull {
-
+        if(numericRate < 0 ||numericRate > 5)
+            throw new InvalidValue("");
+        else if(this.currentRegion.getStudent(studentName) == null)
+            throw new DoesNotExist("");
+        else if(!(type.equals(LEISURE) || type.equals(LODGING) || type.equals(BOOKISH)))
+            throw new InvalidType("");
+        else if(!this.currentRegion.hasServicesType(type))
+            throw new Untouched("");
+        else if(!this.currentRegion.hasServicesTypeRate(type, numericRate))
+            throw new ServiceFull("");
+        else{
+            this.currentRegion.listRankedServices(numericRate, type,
+                    this.currentRegion.getStudent(studentName));
+        }
     }
 
     @Override
     public void allServicesWithTag(String tag) throws Untouched {
-
+        if(!this.currentRegion.hasServicesWithTag())
+            throw new Untouched("");
+        else{
+            this.currentRegion.listServicesWithTag();
+        }
     }
 
     @Override
     public void mostRelevantService(String studentName, String type) throws InvalidType, DoesNotExist, Untouched {
-
+        if(!(type.equals(LEISURE) || type.equals(LODGING) || type.equals(BOOKISH)))
+            throw new InvalidType("");
+        else if(this.currentRegion.getStudent(studentName) == null)
+            throw new DoesNotExist("");
+        else if(this.currentRegion.hasServicesType(type))
+            throw new Untouched("");
+        else{
+            this.currentRegion.findMostRelevantService
+                    (this.currentRegion.getStudent(studentName));
+        }
     }
 
 

@@ -188,4 +188,9 @@ public class RegionClass implements Region {
                 location.getType(), location.getLatitude(),
                 location.getLongitude());
     }
+
+    @Override
+    public void listServicesByReview() {
+
+    }
 }
