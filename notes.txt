@@ -1,0 +1,18 @@
+POWERPOINTS semana passada (FSO, FISICA, AED)
+
+LC (ex. 4 do teste)
+
+LC(fichas 1,2,3,4,5)
+
+testes de anos passados (2021, 2022)
+
+
+
+segunda classe so com modificadores
+
+devolver iteradores (prints na main)
+
+sinais (list users)
+
+sorted students
+normal students
