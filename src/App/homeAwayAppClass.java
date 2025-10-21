@@ -1,9 +1,10 @@
 package App;
 
-import Exceptions.*;
-import Regions.*;
-import Services.*;
-import Students.*;
+import App.Exceptions.*;
+import App.Regions.*;
+import App.Services.Reviews.ReviewClass;
+import App.Services.*;
+import App.Students.*;
 
 import java.io.*;
 
@@ -252,16 +253,27 @@ public class homeAwayAppClass implements HomeAwayApp{
 
     @Override
     public void rateService(String name, int numericRate, String tag) {
-
+        if(numericRate < 1 || numericRate > 5)
+            throw new InvalidType("");
+        else if(this.currentRegion.getService(name) == null)
+            throw new DoesNotExist("");
+        else{
+            this.currentRegion.getService(name).addReview(new ReviewClass(numericRate, tag));
+        }
     }
 
     @Override
     public void listServicesByRating() {
-
+        if(!this.currentRegion.hasServices())
+            throw new DoesNotExist("");
+        else{
+            this.currentRegion.listServicesByReview();
+        }
     }
 
     @Override
-    public void listServicesByTypeAndRating(int numericRate, String type, String studentName) throws InvalidValue, DoesNotExist, InvalidType, Untouched, ServiceFull {
+    public void listServicesByTypeAndRating(int numericRate, String type, String studentName)
+            throws InvalidValue, DoesNotExist, InvalidType, Untouched, ServiceFull {
 
     }
 
@@ -277,10 +289,12 @@ public class homeAwayAppClass implements HomeAwayApp{
 
 
 
+
     @Override
     public String getAreaName() {
         return currentRegion.getName();
     }
+
 
     /**
      * Private function that checks if the file exists in the folder data

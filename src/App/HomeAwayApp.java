@@ -1,5 +1,5 @@
 package App;
-import Exceptions.*;
+import App.Exceptions.*;
 
 
 public interface HomeAwayApp {

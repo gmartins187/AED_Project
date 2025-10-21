@@ -113,6 +113,5 @@ public interface List<E> extends Serializable {
      * @throws InvalidPositionException - if position is not valid in the list
      */
     E remove( int position );
-
-}   
+}
 

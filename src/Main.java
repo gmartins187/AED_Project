@@ -1,5 +1,5 @@
 import App.*;
-import Exceptions.*;
+import App.Exceptions.*;
 import java.io.File;
 import java.util.Scanner;
 
