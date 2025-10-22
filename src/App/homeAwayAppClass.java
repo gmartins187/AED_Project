@@ -214,7 +214,7 @@ public class homeAwayAppClass implements HomeAwayApp{
     }
 
     @Override
-    public void listUsersInService(String order, String serviceName) {
+    public Iterator<Student> listUsersInService(String order, String serviceName) {
         if(!order.equals(">") && !order.equals("<")){
             throw new InvalidOrder("");
         }else if(this.currentRegion.getService(serviceName) == null){
@@ -223,7 +223,7 @@ public class homeAwayAppClass implements HomeAwayApp{
             throw new InvalidType("");
         } else{
             Service service= this.currentRegion.getService(serviceName);
-            this.currentRegion.listUsersIn(service, order);
+            return this.currentRegion.listUsersIn(service, order);
         }
     }
 

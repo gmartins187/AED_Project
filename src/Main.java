@@ -1,7 +1,9 @@
 import App.*;
 import App.Exceptions.*;
 import App.Services.Service;
+import App.Students.Student;
 import dataStructures.Iterator;
+import dataStructures.TwoWayIterator;
 
 import java.io.File;
 import java.util.Scanner;
@@ -354,7 +356,20 @@ public class Main {
             String order = in.next().trim();
             serviceName = in.nextLine();
 
-            app.listUsersInService(order, serviceName);
+            Iterator<Student> it = app.listUsersInService(order, serviceName);
+
+            if(order.equals("<")){
+                TwoWayIterator<Student> newIt = (TwoWayIterator<Student>) it;
+                while(newIt.hasPrevious()){
+                    Student next = newIt.next();
+                    System.out.println(next.getName() + ": " + next.getType());
+                }
+            } else{
+                while(it.hasNext()){
+                    Student next = it.next();
+                    System.out.println(next.getName() + ": " + next.getType());
+                }
+            }
         } catch (InvalidOrder e){
             System.out.println("This order does not exist!");
         } catch (DoesNotExist e){
@@ -484,6 +499,10 @@ public class Main {
             String tag = in.next();
 
             Iterator<Service> it = app.getServicesWithTag(tag);
+            while(it.hasNext()){
+                Service next = it.next();
+                System.out.println(next.getClass() + " " +next.getName());
+            }
         } catch (Untouched e) {
             System.out.println(NO_TAG);
         }

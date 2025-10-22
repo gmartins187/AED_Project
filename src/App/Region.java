@@ -101,7 +101,7 @@ public interface Region extends Serializable {
      * @param service the users must be in this service
      * @param order the specific order to iterate(from oldest to newest or reverse)
      */
-    void listUsersIn(Service service, String order);
+    Iterator<Student> listUsersIn(Service service, String order);
 
     /**
      * prints to the console where is the student

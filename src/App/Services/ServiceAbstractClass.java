@@ -1,5 +1,6 @@
 package App.Services;
 
+import App.Students.Student;
 import dataStructures.Iterator;
 import dataStructures.List;
 import dataStructures.ListInArray;
@@ -103,5 +104,11 @@ public abstract class ServiceAbstractClass implements Service {
             if(it.next().getTag().equals(tag)) return true;
 
         return false;
+    }
+
+    @Override
+    public long getDistance(Student student){
+        return Math.abs(this.latitude - student.getLocation().getLatitude())
+                + Math.abs(this.longitude - student.getLocation().getLongitude());
     }
 }

@@ -1,21 +1,15 @@
 package App;
 
+import App.Services.DistanceComparator;
 import App.Services.Lodging;
 import App.Services.Service;
 import App.Services.ServicesComparator;
 import App.Students.Student;
 import App.Students.StudentsComparator;
+import App.Students.Thrifty;
 import dataStructures.*;
 
 public class RegionClass implements Region {
-
-    //private final String THRIFTY = "thrifty";
-    //private final String BOOKISH = "bookish";
-    //private final String OUTGOING = "outgoing";
-
-    private final String LODGING = "lodging";
-    private final String LEISURE = "leisure";
-    private final String EATING = "eating";
 
     private final long topBound;
     private final long lowBound;
@@ -157,7 +151,7 @@ public class RegionClass implements Region {
 
     @Override
     public boolean hasStudents() {
-        return students.isEmpty();
+        return !students.isEmpty();
     }
 
     @Override
@@ -175,21 +169,19 @@ public class RegionClass implements Region {
     }
 
     @Override
-    public void listUsersIn(Service service, String order) {
-       // if(order.equals(">")){
-       //     return new FilterIterator<>(students.iterator(), new InService(service));
-       //     while(it.hasNext()){
-       //         Student next = it.next();
-       //         System.out.println(next.getName() + ": " + next.getType());
-       //     }
-       // } else {//order.equals("<")
-       //     return new TwoWayDoublyIterator<>(students.getFirst(), students.getLast());
-       //     while (iterator.hasPrevious()){
-       //         Student previous = iterator.previous();
-       //         if(previous.getLocation() == service)
-       //             System.out.println(previous.getName() + ": " + previous.getType());
-       //     }
-       // }
+    public Iterator<Student> listUsersIn(Service service, String order) {
+
+        TwoWayList<Student> ret = new DoublyLinkedList<>();
+        Iterator<Student> it = students.iterator();
+        while(it.hasNext()){
+            Student next = it.next();
+            if(next.getLocation().equals(service)) ret.addLast(next);
+        }
+        if(order.equals(">")){
+            return ret.iterator();
+        } else {
+            return ret.twoWayiterator();
+        }
     }
 
     @Override
@@ -237,7 +229,15 @@ public class RegionClass implements Region {
 
     @Override
     public Iterator<Service> getRankedServices(int numericRate, String type, Student student) {
-            //TODO return ;
+        Comparator<Service> comparator = new DistanceComparator(student);
+        int counter = 0;
+        List<Service> ret = new SortedDoublyLinkedList<>(comparator);
+        Iterator<Service> it = services.iterator();
+        while(it.hasNext()){
+            Service next = it.next();
+            if(next.getAverageRating() == numericRate) ret.add(counter++, next);
+        }
+        return ret.iterator();
     }
 
     @Override
@@ -247,11 +247,21 @@ public class RegionClass implements Region {
 
     @Override
     public String findMostRelevantService(Student student, String type) {
-        //TODO
-        switch (type.toLowerCase()) {
-            LODGING ->
-            LEISURE ->
-            EATING ->
+        if(student instanceof Thrifty){
+            Iterator<Service> it = services.iterator();
+            Service ret = it.next();
+            while(it.hasNext()) {
+                Service next = it.next();
+                if(next.getPrice() < ret.getPrice() && next.getType().equals(type)) ret = next;
+            }
+            return ret.getName();
+        } else {
+            Iterator<Service> it = sortedRatingServices.iterator();
+            while(it.hasNext()){
+                Service next = it.next();
+                if(next.getType().equals(type)) return next.getName();
+            }
+            return null;
         }
     }
 }

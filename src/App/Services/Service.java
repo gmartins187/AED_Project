@@ -67,4 +67,10 @@ public interface Service {
      * return if the service is tagged with the tag
      */
     boolean isTagged(String tag);
+
+    /**
+     * @param student the student
+     * @return the distance from the service to the student
+     */
+    long getDistance(Student student);
 }

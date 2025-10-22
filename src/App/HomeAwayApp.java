@@ -1,6 +1,7 @@
 package App;
 import App.Exceptions.*;
 import App.Services.Service;
+import App.Students.Student;
 import dataStructures.Iterator;
 
 
@@ -116,8 +117,9 @@ public interface HomeAwayApp {
      * @throws InvalidOrder if the sign order is not valid
      * @throws DoesNotExist if the service does not exist or has no users
      * @throws InvalidType if the order is not valid
+     * @return an iterator with all the users in the service
      */
-    void listUsersInService(String order, String serviceName);
+    Iterator<Student> listUsersInService(String order, String serviceName);
 
     /**
      * Locates a student and shows their details
