@@ -52,6 +52,7 @@ public class RegionClass implements Region {
 
         //TODO
         this.sortedStudents = new SortedDoublyLinkedList<E>(new StudentsComparator());
+        //TODO
         this.sortedRatingServices = new SortedDoublyLinkedList<E>(new ServicesComparator());
     }
 

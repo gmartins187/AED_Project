@@ -202,7 +202,7 @@ public class homeAwayAppClass implements HomeAwayApp{
             throw new DoesNotExist("");
         else if(this.currentRegion.getStudent(name).getHome().equals(this.currentRegion.getService(lodgingName)))
             throw new AlreadyThere("");
-        else if(((Lodging)this.currentRegion.getService(lodgingName)).isFull())
+        else if(this.currentRegion.getService(lodgingName).isFull())
             throw new ServiceFull("");
         else if(this.currentRegion.getStudent(name) instanceof Thrifty) {
             if (this.currentRegion.getService(lodgingName).getPrice() > this.currentRegion.getStudent(name).getHome().getPrice())
