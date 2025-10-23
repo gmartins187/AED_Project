@@ -50,8 +50,9 @@ public class RegionClass implements Region {
         this.students = new DoublyLinkedList<>();
         this.services = new DoublyLinkedList<>();
 
-        this.sortedStudents = new SortedDoublyLinkedList<>(new StudentsComparator());
-        this.sortedRatingServices = new SortedDoublyLinkedList<>(new ServicesComparator());
+        //TODO
+        this.sortedStudents = new SortedDoublyLinkedList<E>(new StudentsComparator());
+        this.sortedRatingServices = new SortedDoublyLinkedList<E>(new ServicesComparator());
     }
 
 
@@ -88,16 +89,12 @@ public class RegionClass implements Region {
 
     @Override
     public boolean hasServices() {
-        return services.isEmpty();
+        return !services.isEmpty();
     }
 
     @Override
-    public void listAllServices() {
-        Iterator<Service> iterator = services.iterator();
-        while(iterator.hasNext()) {
-            Service next = iterator.next();
-            System.out.println(next.getName() + ": " + next.getType() + " " + next.getLatitude() + " -" + next.getLongitude() + ".");
-        }
+    public Iterator<Service> listAllServices() {
+        return services.iterator();
     }
 
     @Override
@@ -160,12 +157,8 @@ public class RegionClass implements Region {
     }
 
     @Override
-    public void listStudents(String from) {
-        Iterator<Student> iterator = new FilterIterator<>(students.iterator(), new IsFrom(from));
-        while (iterator.hasNext()){
-            Student next = iterator.next();
-            System.out.println(next.getName() + ": " + next.getType() + " at " + next.getLodging().getName());
-        }
+    public Iterator<Student> listStudents(String from) {
+        return new FilterIterator<>(students.iterator(), new IsFrom(from));
     }
 
     @Override
@@ -185,9 +178,9 @@ public class RegionClass implements Region {
     }
 
     @Override
-    public void whereStudent(Student student) {
+    public String whereStudent(Student student) {
         Service location = student.getLocation();
-        System.out.printf("%s is at %s %s (%d, %d).",
+        return String.format("%s is at %s %s (%d, %d).",
                 student.getName(), location.getName(),
                 location.getType(), location.getLatitude(),
                 location.getLongitude());
@@ -231,7 +224,8 @@ public class RegionClass implements Region {
     public Iterator<Service> getRankedServices(int numericRate, String type, Student student) {
         Comparator<Service> comparator = new DistanceComparator(student);
         int counter = 0;
-        List<Service> ret = new SortedDoublyLinkedList<>(comparator);
+        //TODO
+        List<Service> ret = new SortedDoublyLinkedList<E>(comparator);
         Iterator<Service> it = services.iterator();
         while(it.hasNext()){
             Service next = it.next();

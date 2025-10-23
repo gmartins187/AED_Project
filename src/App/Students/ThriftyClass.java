@@ -1,6 +1,7 @@
 package App.Students;
 
 import App.Services.Service;
+import dataStructures.Iterator;
 
 public class ThriftyClass extends StudentAbstractClass implements Thrifty {
     /**
@@ -22,7 +23,8 @@ public class ThriftyClass extends StudentAbstractClass implements Thrifty {
     }
 
     @Override
-    public void getVisitedPlaces() {
+    public Iterator<Service> getVisitedPlaces() {
+        return null;
     }
 
     @Override

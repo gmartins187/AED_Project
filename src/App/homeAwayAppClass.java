@@ -118,11 +118,11 @@ public class homeAwayAppClass implements HomeAwayApp{
     }
 
     @Override
-    public void listAllServices() {
+    public Iterator<Service> listAllServices() {
         if(!this.currentRegion.hasServices())
             throw new DoesNotExist("");
         else
-            this.currentRegion.listAllServices();
+            return this.currentRegion.listAllServices();
     }
 
     @Override
@@ -165,13 +165,13 @@ public class homeAwayAppClass implements HomeAwayApp{
     }
 
     @Override
-    public void listStudents(String from) {
+    public Iterator<Student> listStudents(String from) {
         if(this.currentRegion.hasStudents()){
             throw new DoesNotExist("");
         } else if(this.currentRegion.hasEthnicity(from)){
             throw new InvalidArea("");
         } else{
-            this.currentRegion.listStudents(from);
+            return this.currentRegion.listStudents(from);
         }
     }
 
@@ -209,6 +209,7 @@ public class homeAwayAppClass implements HomeAwayApp{
                 throw new InvalidService("");
         } else{
             this.currentRegion.getStudent(name).setHome((Lodging) this.currentRegion.getService(lodgingName));
+            this.currentRegion.getStudent(name).setLocation(this.currentRegion.getService(lodgingName));
             this.currentRegion.getStudent(name).pingService(this.currentRegion.getService(lodgingName));
         }
     }
@@ -228,16 +229,16 @@ public class homeAwayAppClass implements HomeAwayApp{
     }
 
     @Override
-    public void locateStudent(String name) {
+    public String locateStudent(String name) {
         if(this.currentRegion.getStudent(name) == null)
             throw new DoesNotExist("");
         else{
-            this.currentRegion.whereStudent(this.currentRegion.getStudent(name));
+            return this.currentRegion.whereStudent(this.currentRegion.getStudent(name));
         }
     }
 
     @Override
-    public void listVisitedLocations(String name) {
+    public Iterator<Service> listVisitedLocations(String name) {
         if(this.currentRegion.getStudent(name) == null)
             throw new DoesNotExist("");
         else if(this.currentRegion.getStudent(name) instanceof Thrifty)
@@ -245,9 +246,7 @@ public class homeAwayAppClass implements HomeAwayApp{
         else if(this.currentRegion.getStudent(name).hasVisited())
             throw new Untouched("");
         else{
-            Student student = this.currentRegion.getStudent(name);
-
-            student.getVisitedPlaces();
+            return this.currentRegion.getStudent(name).getVisitedPlaces();
         }
     }
 

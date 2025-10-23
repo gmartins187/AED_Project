@@ -42,7 +42,7 @@ public interface Region extends Serializable {
     /**
      * Iterates all the services in the current region loaded
      */
-    void listAllServices();
+    Iterator<Service> listAllServices();
 
     /**
      * adds a student to the region
@@ -94,7 +94,7 @@ public interface Region extends Serializable {
      * list all the students from the region
      * @param from the ethnicity of the students to iterate
      */
-    void listStudents(String from);
+    Iterator<Student> listStudents(String from);
 
     /**
      * lists all the users in a service by a specific order
@@ -107,7 +107,7 @@ public interface Region extends Serializable {
      * prints to the console where is the student
      * @param student the student to search for
      */
-    void whereStudent(Student student);
+    String whereStudent(Student student);
 
     /**
      * list the services by the review. in case of the same review

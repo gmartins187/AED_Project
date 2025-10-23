@@ -41,7 +41,7 @@ public interface HomeAwayApp {
      * Lists all services in the current area
      * @throws NoCurrentArea if there is no current area defined
      */
-    void listAllServices();
+    Iterator<Service> listAllServices();
 
     /**
      * Creates and adds a new student in the app
@@ -77,7 +77,7 @@ public interface HomeAwayApp {
      * @throws DoesNotExist if there are no students
      * @throws InvalidArea if there are no students in the app from that specific country
      */
-    void listStudents(String from);
+    Iterator<Student> listStudents(String from);
 
     /**
      * Change the home of a student
@@ -126,7 +126,7 @@ public interface HomeAwayApp {
      * @param name the name of the student
      * @throws DoesNotExist if the student does not exist
      */
-    void locateStudent(String name);
+    String locateStudent(String name);
 
     /**
      * Lists all locations a student has visited
@@ -135,7 +135,7 @@ public interface HomeAwayApp {
      * @throws InvalidType if the student is thrifty
      * @throws Untouched if the student has not visited any locations
      */
-    void listVisitedLocations(String name);
+    Iterator<Service> listVisitedLocations(String name);
 
     /**
      * Rates a service

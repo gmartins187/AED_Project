@@ -30,10 +30,8 @@ public class OutgoingClass extends StudentAbstractClass implements Outgoing {
     }
 
     @Override
-    public void getVisitedPlaces() {
-        Iterator<Service> it = visitedServices.iterator();
-        while(it.hasNext())
-            System.out.println(it.next().getName());
+    public Iterator<Service> getVisitedPlaces() {
+        return visitedServices.iterator();
     }
 
     @Override

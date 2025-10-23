@@ -3,12 +3,10 @@ package App.Students;
 import dataStructures.Comparator;
 
 public class StudentsComparator implements Comparator<Student> {
-
     /**
-     * comparator to put the order in alphabetical order in this case by the name
      * @param x
      * @param y
-     * @return
+     * @return comparator to put the order in alphabetical order in this case by the name
      */
     @Override
     public int compare(Student x, Student y) {

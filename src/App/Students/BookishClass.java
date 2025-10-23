@@ -1,13 +1,13 @@
 package App.Students;
 
 import App.Services.Service;
+import dataStructures.DoublyLinkedList;
 import dataStructures.Iterator;
 import dataStructures.List;
 import dataStructures.ListInArray;
 
 public class BookishClass extends StudentAbstractClass implements Bookish {
 
-    private int numberOfServicesVisited;
     private final List<Service> visitedServices;
 
     /**
@@ -19,24 +19,21 @@ public class BookishClass extends StudentAbstractClass implements Bookish {
      */
     public BookishClass(String name, String ethnicity, Service currentService, String type) {
         super(name, ethnicity, currentService,type);
-        visitedServices = new ListInArray<>(numberOfServicesVisited);
-        this.numberOfServicesVisited = 0;
+        visitedServices = new DoublyLinkedList<>();
     }
 
     @Override
     public boolean hasVisited() {
-        return numberOfServicesVisited == 0;
+        return !visitedServices.isEmpty();
     }
 
     @Override
-    public void getVisitedPlaces() {
-        Iterator<Service> it = visitedServices.iterator();
-        while(it.hasNext())
-            System.out.println(it.next().getName());
+    public Iterator<Service> getVisitedPlaces() {
+        return visitedServices.iterator();
     }
 
     @Override
     public void pingService(Service service) {
-        this.visitedServices.add(numberOfServicesVisited++, service);
+        if(visitedServices.indexOf(service) < 0) this.visitedServices.addLast(service);
     }
 }

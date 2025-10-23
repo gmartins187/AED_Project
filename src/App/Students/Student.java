@@ -3,6 +3,7 @@ package App.Students;
 import App.Services.Lodging;
 import App.Services.Service;
 import dataStructures.Comparator;
+import dataStructures.Iterator;
 
 public interface Student{
 
@@ -56,7 +57,7 @@ public interface Student{
     /**
      * iterates all the places visited by the student
      */
-    void getVisitedPlaces();
+    Iterator<Service> getVisitedPlaces();
 
     /**
      * register that I have visited this place

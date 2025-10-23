@@ -18,6 +18,7 @@ public class Main {
     private static final String EXIT_TEXT = "Bye!";
     private static final String SAVED = "%s saved.";
     private static final String NOT_COMMAND_TEXT = "Unknown command. Type help to see available commands.";
+    private static final String STUDENT_ADDED = "%s added.";
     private static final String INVALID_BOUNDS = "Invalid bounds.";
     private static final String AREA_EXISTS_ALREADY = "Bounds already exists. Please load it!";
     private static final String NO_CURRENT_AREA = "System bounds not defined.";
@@ -54,6 +55,9 @@ public class Main {
     private static final String HAS_LEFT = " has left.";
     private static final String RANKED = "Services sorted in descending order";
     private static final String RANKING = "%s services closer with %d average";
+    private static final String SERVICE_RATED = "Your evaluation has been registered!";
+    private static final String IS_AT = "%s is now at %s.";
+    private static final String NEW_HOME = "lodging %s is now %s’s home. %s is at home.";
 
 
     public static void main(String[] args){commands();}
@@ -223,7 +227,14 @@ public class Main {
      */
     private static void allServices(HomeAwayApp app) {
         try{
-            app.listAllServices();
+            Iterator<Service> it = app.listAllServices();
+            while(it.hasNext()){
+                Service next = it.next();
+                System.out.println(next.getName() + ": "
+                        + next.getType() + " "
+                        + next.getLatitude()
+                        + " -" + next.getLongitude() + ".");
+            }
         } catch (DoesNotExist e){
             System.out.println(NO_SERVICES);
         }
@@ -245,6 +256,7 @@ public class Main {
             lodgingName = in.next();
 
             app.newStudent(type, name, country, lodgingName);
+            System.out.printf(STUDENT_ADDED, name);
         } catch (InvalidType e){
             System.out.println(INVALID_STU_TYPE);
         } catch (InvalidLocation e){
@@ -282,7 +294,13 @@ public class Main {
         try{
             from = in.next();
 
-            app.listStudents(from);
+            Iterator<Student> it = app.listStudents(from);
+            while (it.hasNext()){
+                Student next = it.next();
+                System.out.println(next.getName() + ": "
+                        + next.getType() + " at "
+                        + next.getLodging().getName());
+            }
         } catch (DoesNotExist e){
             System.out.println(NO_STUDENTS);
         } catch (InvalidArea e){
@@ -304,6 +322,8 @@ public class Main {
             locationName = in.next();
 
             app.changeStudentLocation(name, locationName);
+            //TODO is distracted
+            System.out.printf(IS_AT, name, locationName);
         } catch (InvalidLocation e){
             System.out.printf(UNKNOWN, locationName);
         } catch (DoesNotExist e){
@@ -331,6 +351,7 @@ public class Main {
             lodgingName = in.next();
 
             app.changeStudentHome(name, lodgingName);
+            System.out.printf(NEW_HOME, lodgingName, name, name);
         } catch (InvalidLocation e){
             System.out.printf(INVALID_LODGING, lodgingName);
         } catch (DoesNotExist e){
@@ -390,7 +411,7 @@ public class Main {
         try{
             name = in.next();
 
-            app.locateStudent(name);
+            System.out.println(app.locateStudent(name));
         } catch (DoesNotExist e){
             System.out.printf(DOES_NOT_EXIST, name);
         }
@@ -407,7 +428,9 @@ public class Main {
         try{
             name = in.next();
 
-            app.listVisitedLocations(name);
+            Iterator<Service> it = app.listVisitedLocations(name);
+            while(it.hasNext())
+                System.out.println(name);
         } catch (DoesNotExist e){
             System.out.printf(DOES_NOT_EXIST, name);
         } catch (InvalidType e){
@@ -431,6 +454,7 @@ public class Main {
             String tag = in.next();
 
             app.rateService(name, numericRate, tag);
+            System.out.println(SERVICE_RATED);
         } catch (InvalidValue e){
             System.out.println(INVALID_RATE);
         } catch (DoesNotExist e){
