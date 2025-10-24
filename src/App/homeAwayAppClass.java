@@ -92,13 +92,14 @@ public class homeAwayAppClass implements HomeAwayApp{
             throw new InvalidService("");
         else if(!this.currentRegion.isValid(latitude,longitude))
             throw new InvalidLocation("");
-        else if(price == 0)
+        else if(price <= 0)
             throw new InvalidPrice("");
-        else if(type.equals(LEISURE))
-            if(!(0 <= value2 && value2 <= 100)) throw new InvalidValue("");
+        else if(type.equals(LEISURE)) {
+            if (!(0 <= value2 && value2 <= 100)) throw new InvalidValue("");
+        }
         else if(value2 == 0)
             throw new InvalidValue("");
-        if(this.currentRegion.getService(name) == null)
+        if(this.currentRegion.getService(name) != null)
             throw new AlreadyExists("");
         else {
             switch (type) {

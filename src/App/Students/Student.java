@@ -2,10 +2,9 @@ package App.Students;
 
 import App.Services.Lodging;
 import App.Services.Service;
-import dataStructures.Comparator;
 import dataStructures.Iterator;
 
-public interface Student{
+public interface Student {
 
     /**
      * @return the name of the student

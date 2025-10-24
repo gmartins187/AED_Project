@@ -25,7 +25,7 @@ public class RegionClass implements Region {
     private final SortedList<Service> sortedRatingServices;
 
     private int numOfEthnicities;
-    private List<String> ethnicityList;
+    private final List<String> ethnicityList;
 
 
 
@@ -51,9 +51,9 @@ public class RegionClass implements Region {
         this.services = new DoublyLinkedList<>();
 
         //TODO
-        this.sortedStudents = new SortedDoublyLinkedList<E>(new StudentsComparator());
+        this.sortedStudents = new SortedDoublyLinkedList<>(new StudentsComparator());
         //TODO
-        this.sortedRatingServices = new SortedDoublyLinkedList<E>(new ServicesComparator());
+        this.sortedRatingServices = new SortedDoublyLinkedList<>(new ServicesComparator());
     }
 
 
@@ -155,6 +155,7 @@ public class RegionClass implements Region {
     @Override
     public void addEthnicity(String country) {
         ethnicityList.addLast(country);
+        numOfEthnicities++;
     }
 
     @Override
@@ -224,13 +225,11 @@ public class RegionClass implements Region {
     @Override
     public Iterator<Service> getRankedServices(int numericRate, String type, Student student) {
         Comparator<Service> comparator = new DistanceComparator(student);
-        int counter = 0;
-        //TODO
-        List<Service> ret = new SortedDoublyLinkedList<E>(comparator);
+        SortedList<Service> ret = new SortedDoublyLinkedList<>(comparator);
         Iterator<Service> it = services.iterator();
         while(it.hasNext()){
             Service next = it.next();
-            if(next.getAverageRating() == numericRate) ret.add(counter++, next);
+            if(next.getAverageRating() == numericRate) ret.add(next);
         }
         return ret.iterator();
     }

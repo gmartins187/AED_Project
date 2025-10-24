@@ -9,7 +9,7 @@ import dataStructures.exceptions.*;
  * @param <E> Generic Element
  * 
  */
-public class SortedDoublyLinkedList<E extends Comparable <E>> implements SortedList<E> {
+public class SortedDoublyLinkedList<E> implements SortedList<E> {
 
 
     /**
@@ -275,7 +275,7 @@ public class SortedDoublyLinkedList<E extends Comparable <E>> implements SortedL
      */
     private int compareElements(E element1, E element2) {
         if (comparator == null) {
-            return element1.compareTo(element2);
+            return comparator.compare(element1,element2);
         } else {
             return comparator.compare(element1, element2);
         }

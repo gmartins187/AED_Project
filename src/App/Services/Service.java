@@ -2,7 +2,7 @@ package App.Services;
 
 import App.Students.Student;
 
-public interface Service {
+public interface Service{
 
     /**
      * @return the name of the service

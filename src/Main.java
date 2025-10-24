@@ -58,6 +58,7 @@ public class Main {
     private static final String SERVICE_RATED = "Your evaluation has been registered!";
     private static final String IS_AT = "%s is now at %s.";
     private static final String NEW_HOME = "lodging %s is now %s’s home. %s is at home.";
+    private static final String NEW_SERVICE = "%s %s added.\n";
 
 
     public static void main(String[] args){commands();}
@@ -199,9 +200,9 @@ public class Main {
             long longitude = in.nextLong();
             int value1 = in.nextInt();
             int value2 = in.nextInt();
-            name = in.next();
+            name = in.nextLine().trim();
             app.newService(type, latitude, longitude, value1, value2, name);
-            System.out.println("Eating " + name + " added.");
+            System.out.printf(NEW_SERVICE, type, name);
         } catch (InvalidService e){
             System.out.println(INVALID_TYPE);
         } catch (InvalidLocation e){
