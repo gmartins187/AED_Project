@@ -194,4 +194,10 @@ public interface HomeAwayApp {
      * @return the name of the current region.
      */
     String getAreaName();
+
+    /**
+     * @param name the name
+     * @return the stored name of the service
+     */
+    String getServiceName(String name);
 }

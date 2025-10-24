@@ -113,7 +113,7 @@ public class homeAwayAppClass implements HomeAwayApp{
         else if(type.equals(LEISURE)) {
             if (!(0 <= value2 && value2 <= 100)) throw new InvalidValue("");
         }
-        else if(value2 == 0)
+        else if(value2 <= 0)
             throw new InvalidValue("");
         if(this.currentRegion.getService(name) != null)
             throw new AlreadyExists("");
@@ -141,6 +141,15 @@ public class homeAwayAppClass implements HomeAwayApp{
         else
             return this.currentRegion.listAllServices();
     }
+
+
+
+
+
+
+
+
+
 
     @Override
     public void newStudent(String type, String name, String country, String lodgingName){
@@ -334,6 +343,11 @@ public class homeAwayAppClass implements HomeAwayApp{
     @Override
     public String getAreaName() {
         return currentRegion.getName();
+    }
+
+    @Override
+    public String getServiceName(String name) {
+        return this.currentRegion.getService(name).getName();
     }
 
 

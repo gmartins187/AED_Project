@@ -6,7 +6,6 @@ import dataStructures.Iterator;
 import dataStructures.TwoWayIterator;
 
 import java.io.File;
-import java.util.Locale;
 import java.util.Scanner;
 
 
@@ -24,7 +23,7 @@ public class Main {
     private static final String AREA_EXISTS_ALREADY = "Bounds already exists. Please load it!";
     private static final String NO_CURRENT_AREA = "System bounds not defined.";
     private static final String INVALID_TYPE = "Invalid service type!";
-    private static final String INVALID_LOCATION = "Invalid location.";
+    private static final String INVALID_LOCATION = "Invalid location!";
     private static final String INVALID_MENU_PRICE = "Invalid menu price!";
     private static final String INVALID_DISCOUNT_PRICE = "Invalid discount price!";
     private static final String ALREADY_EXISTS = " already exists!";
@@ -206,7 +205,7 @@ public class Main {
             int value2 = in.nextInt();
             name = in.nextLine().trim();
             app.newService(type, latitude, longitude, value1, value2, name);
-            System.out.printf(NEW_SERVICE, type, name);
+            System.out.printf(NEW_SERVICE, type, app.getServiceName(name));
         } catch (InvalidService e){
             System.out.println(INVALID_TYPE);
         } catch (InvalidLocation e){
@@ -222,7 +221,7 @@ public class Main {
         } catch (ServiceFull e) {
             System.out.println(INVALID_CAPACITY);
         } catch (AlreadyExists e){
-            System.out.println(name + ALREADY_EXISTS); }
+            System.out.println(app.getServiceName(name) + ALREADY_EXISTS); }
     }
 
 

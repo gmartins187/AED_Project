@@ -50,9 +50,7 @@ public class RegionClass implements Region {
         this.students = new DoublyLinkedList<>();
         this.services = new DoublyLinkedList<>();
 
-        //TODO
         this.sortedStudents = new SortedDoublyLinkedList<>(new StudentsComparator());
-        //TODO
         this.sortedRatingServices = new SortedDoublyLinkedList<>(new ServicesComparator());
     }
 
@@ -76,7 +74,7 @@ public class RegionClass implements Region {
         Iterator<Service> iterator = services.iterator();
         while(iterator.hasNext()) {
             Service next = iterator.next();
-            if (next.getName().equals(name)) return next;
+            if (next.getName().equalsIgnoreCase(name)) return next;
         }
 
         return null;
