@@ -2,7 +2,9 @@ package App.Services;
 
 import App.Students.Student;
 
-public interface Service{
+import java.io.Serializable;
+
+public interface Service extends Serializable {
 
     /**
      * @return the name of the service

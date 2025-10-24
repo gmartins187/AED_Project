@@ -65,10 +65,10 @@ public class RegionClass implements Region {
 
     @Override
     public boolean isValid(long latitude, long longitude) {
-        return this.topBound > latitude
-                && latitude > this.lowBound
-                && this.leftBound < longitude
-                && longitude < this.rightBound;
+        return this.topBound >= latitude
+                && latitude >= this.lowBound
+                && this.leftBound <= longitude
+                && longitude <= this.rightBound;
     }
 
     @Override
@@ -84,7 +84,7 @@ public class RegionClass implements Region {
 
     @Override
     public void addService(Service service) {
-        services.addFirst(service);
+        services.addLast(service);
         sortedRatingServices.add(service);
     }
 

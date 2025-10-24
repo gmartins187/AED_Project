@@ -29,10 +29,13 @@ public class homeAwayAppClass implements HomeAwayApp{
     }
 
 
+
+
+
     @Override
     public void newArea(long top, long left, long bottom, long right, String name)
             throws InvalidArea, AlreadyExists{
-        if(fileExists(name)){
+        if(fileExists(name.toLowerCase())){
             throw new AlreadyExists("");
         }else if(validArea(top,left,bottom,right)){
             throw new InvalidArea("");
@@ -43,10 +46,11 @@ public class homeAwayAppClass implements HomeAwayApp{
 
     @Override
     public String saveArea() throws NoCurrentArea {
+        String ret = currentRegion.getName();
         if(currentRegion == null)
             throw new NoCurrentArea("");
         else {
-            String areaName = currentRegion.getName();
+            String areaName = currentRegion.getName().toLowerCase();
             try {
                 File dataFolder = new File("data");
 
@@ -66,12 +70,12 @@ public class homeAwayAppClass implements HomeAwayApp{
                 e.printStackTrace();
             }
             currentRegion = null;
-            return areaName;
+            return ret;
         }
     }
 
     @Override
-    public void loadArea(String regionName) throws NoCurrentArea{
+    public String loadArea(String regionName) throws NoCurrentArea{
         File file = new File("data", regionName.replace(" ", ""));
 
         if (!file.exists()) throw new NoCurrentArea("");
@@ -84,7 +88,19 @@ public class homeAwayAppClass implements HomeAwayApp{
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+        return currentRegion.getName();
     }
+
+
+
+
+
+
+
+
+
+
+
 
     @Override
     public void newService(String type, long latitude, long longitude, int price, int value2, String name) {
@@ -120,7 +136,7 @@ public class homeAwayAppClass implements HomeAwayApp{
 
     @Override
     public Iterator<Service> listAllServices() {
-        if(!this.currentRegion.hasServices())
+        if(this.currentRegion == null || !this.currentRegion.hasServices())
             throw new DoesNotExist("");
         else
             return this.currentRegion.listAllServices();
@@ -312,7 +328,6 @@ public class homeAwayAppClass implements HomeAwayApp{
                     findMostRelevantService(this.currentRegion.getStudent(studentName), type);
         }
     }
-
 
 
 

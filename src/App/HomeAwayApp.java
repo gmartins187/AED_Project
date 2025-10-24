@@ -34,7 +34,7 @@ public interface HomeAwayApp {
      * @param areaName the name of the area to load
      * @throws InvalidArea if the area does not exist
      */
-    void loadArea(String areaName);
+    String loadArea(String areaName);
 
 
     /**

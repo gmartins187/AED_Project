@@ -6,6 +6,7 @@ import dataStructures.Iterator;
 import dataStructures.TwoWayIterator;
 
 import java.io.File;
+import java.util.Locale;
 import java.util.Scanner;
 
 
@@ -59,6 +60,7 @@ public class Main {
     private static final String IS_AT = "%s is now at %s.";
     private static final String NEW_HOME = "lodging %s is now %s’s home. %s is at home.";
     private static final String NEW_SERVICE = "%s %s added.\n";
+    private static final String AREA_LOADED = "%s loaded.\n";
 
 
     public static void main(String[] args){commands();}
@@ -99,7 +101,8 @@ public class Main {
                     in.nextLine();}
             }
         } while(!command.equals(Command.EXIT));
-        clearDataFolder();
+        App.saveArea();
+        //clearDataFolder();
         in.close();
     }
 
@@ -177,11 +180,12 @@ public class Main {
      */
     private static void loadArea(HomeAwayApp app, Scanner in) {
         String areaName = in.nextLine().trim();
-        try{
-            app.loadArea(areaName);
-            System.out.println(areaName + "loaded.");
+        try{;
+            System.out.printf(AREA_LOADED, app.loadArea(areaName.toLowerCase()));
         } catch (InvalidArea e){
             System.out.println("Bounds " + areaName + " does not exists.");
+        } catch (NoCurrentArea e){
+            System.out.println(NO_CURRENT_AREA);
         }
     }
 
@@ -232,9 +236,9 @@ public class Main {
             while(it.hasNext()){
                 Service next = it.next();
                 System.out.println(next.getName() + ": "
-                        + next.getType() + " "
+                        + next.getType() + " ("
                         + next.getLatitude()
-                        + " -" + next.getLongitude() + ".");
+                        + ", " + next.getLongitude() + ").");
             }
         } catch (DoesNotExist e){
             System.out.println(NO_SERVICES);
