@@ -4,7 +4,9 @@ import App.Services.Lodging;
 import App.Services.Service;
 import dataStructures.Iterator;
 
-public interface Student {
+import java.io.Serializable;
+
+public interface Student extends Serializable {
 
     /**
      * @return the name of the student

@@ -37,7 +37,6 @@ public class LodgingClass extends ServiceAbstractClass implements Lodging {
 
     @Override
     public void addStudent(Student student) {
-        numOfPeople++;
         visited.add(numOfPeople++, student);
     }
 
