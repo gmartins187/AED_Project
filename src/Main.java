@@ -29,7 +29,7 @@ public class Main {
     private static final String ALREADY_EXISTS = " already exists!";
     private static final String NO_SERVICES = "No services yet!";
     private static final String INVALID_STU_TYPE = "Invalid student type!";
-    private static final String INVALID_LODGING = "Lodging %s does not exist!";
+    private static final String INVALID_LODGING = "lodging %s does not exist!\n";
     private static final String SERVICE_FULL = "%S %s is full!\n";
     private static final String UNKNOWN = "Unknown %s!\n";
     private static final String DOES_NOT_EXIST = "%s does not exist!\n";
@@ -294,14 +294,14 @@ public class Main {
     private static void listStudents(HomeAwayApp app, Scanner in) {
         String from = "";
         try{
-            from = in.next();
+            from = in.nextLine().trim();
 
             Iterator<Student> it = app.listStudents(from);
             while (it.hasNext()){
                 Student next = it.next();
                 System.out.println(next.getName() + ": "
                         + next.getType() + " at "
-                        + next.getLodging().getName());
+                        + next.getLodging().getName() + ".");
             }
         } catch (DoesNotExist e){
             System.out.println(NO_STUDENTS);
@@ -411,7 +411,7 @@ public class Main {
     private static void locateStudent(HomeAwayApp app, Scanner in) {
         String name = "";
         try{
-            name = in.next();
+            name = in.nextLine().trim();
 
             System.out.println(app.locateStudent(name));
         } catch (DoesNotExist e){

@@ -13,9 +13,6 @@ public class IsFrom implements Predicate<Student>{
 
     @Override
     public boolean check(Student student) {
-        if(this.from.equals("all")) return true;
-        else{
-            return this.from.equals(student.getEthnicity());
-        }
+        return this.from.equals(student.getEthnicity());
     }
 }

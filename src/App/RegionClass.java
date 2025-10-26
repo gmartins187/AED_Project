@@ -122,7 +122,7 @@ public class RegionClass implements Region {
         Iterator<Student> iterator = students.iterator();
         while (iterator.hasNext()) {
             Student next = iterator.next();
-            if (next.getName().equals(name)) return next;
+            if (next.getName().equalsIgnoreCase(name)) return next;
         }
 
         return null;
@@ -158,7 +158,10 @@ public class RegionClass implements Region {
 
     @Override
     public Iterator<Student> listStudents(String from) {
-        return new FilterIterator<>(students.iterator(), new IsFrom(from));
+        if(from.equalsIgnoreCase("all"))
+            return sortedStudents.iterator();
+        else
+            return new FilterIterator<>(students.iterator(), new IsFrom(from));
     }
 
     @Override
