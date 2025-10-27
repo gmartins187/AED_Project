@@ -200,4 +200,10 @@ public interface HomeAwayApp {
      * @return the stored name of the service
      */
     String getServiceName(String name);
+
+    /**
+     * @param name the name received in the input
+     * @return the name of the student registered to the region
+     */
+    String getStudentName(String name);
 }

@@ -30,7 +30,7 @@ class ArrayIterator<E> implements Iterator<E> {
     @Override
     public boolean hasNext() {
 	    //TODO
-        return this.counter > this.current;
+        return counter > current;
     }
 
 

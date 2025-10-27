@@ -30,7 +30,7 @@ public class Main {
     private static final String NO_SERVICES = "No services yet!";
     private static final String INVALID_STU_TYPE = "Invalid student type!";
     private static final String INVALID_LODGING = "lodging %s does not exist!\n";
-    private static final String SERVICE_FULL = "%S %s is full!\n";
+    private static final String SERVICE_FULL = "lodging %s is full!\n";
     private static final String UNKNOWN = "Unknown %s!\n";
     private static final String DOES_NOT_EXIST = "%s does not exist!\n";
     private static final String INVALID_SERVICE = "%s is not a valid service!\n";
@@ -38,7 +38,7 @@ public class Main {
     private static final String NO_STUDENTS = "No students yet!";
     private static final String NO_STUDENTS_FROM = "No students from %s!\n";
     private static final String CURRENT_HOME = "That is %s's home!\n";
-    private static final String LODGING_FULL = "Lodging %s is full!\n";
+    private static final String LODGING_FULL = "lodging %s is full!\n";
     private static final String INVALID_MOVE = "Move is not acceptable for %s!";
     private static final String INVALID_CAPACITY = "Invalid capacity!";
     private static final String INVALID_ROOM_PRICE = "Invalid room price!";
@@ -264,9 +264,9 @@ public class Main {
         } catch (InvalidLocation e){
             System.out.printf(INVALID_LODGING, lodgingName);
         } catch (ServiceFull e){
-            System.out.printf(SERVICE_FULL, LODGING, lodgingName);
+            System.out.printf(SERVICE_FULL, lodgingName);
         } catch (AlreadyExists e){
-            System.out.println(name + ALREADY_EXISTS);
+            System.out.println(app.getStudentName(name) + ALREADY_EXISTS);
         }
     }
 
@@ -320,12 +320,12 @@ public class Main {
         String name = "";
         String locationName = "";
         try{
-            name = in.next();
-            locationName = in.next();
+            name = in.nextLine().trim();
+            locationName = in.nextLine().trim();
 
             app.changeStudentLocation(name, locationName);
             //TODO is distracted
-            System.out.printf(IS_AT, name, locationName);
+            System.out.printf(IS_AT, app.getStudentName(name), locationName);
         } catch (InvalidLocation e){
             System.out.printf(UNKNOWN, locationName);
         } catch (DoesNotExist e){

@@ -161,7 +161,7 @@ public class homeAwayAppClass implements HomeAwayApp{
             throw new AlreadyExists("");
         else {
             Lodging lodgingService = (Lodging) this.currentRegion.getService(lodgingName);
-            if(this.currentRegion.hasEthnicity(country)) this.currentRegion.addEthnicity(country);
+            if(!this.currentRegion.hasEthnicity(country)) this.currentRegion.addEthnicity(country);
             switch (type){
                 case OUTGOING -> this.currentRegion.addStudent(new OutgoingClass(name, country, lodgingService, type));
                 case BOOKISH -> this.currentRegion.addStudent(new BookishClass(name, country, lodgingService, type));
@@ -192,7 +192,7 @@ public class homeAwayAppClass implements HomeAwayApp{
     public Iterator<Student> listStudents(String from) {
         if(!this.currentRegion.hasStudents()){
             throw new DoesNotExist("");
-        } else if(this.currentRegion.hasEthnicity(from)){
+        } else if(!this.currentRegion.hasEthnicity(from)){
             throw new InvalidArea("");
         } else{
             return this.currentRegion.listStudents(from);
@@ -207,7 +207,7 @@ public class homeAwayAppClass implements HomeAwayApp{
             throw new DoesNotExist("");
         else if(currentRegion.getService(locationName)instanceof LodgingClass)
             throw new InvalidService("");
-        else if(currentRegion.getStudent(name).getLocation() == currentRegion.getService(locationName))
+        else if(currentRegion.getStudent(name).getLocation().equals(currentRegion.getService(locationName)))
             throw new AlreadyThere("");
         else if(this.currentRegion.getService(locationName) instanceof Eating){
             if((this.currentRegion.getService(locationName)).isFull())
@@ -346,6 +346,11 @@ public class homeAwayAppClass implements HomeAwayApp{
     @Override
     public String getServiceName(String name) {
         return this.currentRegion.getService(name).getName();
+    }
+
+    @Override
+    public String getStudentName(String name) {
+        return this.currentRegion.getStudent(name).getName();
     }
 
 

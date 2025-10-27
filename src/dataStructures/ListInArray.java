@@ -286,7 +286,7 @@ public class ListInArray<E> implements List<E> {
      */
     private void reallocate(){
         @SuppressWarnings("unchecked")
-        E[] newElems = (E[]) new Object[elems.length*FACTOR];
+        E[] newElems = (E[]) new Object[elems.length*FACTOR + 1];
         for (int i = 0; i < counter; i++){
             newElems[i] = this.elems[i];
         }

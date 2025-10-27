@@ -44,7 +44,7 @@ public class RegionClass implements Region {
         this.rightBound = rightBound;
         this.regionName = regionName;
 
-        this.numOfEthnicities = 0;
+        this.numOfEthnicities = 30;
         this.ethnicityList = new ListInArray<>(numOfEthnicities);
 
         this.students = new DoublyLinkedList<>();
@@ -98,17 +98,14 @@ public class RegionClass implements Region {
 
     @Override
     public void addStudent(Student student) {
-        students.addFirst(student);
+        students.addLast(student);
         sortedStudents.add(student);
     }
 
     @Override
     public boolean hasEthnicity(String country) {
-        Iterator<String> it = ethnicityList.iterator();
-        while(it.hasNext())
-            if(it.next().equals(country)) return true;
-
-        return false;
+        if(country.equalsIgnoreCase("all")) return true;
+        return ethnicityList.indexOf(country.trim().toLowerCase()) >= 0;
     }
 
     @Override
@@ -139,7 +136,7 @@ public class RegionClass implements Region {
         Iterator<Service> iterator = services.iterator();
         while(iterator.hasNext()) {
             Service next = iterator.next();
-            if (next instanceof Lodging && next.getName().equals(lodgingName))
+            if (next instanceof Lodging && next.getName().equalsIgnoreCase(lodgingName))
                 return true;
         }
         return false;
@@ -152,7 +149,9 @@ public class RegionClass implements Region {
 
     @Override
     public void addEthnicity(String country) {
-        ethnicityList.addLast(country);
+        if(numOfEthnicities == 0)
+            ethnicityList.addFirst(country.trim().toLowerCase());
+        else ethnicityList.addLast(country.trim().toLowerCase());
         numOfEthnicities++;
     }
 
