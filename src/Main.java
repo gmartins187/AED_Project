@@ -63,6 +63,8 @@ public class Main {
     private static final String AREA_LOADED = "%s loaded.\n";
     private static final String IS_DISTRACTED = " %s is distracted!";
     private static final String NO_SYSTEM_BOUNDS = "System bounds not defined.";
+    private static final String NO_STUDENTS_IN = "No students on %s!\n";
+    private static final String NO_ORDER = "This order does not exists!";
 
 
     public static void main(String[] args){commands();}
@@ -366,7 +368,7 @@ public class Main {
 
             app.changeStudentHome(name, lodgingName);
             String newName = app.getStudentName(name);
-            System.out.printf(NEW_HOME, lodgingName, newName, newName);
+            System.out.printf(NEW_HOME, app.getServiceName(lodgingName), newName, newName);
         } catch (InvalidLocation e){
             System.out.printf(INVALID_LODGING, lodgingName);
         } catch (DoesNotExist e){
@@ -390,14 +392,14 @@ public class Main {
         String serviceName = "";
         try{
             String order = in.next().trim();
-            serviceName = in.nextLine();
+            serviceName = in.nextLine().trim();
 
             Iterator<Student> it = app.listUsersInService(order, serviceName);
 
             if(order.equals("<")){
                 TwoWayIterator<Student> newIt = (TwoWayIterator<Student>) it;
                 while(newIt.hasPrevious()){
-                    Student next = newIt.next();
+                    Student next = newIt.previous();
                     System.out.println(next.getName() + ": " + next.getType());
                 }
             } else{
@@ -407,11 +409,13 @@ public class Main {
                 }
             }
         } catch (InvalidOrder e){
-            System.out.println("This order does not exist!");
+            System.out.println(NO_ORDER);
         } catch (DoesNotExist e){
             System.out.printf(DOES_NOT_EXIST, serviceName);
         } catch (InvalidType e){
-            System.out.printf(DOES_NOT_CONTROL, serviceName);
+            System.out.printf(DOES_NOT_CONTROL, app.getServiceName(serviceName));
+        } catch (InvalidValue e){
+            System.out.printf(NO_STUDENTS_IN, app.getServiceName(serviceName));
         }
     }
 

@@ -49,12 +49,18 @@ public class EatingClass extends ServiceAbstractClass implements Eating{
     }
 
     @Override
-    public void removeStudent() {
+    public void removeStudent(Student student) {
         numOfPeople--;
+        inService.remove(inService.indexOf(student));
     }
 
     @Override
     public boolean hasStudent(Student stu) {
         return inService.indexOf(stu) >= 0;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return inService.isEmpty();
     }
 }

@@ -45,7 +45,8 @@ public abstract class StudentAbstractClass implements Student{
 
     @Override
     public void setLocation(Service newLocation){
-        this.Location.removeStudent();
+        if(this.home != this.Location)
+            this.Location.removeStudent(this);
         this.Location = newLocation;
         this.Location.addStudent(this);
     }
@@ -56,7 +57,7 @@ public abstract class StudentAbstractClass implements Student{
         if (this.home == this.Location) {
             // 2. If so, remove student from the current home
             // Note: This will cause a NullPointerException if this.home is null
-            this.home.removeStudent();
+            this.home.removeStudent(this);
         }
 
         // 3. Add student to the new home

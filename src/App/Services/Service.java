@@ -44,8 +44,9 @@ public interface Service extends Serializable {
 
     /**
      * removes student from the service in the service
+     * @param student the student to remove
      */
-    void removeStudent();
+    void removeStudent(Student student);
 
     /**
      * adds a review to the service
@@ -79,4 +80,9 @@ public interface Service extends Serializable {
      * @return yes if it has student in service
      */
     boolean hasStudent(Student student);
+
+    /**
+     * @return true if there is no student in the service
+     */
+    boolean isEmpty();
 }

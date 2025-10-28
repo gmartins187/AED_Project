@@ -234,8 +234,10 @@ public class homeAwayAppClass implements HomeAwayApp{
             throw new InvalidOrder("");
         else if(location == null)
             throw new DoesNotExist("");
-        else if(!(location instanceof Leisure))
+        else if(location instanceof Leisure)
             throw new InvalidType("");
+        else if(location.isEmpty())
+            throw new InvalidValue("");
 
         return this.currentRegion.listUsersIn(location, order);
 
