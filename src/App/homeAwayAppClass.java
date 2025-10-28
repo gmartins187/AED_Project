@@ -37,7 +37,7 @@ public class homeAwayAppClass implements HomeAwayApp{
             throws InvalidArea, AlreadyExists{
         if(fileExists(name.toLowerCase())){
             throw new AlreadyExists("");
-        }else if(validArea(top,left,bottom,right)){
+        }else if(invalidArea(top,left,bottom,right)){
             throw new InvalidArea("");
         }else {
             currentRegion = new RegionClass(top, bottom, left, right, name);
@@ -46,7 +46,6 @@ public class homeAwayAppClass implements HomeAwayApp{
 
     @Override
     public String saveArea() throws NoCurrentArea {
-        String ret = currentRegion.getName();
         if(currentRegion == null)
             throw new NoCurrentArea("");
         else {
@@ -56,7 +55,7 @@ public class homeAwayAppClass implements HomeAwayApp{
 
                 if (!dataFolder.exists()) dataFolder.mkdir();
 
-                File file = new File(dataFolder, currentRegion.getName().replace(" ",""));
+                File file = new File(dataFolder, currentRegion.getName().toLowerCase().replace(" ",""));
 
                 FileOutputStream output = new FileOutputStream(file);
                 ObjectOutputStream out = new ObjectOutputStream(output);
@@ -69,8 +68,7 @@ public class homeAwayAppClass implements HomeAwayApp{
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            currentRegion = null;
-            return ret;
+            return currentRegion.getName();
         }
     }
 
@@ -114,7 +112,7 @@ public class homeAwayAppClass implements HomeAwayApp{
             if (!(0 <= value2 && value2 <= 100)) throw new InvalidValue("");
         }
         else if(value2 <= 0)
-            throw new InvalidValue("");
+            throw new ServiceFull("");
         if(this.currentRegion.getService(name) != null)
             throw new AlreadyExists("");
         else {
@@ -136,7 +134,9 @@ public class homeAwayAppClass implements HomeAwayApp{
 
     @Override
     public Iterator<Service> listAllServices() {
-        if(this.currentRegion == null || !this.currentRegion.hasServices())
+        if(this.currentRegion == null)
+            throw new NoCurrentArea("");
+        else if(!this.currentRegion.hasServices())
             throw new DoesNotExist("");
         else
             return this.currentRegion.listAllServices();
@@ -155,7 +155,7 @@ public class homeAwayAppClass implements HomeAwayApp{
     public void newStudent(String type, String name, String country, String lodgingName){
         if(!isStuTypeValid(type))
             throw new InvalidType("");
-        else if(currentRegion.hasLodging(lodgingName))
+        else if(!currentRegion.hasLodging(lodgingName))
             throw new InvalidLocation("");
         else if(this.currentRegion.isServiceFull(lodgingName))
             throw new ServiceFull("");
@@ -163,13 +163,13 @@ public class homeAwayAppClass implements HomeAwayApp{
             throw new AlreadyExists("");
         else {
             Lodging lodgingService = (Lodging) this.currentRegion.getService(lodgingName);
-            if(this.currentRegion.hasEthnicity(country)) this.currentRegion.addEthnicity(country);
+            if(!this.currentRegion.hasEthnicity(country)) this.currentRegion.addEthnicity(country);
             switch (type){
                 case OUTGOING -> this.currentRegion.addStudent(new OutgoingClass(name, country, lodgingService, type));
                 case BOOKISH -> this.currentRegion.addStudent(new BookishClass(name, country, lodgingService, type));
                 case THRIFTY -> this.currentRegion.addStudent(new ThriftyClass(name, country, lodgingService, type));
             }
-            if(!(lodgingService instanceof LeisureClass)) lodgingService.addStudent(this.currentRegion.getStudent(name));
+            lodgingService.addStudent(this.currentRegion.getStudent(name));
         }
     }
 
@@ -192,9 +192,11 @@ public class homeAwayAppClass implements HomeAwayApp{
 
     @Override
     public Iterator<Student> listStudents(String from) {
-        if(this.currentRegion.hasStudents()){
+        if(this.currentRegion == null)
+            throw new NoCurrentArea("");
+        if(!this.currentRegion.hasStudents()){
             throw new DoesNotExist("");
-        } else if(this.currentRegion.hasEthnicity(from)){
+        } else if(!this.currentRegion.hasEthnicity(from)){
             throw new InvalidArea("");
         } else{
             return this.currentRegion.listStudents(from);
@@ -203,41 +205,45 @@ public class homeAwayAppClass implements HomeAwayApp{
 
     @Override
     public void changeStudentLocation(String name, String locationName) {
-        if(currentRegion.getService(locationName) == null)
+        Service service = currentRegion.getService(locationName);
+        Student student = currentRegion.getStudent(name);
+
+        if (service == null)
             throw new InvalidLocation("");
-        else if(currentRegion.getStudent(name) == null)
+        else if (student == null)
             throw new DoesNotExist("");
-        else if(currentRegion.getService(locationName)instanceof LodgingClass)
+        else if (service instanceof LodgingClass)
             throw new InvalidService("");
-        else if(currentRegion.getStudent(name).getLocation() == currentRegion.getService(locationName))
+        else if (student.getLocation() == service)
             throw new AlreadyThere("");
-        else if(this.currentRegion.getService(locationName) instanceof Eating){
-            if((this.currentRegion.getService(locationName)).isFull())
-                throw new ServiceFull("");
-        }else{
-            this.currentRegion.getStudent(name).setLocation(this.currentRegion.getService(locationName));
-            this.currentRegion.getStudent(name).pingService(this.currentRegion.getService(locationName));
-        }
+        if (service instanceof Eating && service.isFull())
+            throw new ServiceFull("");
+
+        student.setLocation(service);
+        student.pingService(service);
     }
+
 
     @Override
     public void changeStudentHome(String name, String lodgingName) {
-        if(this.currentRegion.getService(lodgingName) == null)
+        Service lodging = currentRegion.getService(lodgingName);
+        Student stu = currentRegion.getStudent(name);
+
+        if(lodging == null)
             throw new InvalidLocation("");
-        else if(this.currentRegion.getStudent(name) == null)
+        else if(stu == null)
             throw new DoesNotExist("");
-        else if(this.currentRegion.getStudent(name).getHome().equals(this.currentRegion.getService(lodgingName)))
+        else if(stu.getHome().equals(lodging))
             throw new AlreadyThere("");
-        else if(this.currentRegion.getService(lodgingName).isFull())
+        else if(lodging.isFull())
             throw new ServiceFull("");
-        else if(this.currentRegion.getStudent(name) instanceof Thrifty) {
-            if (this.currentRegion.getService(lodgingName).getPrice() > this.currentRegion.getStudent(name).getHome().getPrice())
-                throw new InvalidService("");
-        } else{
-            this.currentRegion.getStudent(name).setHome((Lodging) this.currentRegion.getService(lodgingName));
-            this.currentRegion.getStudent(name).setLocation(this.currentRegion.getService(lodgingName));
-            this.currentRegion.getStudent(name).pingService(this.currentRegion.getService(lodgingName));
-        }
+        else if(stu instanceof Thrifty && lodging.getPrice() > stu.getHome().getPrice())
+            throw new InvalidService("");
+
+        this.currentRegion.getStudent(name).setHome((Lodging) this.currentRegion.getService(lodgingName));
+        this.currentRegion.getStudent(name).setLocation(this.currentRegion.getService(lodgingName));
+        this.currentRegion.getStudent(name).pingService(this.currentRegion.getService(lodgingName));
+
     }
 
     @Override
@@ -256,11 +262,13 @@ public class homeAwayAppClass implements HomeAwayApp{
 
     @Override
     public String locateStudent(String name) {
-        if(this.currentRegion.getStudent(name) == null)
-            throw new DoesNotExist("");
-        else{
-            return this.currentRegion.whereStudent(this.currentRegion.getStudent(name));
-        }
+        Student stu = this.currentRegion.getStudent(name);
+
+
+        if(stu == null) throw new DoesNotExist("");
+
+        else return this.currentRegion.whereStudent(stu);
+
     }
 
     @Override
@@ -350,6 +358,19 @@ public class homeAwayAppClass implements HomeAwayApp{
         return this.currentRegion.getService(name).getName();
     }
 
+    @Override
+    public String getStudentName(String name) {
+        return this.currentRegion.getStudent(name).getName();
+    }
+
+    @Override
+    public boolean isStudentDistracted(String name, String locationName) {
+        Student stu = this.currentRegion.getStudent(name);
+        Service loc = this.currentRegion.getService(locationName);
+        if(stu instanceof Thrifty && loc instanceof Eating) return ((Thrifty) stu).isDistracted(loc);
+        else return false;
+    }
+
 
     /**
      * Private function that checks if the file exists in the folder data
@@ -357,7 +378,7 @@ public class homeAwayAppClass implements HomeAwayApp{
      * @return if the file exists
      */
     private static boolean fileExists(String fileName) {
-        File file = new File("data", fileName);
+        File file = new File("data", fileName.replace(" ",""));
         return file.exists();
     }
 
@@ -368,7 +389,7 @@ public class homeAwayAppClass implements HomeAwayApp{
      * @param right the right bound
      * @return if the area is valid
      */
-    private boolean validArea(long top, long left, long bottom, long right) {
-        return top <= bottom && left <= right;
+    private boolean invalidArea(long top, long left, long bottom, long right) {
+        return top <= bottom || right <= left;
     }
 }

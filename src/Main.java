@@ -16,9 +16,9 @@ public class Main {
     private static final String LEISURE = "leisure";
 
     private static final String EXIT_TEXT = "Bye!";
-    private static final String SAVED = "%s saved.";
+    private static final String SAVED = "%s saved.\n";
     private static final String NOT_COMMAND_TEXT = "Unknown command. Type help to see available commands.";
-    private static final String STUDENT_ADDED = "%s added.";
+    private static final String STUDENT_ADDED = "%s added.\n";
     private static final String INVALID_BOUNDS = "Invalid bounds.";
     private static final String AREA_EXISTS_ALREADY = "Bounds already exists. Please load it!";
     private static final String NO_CURRENT_AREA = "System bounds not defined.";
@@ -29,37 +29,40 @@ public class Main {
     private static final String ALREADY_EXISTS = " already exists!";
     private static final String NO_SERVICES = "No services yet!";
     private static final String INVALID_STU_TYPE = "Invalid student type!";
-    private static final String INVALID_LODGING = "Lodging %s does not exist!";
-    private static final String SERVICE_FULL = "%S %s is full!";
-    private static final String UNKNOWN = "Unknown %s!";
-    private static final String DOES_NOT_EXIST = "%s does not exist!";
-    private static final String INVALID_SERVICE = "%s is not a valid service!";
+    private static final String INVALID_LODGING = "lodging %s does not exist!\n";
+    private static final String SERVICE_FULL = "lodging %s is full!\n";
+    private static final String EATING_FULL = "eating %s is full!\n";
+    private static final String UNKNOWN = "Unknown %s!\n";
+    private static final String DOES_NOT_EXIST = "%s does not exist!\n";
+    private static final String INVALID_SERVICE = "%s is not a valid service!\n";
     private static final String ALREADY_THERE = "Already there!";
     private static final String NO_STUDENTS = "No students yet!";
-    private static final String NO_STUDENTS_FROM = "No students from %s!";
-    private static final String CURRENT_HOME = "That is %s's home!";
-    private static final String LODGING_FULL = "Lodging %s is full!";
+    private static final String NO_STUDENTS_FROM = "No students from %s!\n";
+    private static final String CURRENT_HOME = "That is %s's home!\n";
+    private static final String LODGING_FULL = "lodging %s is full!\n";
     private static final String INVALID_MOVE = "Move is not acceptable for %s!";
     private static final String INVALID_CAPACITY = "Invalid capacity!";
     private static final String INVALID_ROOM_PRICE = "Invalid room price!";
     private static final String INVALID_TICKET_PRICE = "Invalid ticket price!";
-    private static final String DOES_NOT_CONTROL = "%s does not control student entry and exit!";
-    private static final String HAS_NOT_VISITED = "%s has not visited any locations!";
-    private static final String IS_THRIFTY = "%s is thrifty!";
+    private static final String DOES_NOT_CONTROL = "%s does not control student entry and exit!\n";
+    private static final String HAS_NOT_VISITED = "%s has not visited any locations!\n";
+    private static final String IS_THRIFTY = "%s is thrifty!\n";
     private static final String INVALID_RATE = "Invalid evaluation!";
     private static final String NO_SERVICES_SYS = "No services in the system.";
     private static final String INVALID_STARS = "Invalid stars!";
-    private static final String NO_TYPE_SERVICES = "No %s services!";
-    private static final String NO_TYPE_SERVICES_AVG = "No %s services with average!";
+    private static final String NO_TYPE_SERVICES = "No %s services!\n";
+    private static final String NO_TYPE_SERVICES_AVG = "No %s services with average!\n";
     private static final String NO_TAG = "There are no services with this tag!";
     private static final String HAS_LEFT = " has left.";
     private static final String RANKED = "Services sorted in descending order";
-    private static final String RANKING = "%s services closer with %d average";
+    private static final String RANKING = "%s services closer with %d average\n";
     private static final String SERVICE_RATED = "Your evaluation has been registered!";
     private static final String IS_AT = "%s is now at %s.";
-    private static final String NEW_HOME = "lodging %s is now %s’s home. %s is at home.";
+    private static final String NEW_HOME = "lodging %s is now %s’s home. %s is at home.\n";
     private static final String NEW_SERVICE = "%s %s added.\n";
     private static final String AREA_LOADED = "%s loaded.\n";
+    private static final String IS_DISTRACTED = " %s is distracted!";
+    private static final String NO_SYSTEM_BOUNDS = "System bounds not defined.";
 
 
     public static void main(String[] args){commands();}
@@ -183,8 +186,6 @@ public class Main {
             System.out.printf(AREA_LOADED, app.loadArea(areaName.toLowerCase()));
         } catch (InvalidArea e){
             System.out.println("Bounds " + areaName + " does not exists.");
-        } catch (NoCurrentArea e){
-            System.out.println(NO_CURRENT_AREA);
         }
     }
 
@@ -241,6 +242,8 @@ public class Main {
             }
         } catch (DoesNotExist e){
             System.out.println(NO_SERVICES);
+        } catch (NoCurrentArea e){
+            System.out.println(NO_CURRENT_AREA);
         }
     }
 
@@ -254,10 +257,10 @@ public class Main {
         String name = "";
         String lodgingName = "";
         try{
-            String type = in.next().trim().toLowerCase();
-            name = in.next();
-            String country = in.next().trim();
-            lodgingName = in.next();
+            String type = in.nextLine().trim().toLowerCase();
+            name = in.nextLine();
+            String country = in.nextLine().trim();
+            lodgingName = in.nextLine();
 
             app.newStudent(type, name, country, lodgingName);
             System.out.printf(STUDENT_ADDED, name);
@@ -266,9 +269,9 @@ public class Main {
         } catch (InvalidLocation e){
             System.out.printf(INVALID_LODGING, lodgingName);
         } catch (ServiceFull e){
-            System.out.printf(SERVICE_FULL, LODGING, lodgingName);
+            System.out.printf(SERVICE_FULL, lodgingName);
         } catch (AlreadyExists e){
-            System.out.println(name + ALREADY_EXISTS);
+            System.out.println(app.getStudentName(name) + ALREADY_EXISTS);
         }
     }
 
@@ -296,19 +299,21 @@ public class Main {
     private static void listStudents(HomeAwayApp app, Scanner in) {
         String from = "";
         try{
-            from = in.next();
+            from = in.nextLine().trim();
 
             Iterator<Student> it = app.listStudents(from);
             while (it.hasNext()){
                 Student next = it.next();
                 System.out.println(next.getName() + ": "
                         + next.getType() + " at "
-                        + next.getLodging().getName());
+                        + next.getLocation().getName() + ".");
             }
         } catch (DoesNotExist e){
             System.out.println(NO_STUDENTS);
         } catch (InvalidArea e){
             System.out.printf(NO_STUDENTS_FROM, from);
+        } catch (NoCurrentArea e){
+            System.out.println(NO_SYSTEM_BOUNDS);
         }
     }
 
@@ -322,12 +327,17 @@ public class Main {
         String name = "";
         String locationName = "";
         try{
-            name = in.next();
-            locationName = in.next();
+            name = in.nextLine().trim();
+            locationName = in.nextLine().trim();
 
+            boolean isDistracted = app.isStudentDistracted(name, locationName);
             app.changeStudentLocation(name, locationName);
-            //TODO is distracted
-            System.out.printf(IS_AT, name, locationName);
+
+            System.out.printf(IS_AT, app.getStudentName(name), locationName);
+
+            if(isDistracted) System.out.printf(IS_DISTRACTED, name);
+
+            System.out.println();
         } catch (InvalidLocation e){
             System.out.printf(UNKNOWN, locationName);
         } catch (DoesNotExist e){
@@ -337,7 +347,7 @@ public class Main {
         } catch (AlreadyThere e){
             System.out.println(ALREADY_THERE);
         } catch (ServiceFull e){
-            System.out.printf(SERVICE_FULL, EATING, locationName);
+            System.out.printf(EATING_FULL, locationName);
         }
     }
 
@@ -351,8 +361,8 @@ public class Main {
         String name = "";
         String lodgingName = "";
         try{
-            name = in.next();
-            lodgingName = in.next();
+            name = in.nextLine().trim();
+            lodgingName = in.nextLine().trim();
 
             app.changeStudentHome(name, lodgingName);
             System.out.printf(NEW_HOME, lodgingName, name, name);
@@ -413,7 +423,7 @@ public class Main {
     private static void locateStudent(HomeAwayApp app, Scanner in) {
         String name = "";
         try{
-            name = in.next();
+            name = in.nextLine().trim();
 
             System.out.println(app.locateStudent(name));
         } catch (DoesNotExist e){

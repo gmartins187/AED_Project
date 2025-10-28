@@ -139,17 +139,17 @@ public class SortedDoublyLinkedList<E> implements SortedList<E> {
      * @return true iff the element exists in the list.
      */
     public boolean contains(E element) {
-        //TODO
-        if (head == null) {
-            return false;
-        }
         DoublyListNode<E> current = head;
         while (current != null) {
-            if (comparator.compare(current.getElement(), element) == 0) {
+            int cmp = compareElements(current.getElement(), element);
+
+            if (cmp == 0) {
                 return true;
-            } else if (comparator.compare(current.getElement(), element) > 0) {
+            } else if (cmp > 0) {
+                break;
+            } else {
                 current = current.getNext();
-            } else break;
+            }
         }
         return false;
     }
@@ -274,10 +274,6 @@ public class SortedDoublyLinkedList<E> implements SortedList<E> {
      * or positive value if first is greater than second.
      */
     private int compareElements(E element1, E element2) {
-        if (comparator == null) {
-            return comparator.compare(element1,element2);
-        } else {
-            return comparator.compare(element1, element2);
-        }
+        return comparator.compare(element1, element2);
     }
 }

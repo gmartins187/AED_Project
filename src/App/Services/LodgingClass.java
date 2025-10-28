@@ -1,5 +1,6 @@
 package App.Services;
 
+import dataStructures.DoublyLinkedList;
 import dataStructures.List;
 import App.Students.Student;
 import dataStructures.ListInArray;
@@ -37,8 +38,8 @@ public class LodgingClass extends ServiceAbstractClass implements Lodging {
 
     @Override
     public void addStudent(Student student) {
-        numOfPeople++;
-        visited.add(numOfPeople++, student);
+        this.numOfPeople++;
+        visited.addLast(student);
     }
 
     @Override

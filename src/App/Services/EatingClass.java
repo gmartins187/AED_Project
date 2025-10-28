@@ -1,6 +1,7 @@
 package App.Services;
 
 import App.Students.Student;
+import dataStructures.DoublyLinkedList;
 import dataStructures.List;
 import dataStructures.ListInArray;
 
@@ -39,7 +40,7 @@ public class EatingClass extends ServiceAbstractClass implements Eating{
     @Override
     public void addStudent(Student student) {
         numOfPeople++;
-        visited.add(numOfPeople++, student);
+        visited.addLast(student);
     }
 
     @Override
