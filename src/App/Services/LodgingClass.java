@@ -8,9 +8,13 @@ import dataStructures.ListInArray;
 public class LodgingClass extends ServiceAbstractClass implements Lodging {
 
     private final int capacity;
-    private int numOfPeople;
 
     List<Student> visited;
+    List<Student> inService;
+
+    private int numOfPeople;
+
+    private final int MAX_CAPACITY = 1000;
 
 
     /**
@@ -25,26 +29,33 @@ public class LodgingClass extends ServiceAbstractClass implements Lodging {
     public LodgingClass(long latitude, long longitude, int price, int capacity, String name, String type) {
         super(latitude, longitude, price, name, type);
 
-        this.numOfPeople = 0;
         this.capacity = capacity;
 
-        visited = new ListInArray<>(capacity);
+        visited = new DoublyLinkedList<>();
+        inService = new DoublyLinkedList<>();
+
+        numOfPeople = inService.size();
     }
 
     @Override
     public boolean isFull() {
-        return numOfPeople == capacity;
+        return inService.size() == capacity;
     }
 
     @Override
     public void addStudent(Student student) {
-        this.numOfPeople++;
         visited.addLast(student);
+        inService.addLast(student);
+        numOfPeople++;
     }
 
     @Override
-    public void removeStudent(Student student) {
+    public void removeStudent() {
         numOfPeople--;
-        visited.remove(visited.indexOf(student));
+    }
+
+    @Override
+    public boolean hasStudent(Student stu) {
+        return inService.indexOf(stu) >= 0;
     }
 }

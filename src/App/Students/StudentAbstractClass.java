@@ -41,12 +41,35 @@ public abstract class StudentAbstractClass implements Student{
         return home;
     }
 
+
+
     @Override
     public void setLocation(Service newLocation){
-        this.Location.removeStudent(this);
+        this.Location.removeStudent();
         this.Location = newLocation;
         this.Location.addStudent(this);
     }
+
+    @Override
+    public void setHome(Lodging home) {
+        // 1. Check if the current home is also the current location
+        if (this.home == this.Location) {
+            // 2. If so, remove student from the current home
+            // Note: This will cause a NullPointerException if this.home is null
+            this.home.removeStudent();
+        }
+
+        // 3. Add student to the new home
+        // Note: This will cause a NullPointerException if 'home' (the parameter) is null
+        home.addStudent(this);
+
+        // 4. Update the instance's home and location
+        this.home = home;
+        this.Location = home;
+    }
+
+
+
 
     @Override
     public Lodging getHome(){
@@ -57,14 +80,6 @@ public abstract class StudentAbstractClass implements Student{
     public Service getLocation(){
         return this.Location;
     }
-
-    @Override
-    public void setHome(Lodging home){
-        this.home.removeStudent(this);
-        this.home = home;
-        this.home.addStudent(this);
-    }
-
 
     @Override
     public String getEthnicity(){

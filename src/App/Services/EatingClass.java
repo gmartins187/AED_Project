@@ -8,10 +8,12 @@ import dataStructures.ListInArray;
 public class EatingClass extends ServiceAbstractClass implements Eating{
 
     List<Student> visited;
+    List<Student> inService;
 
     private final int capacity;
-    private int numOfPeople;
 
+    private final int MAX_CAPACITY = 1000;
+    private int numOfPeople;
 
     /**
      * Constructor for ServiceAbstractClass.
@@ -26,10 +28,12 @@ public class EatingClass extends ServiceAbstractClass implements Eating{
     public EatingClass(long latitude, long longitude, int price, int capacity, String name, String type) {
         super(latitude, longitude, price, name, type);
 
-        this.numOfPeople = 0;
         this.capacity = capacity;
 
-        visited = new ListInArray<>(capacity);
+        visited = new ListInArray<>(MAX_CAPACITY);
+        inService = new ListInArray<>(capacity);
+
+        numOfPeople = 0;
     }
 
     @Override
@@ -39,13 +43,18 @@ public class EatingClass extends ServiceAbstractClass implements Eating{
 
     @Override
     public void addStudent(Student student) {
-        numOfPeople++;
+        inService.addLast(student);
         visited.addLast(student);
+        numOfPeople++;
     }
 
     @Override
-    public void removeStudent(Student student) {
+    public void removeStudent() {
         numOfPeople--;
-        visited.remove(visited.indexOf(student));
+    }
+
+    @Override
+    public boolean hasStudent(Student stu) {
+        return inService.indexOf(stu) >= 0;
     }
 }

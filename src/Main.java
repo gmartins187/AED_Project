@@ -40,7 +40,7 @@ public class Main {
     private static final String NO_STUDENTS_FROM = "No students from %s!\n";
     private static final String CURRENT_HOME = "That is %s's home!\n";
     private static final String LODGING_FULL = "lodging %s is full!\n";
-    private static final String INVALID_MOVE = "Move is not acceptable for %s!";
+    private static final String INVALID_MOVE = "Move is not acceptable for %s!\n";
     private static final String INVALID_CAPACITY = "Invalid capacity!";
     private static final String INVALID_ROOM_PRICE = "Invalid room price!";
     private static final String INVALID_TICKET_PRICE = "Invalid ticket price!";
@@ -58,7 +58,7 @@ public class Main {
     private static final String RANKING = "%s services closer with %d average\n";
     private static final String SERVICE_RATED = "Your evaluation has been registered!";
     private static final String IS_AT = "%s is now at %s.";
-    private static final String NEW_HOME = "lodging %s is now %s’s home. %s is at home.\n";
+    private static final String NEW_HOME = "lodging %s is now %s's home. %s is at home.\n";
     private static final String NEW_SERVICE = "%s %s added.\n";
     private static final String AREA_LOADED = "%s loaded.\n";
     private static final String IS_DISTRACTED = " %s is distracted!";
@@ -365,17 +365,18 @@ public class Main {
             lodgingName = in.nextLine().trim();
 
             app.changeStudentHome(name, lodgingName);
-            System.out.printf(NEW_HOME, lodgingName, name, name);
+            String newName = app.getStudentName(name);
+            System.out.printf(NEW_HOME, lodgingName, newName, newName);
         } catch (InvalidLocation e){
             System.out.printf(INVALID_LODGING, lodgingName);
         } catch (DoesNotExist e){
             System.out.printf(DOES_NOT_EXIST, name);
         } catch (AlreadyThere e){
-            System.out.printf(CURRENT_HOME, name);
+            System.out.printf(CURRENT_HOME, app.getStudentName(name));
         } catch (ServiceFull e){
             System.out.printf(LODGING_FULL, lodgingName);
         } catch (InvalidService e){
-            System.out.printf(INVALID_MOVE, name);
+            System.out.printf(INVALID_MOVE, app.getStudentName(name));
         }
     }
 

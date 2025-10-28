@@ -240,9 +240,8 @@ public class homeAwayAppClass implements HomeAwayApp{
         else if(stu instanceof Thrifty && lodging.getPrice() > stu.getHome().getPrice())
             throw new InvalidService("");
 
-        this.currentRegion.getStudent(name).setHome((Lodging) this.currentRegion.getService(lodgingName));
-        this.currentRegion.getStudent(name).setLocation(this.currentRegion.getService(lodgingName));
-        this.currentRegion.getStudent(name).pingService(this.currentRegion.getService(lodgingName));
+        stu.setHome((Lodging) lodging);
+        stu.pingService(lodging);
 
     }
 
