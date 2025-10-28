@@ -272,13 +272,15 @@ public class homeAwayAppClass implements HomeAwayApp{
 
     @Override
     public void rateService(String name, int numericRate, String tag) {
-        if(numericRate < 1 || numericRate > 5)
+        Service loc = this.currentRegion.getService(name);
+
+        if(numericRate >= 1 && numericRate <= 5)
             throw new InvalidType("");
-        else if(this.currentRegion.getService(name) == null)
+        else if(loc == null)
             throw new DoesNotExist("");
-        else{
-            this.currentRegion.getService(name).addReview(new ReviewClass(numericRate, tag));
-        }
+
+        loc.addReview(new ReviewClass(numericRate, tag));
+
     }
 
     @Override

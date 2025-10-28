@@ -470,12 +470,12 @@ public class Main {
         String name = "";
         try {
             int numericRate = in.nextInt();
-            name = in.next();
-            String tag = in.next();
+            name = in.nextLine();
+            String tag = in.nextLine();
 
             app.rateService(name, numericRate, tag);
             System.out.println(SERVICE_RATED);
-        } catch (InvalidValue e){
+        } catch (InvalidType e){
             System.out.println(INVALID_RATE);
         } catch (DoesNotExist e){
             System.out.printf(DOES_NOT_EXIST, name);

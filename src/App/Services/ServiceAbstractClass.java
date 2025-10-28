@@ -43,6 +43,8 @@ public abstract class ServiceAbstractClass implements Service {
 
         this.reviewCounter = 0;
         reviews = new ListInArray<>(INITIAL_CAPACITY);
+
+        averageRating = 4;
     }
 
     @Override
