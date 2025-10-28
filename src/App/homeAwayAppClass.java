@@ -89,17 +89,6 @@ public class homeAwayAppClass implements HomeAwayApp{
         return currentRegion.getName();
     }
 
-
-
-
-
-
-
-
-
-
-
-
     @Override
     public void newService(String type, long latitude, long longitude, int price, int value2, String name) {
         if(!isSerTypeValid(type))
@@ -141,15 +130,6 @@ public class homeAwayAppClass implements HomeAwayApp{
         else
             return this.currentRegion.listAllServices();
     }
-
-
-
-
-
-
-
-
-
 
     @Override
     public void newStudent(String type, String name, String country, String lodgingName){
@@ -247,16 +227,18 @@ public class homeAwayAppClass implements HomeAwayApp{
 
     @Override
     public Iterator<Student> listUsersInService(String order, String serviceName) {
-        if(!order.equals(">") && !order.equals("<")){
+        Service location = this.currentRegion.getService(serviceName);
+
+
+        if(!order.equals(">") && !order.equals("<"))
             throw new InvalidOrder("");
-        }else if(this.currentRegion.getService(serviceName) == null){
+        else if(location == null)
             throw new DoesNotExist("");
-        } else if(!(this.currentRegion.getService(serviceName) instanceof Leisure)){
+        else if(!(location instanceof Leisure))
             throw new InvalidType("");
-        } else{
-            Service service= this.currentRegion.getService(serviceName);
-            return this.currentRegion.listUsersIn(service, order);
-        }
+
+        return this.currentRegion.listUsersIn(location, order);
+
     }
 
     @Override
