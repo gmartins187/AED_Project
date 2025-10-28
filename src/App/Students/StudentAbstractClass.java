@@ -58,6 +58,9 @@ public abstract class StudentAbstractClass implements Student{
             // 2. If so, remove student from the current home
             // Note: This will cause a NullPointerException if this.home is null
             this.home.removeStudent(this);
+        } else{
+            this.home.removeStudent(this);
+            this.Location.removeStudent(this);
         }
 
         // 3. Add student to the new home
