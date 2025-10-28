@@ -149,7 +149,9 @@ public class homeAwayAppClass implements HomeAwayApp{
                 case BOOKISH -> this.currentRegion.addStudent(new BookishClass(name, country, lodgingService, type));
                 case THRIFTY -> this.currentRegion.addStudent(new ThriftyClass(name, country, lodgingService, type));
             }
-            lodgingService.addStudent(this.currentRegion.getStudent(name));
+            Student student = this.currentRegion.getStudent(name);
+            lodgingService.addStudent(student);
+            student.pingService(lodgingService);
         }
     }
 
@@ -256,15 +258,16 @@ public class homeAwayAppClass implements HomeAwayApp{
 
     @Override
     public Iterator<Service> listVisitedLocations(String name) {
-        if(this.currentRegion.getStudent(name) == null)
+        Student stu = this.currentRegion.getStudent(name);
+
+        if(stu == null)
             throw new DoesNotExist("");
-        else if(this.currentRegion.getStudent(name) instanceof Thrifty)
+        else if(stu instanceof Thrifty)
             throw new InvalidType("");
-        else if(this.currentRegion.getStudent(name).hasVisited())
+        else if(stu.hasnotVisited())
             throw new Untouched("");
-        else{
-            return this.currentRegion.getStudent(name).getVisitedPlaces();
-        }
+
+        return this.currentRegion.getStudent(name).getVisitedPlaces();
     }
 
     @Override

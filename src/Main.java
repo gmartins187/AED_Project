@@ -335,7 +335,8 @@ public class Main {
             boolean isDistracted = app.isStudentDistracted(name, locationName);
             app.changeStudentLocation(name, locationName);
 
-            System.out.printf(IS_AT, app.getStudentName(name), locationName);
+            System.out.printf(IS_AT, app.getStudentName(name),
+                    app.getServiceName(locationName));
 
             if(isDistracted) System.out.printf(IS_DISTRACTED, name);
 
@@ -445,17 +446,17 @@ public class Main {
     private static void listVisitedLocations(HomeAwayApp app, Scanner in) {
         String name = "";
         try{
-            name = in.next();
+            name = in.nextLine().trim();
 
             Iterator<Service> it = app.listVisitedLocations(name);
             while(it.hasNext())
-                System.out.println(name);
+                System.out.println(it.next().getName());
         } catch (DoesNotExist e){
             System.out.printf(DOES_NOT_EXIST, name);
         } catch (InvalidType e){
-            System.out.printf(IS_THRIFTY, name);
+            System.out.printf(IS_THRIFTY, app.getStudentName(name));
         } catch (Untouched e){
-            System.out.printf(HAS_NOT_VISITED, name);
+            System.out.printf(HAS_NOT_VISITED, app.getStudentName(name));
         }
     }
 

@@ -25,7 +25,7 @@ public class ThriftyClass extends StudentAbstractClass implements Thrifty {
 
 
     @Override
-    public boolean hasVisited() {
+    public boolean hasnotVisited() {
         return false;
     }
 
@@ -33,6 +33,7 @@ public class ThriftyClass extends StudentAbstractClass implements Thrifty {
     public Iterator<Service> getVisitedPlaces() {
         return null;
     }
+
 
 
     @Override
