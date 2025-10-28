@@ -134,7 +134,9 @@ public class homeAwayAppClass implements HomeAwayApp{
 
     @Override
     public Iterator<Service> listAllServices() {
-        if(this.currentRegion == null || !this.currentRegion.hasServices())
+        if(this.currentRegion == null)
+            throw new NoCurrentArea("");
+        else if(!this.currentRegion.hasServices())
             throw new DoesNotExist("");
         else
             return this.currentRegion.listAllServices();
@@ -167,7 +169,7 @@ public class homeAwayAppClass implements HomeAwayApp{
                 case BOOKISH -> this.currentRegion.addStudent(new BookishClass(name, country, lodgingService, type));
                 case THRIFTY -> this.currentRegion.addStudent(new ThriftyClass(name, country, lodgingService, type));
             }
-            if(!(lodgingService instanceof LeisureClass)) lodgingService.addStudent(this.currentRegion.getStudent(name));
+            lodgingService.addStudent(this.currentRegion.getStudent(name));
         }
     }
 
@@ -190,6 +192,8 @@ public class homeAwayAppClass implements HomeAwayApp{
 
     @Override
     public Iterator<Student> listStudents(String from) {
+        if(this.currentRegion == null)
+            throw new NoCurrentArea("");
         if(!this.currentRegion.hasStudents()){
             throw new DoesNotExist("");
         } else if(!this.currentRegion.hasEthnicity(from)){
@@ -201,41 +205,45 @@ public class homeAwayAppClass implements HomeAwayApp{
 
     @Override
     public void changeStudentLocation(String name, String locationName) {
-        if(currentRegion.getService(locationName) == null)
+        Service service = currentRegion.getService(locationName);
+        Student student = currentRegion.getStudent(name);
+
+        if (service == null)
             throw new InvalidLocation("");
-        else if(currentRegion.getStudent(name) == null)
+        else if (student == null)
             throw new DoesNotExist("");
-        else if(currentRegion.getService(locationName)instanceof LodgingClass)
+        else if (service instanceof LodgingClass)
             throw new InvalidService("");
-        else if(currentRegion.getStudent(name).getLocation().equals(currentRegion.getService(locationName)))
+        else if (student.getLocation() == service)
             throw new AlreadyThere("");
-        else if(this.currentRegion.getService(locationName) instanceof Eating){
-            if((this.currentRegion.getService(locationName)).isFull())
-                throw new ServiceFull("");
-        }else{
-            this.currentRegion.getStudent(name).setLocation(this.currentRegion.getService(locationName));
-            this.currentRegion.getStudent(name).pingService(this.currentRegion.getService(locationName));
-        }
+        if (service instanceof Eating && service.isFull())
+            throw new ServiceFull("");
+
+        student.setLocation(service);
+        student.pingService(service);
     }
+
 
     @Override
     public void changeStudentHome(String name, String lodgingName) {
-        if(this.currentRegion.getService(lodgingName) == null)
+        Service lodging = currentRegion.getService(lodgingName);
+        Student stu = currentRegion.getStudent(name);
+
+        if(lodging == null)
             throw new InvalidLocation("");
-        else if(this.currentRegion.getStudent(name) == null)
+        else if(stu == null)
             throw new DoesNotExist("");
-        else if(this.currentRegion.getStudent(name).getHome().equals(this.currentRegion.getService(lodgingName)))
+        else if(stu.getHome().equals(lodging))
             throw new AlreadyThere("");
-        else if(this.currentRegion.getService(lodgingName).isFull())
+        else if(lodging.isFull())
             throw new ServiceFull("");
-        else if(this.currentRegion.getStudent(name) instanceof Thrifty) {
-            if (this.currentRegion.getService(lodgingName).getPrice() > this.currentRegion.getStudent(name).getHome().getPrice())
-                throw new InvalidService("");
-        } else{
-            this.currentRegion.getStudent(name).setHome((Lodging) this.currentRegion.getService(lodgingName));
-            this.currentRegion.getStudent(name).setLocation(this.currentRegion.getService(lodgingName));
-            this.currentRegion.getStudent(name).pingService(this.currentRegion.getService(lodgingName));
-        }
+        else if(stu instanceof Thrifty && lodging.getPrice() > stu.getHome().getPrice())
+            throw new InvalidService("");
+
+        this.currentRegion.getStudent(name).setHome((Lodging) this.currentRegion.getService(lodgingName));
+        this.currentRegion.getStudent(name).setLocation(this.currentRegion.getService(lodgingName));
+        this.currentRegion.getStudent(name).pingService(this.currentRegion.getService(lodgingName));
+
     }
 
     @Override
@@ -254,11 +262,13 @@ public class homeAwayAppClass implements HomeAwayApp{
 
     @Override
     public String locateStudent(String name) {
-        if(this.currentRegion.getStudent(name) == null)
-            throw new DoesNotExist("");
-        else{
-            return this.currentRegion.whereStudent(this.currentRegion.getStudent(name));
-        }
+        Student stu = this.currentRegion.getStudent(name);
+
+
+        if(stu == null) throw new DoesNotExist("");
+
+        else return this.currentRegion.whereStudent(stu);
+
     }
 
     @Override
@@ -351,6 +361,14 @@ public class homeAwayAppClass implements HomeAwayApp{
     @Override
     public String getStudentName(String name) {
         return this.currentRegion.getStudent(name).getName();
+    }
+
+    @Override
+    public boolean isStudentDistracted(String name, String locationName) {
+        Student stu = this.currentRegion.getStudent(name);
+        Service loc = this.currentRegion.getService(locationName);
+        if(stu instanceof Thrifty && loc instanceof Eating) return ((Thrifty) stu).isDistracted(loc);
+        else return false;
     }
 
 

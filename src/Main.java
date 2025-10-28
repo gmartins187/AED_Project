@@ -31,6 +31,7 @@ public class Main {
     private static final String INVALID_STU_TYPE = "Invalid student type!";
     private static final String INVALID_LODGING = "lodging %s does not exist!\n";
     private static final String SERVICE_FULL = "lodging %s is full!\n";
+    private static final String EATING_FULL = "eating %s is full!\n";
     private static final String UNKNOWN = "Unknown %s!\n";
     private static final String DOES_NOT_EXIST = "%s does not exist!\n";
     private static final String INVALID_SERVICE = "%s is not a valid service!\n";
@@ -56,10 +57,12 @@ public class Main {
     private static final String RANKED = "Services sorted in descending order";
     private static final String RANKING = "%s services closer with %d average\n";
     private static final String SERVICE_RATED = "Your evaluation has been registered!";
-    private static final String IS_AT = "%s is now at %s.\n";
+    private static final String IS_AT = "%s is now at %s.";
     private static final String NEW_HOME = "lodging %s is now %s’s home. %s is at home.\n";
     private static final String NEW_SERVICE = "%s %s added.\n";
     private static final String AREA_LOADED = "%s loaded.\n";
+    private static final String IS_DISTRACTED = " %s is distracted!";
+    private static final String NO_SYSTEM_BOUNDS = "System bounds not defined.";
 
 
     public static void main(String[] args){commands();}
@@ -239,6 +242,8 @@ public class Main {
             }
         } catch (DoesNotExist e){
             System.out.println(NO_SERVICES);
+        } catch (NoCurrentArea e){
+            System.out.println(NO_CURRENT_AREA);
         }
     }
 
@@ -301,12 +306,14 @@ public class Main {
                 Student next = it.next();
                 System.out.println(next.getName() + ": "
                         + next.getType() + " at "
-                        + next.getLodging().getName() + ".");
+                        + next.getLocation().getName() + ".");
             }
         } catch (DoesNotExist e){
             System.out.println(NO_STUDENTS);
         } catch (InvalidArea e){
             System.out.printf(NO_STUDENTS_FROM, from);
+        } catch (NoCurrentArea e){
+            System.out.println(NO_SYSTEM_BOUNDS);
         }
     }
 
@@ -323,9 +330,14 @@ public class Main {
             name = in.nextLine().trim();
             locationName = in.nextLine().trim();
 
+            boolean isDistracted = app.isStudentDistracted(name, locationName);
             app.changeStudentLocation(name, locationName);
-            //TODO is distracted
+
             System.out.printf(IS_AT, app.getStudentName(name), locationName);
+
+            if(isDistracted) System.out.printf(IS_DISTRACTED, name);
+
+            System.out.println();
         } catch (InvalidLocation e){
             System.out.printf(UNKNOWN, locationName);
         } catch (DoesNotExist e){
@@ -335,7 +347,7 @@ public class Main {
         } catch (AlreadyThere e){
             System.out.println(ALREADY_THERE);
         } catch (ServiceFull e){
-            System.out.printf(SERVICE_FULL, EATING, locationName);
+            System.out.printf(EATING_FULL, locationName);
         }
     }
 
@@ -349,8 +361,8 @@ public class Main {
         String name = "";
         String lodgingName = "";
         try{
-            name = in.next();
-            lodgingName = in.next();
+            name = in.nextLine().trim();
+            lodgingName = in.nextLine().trim();
 
             app.changeStudentHome(name, lodgingName);
             System.out.printf(NEW_HOME, lodgingName, name, name);

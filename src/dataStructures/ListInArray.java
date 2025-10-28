@@ -109,7 +109,7 @@ public class ListInArray<E> implements List<E> {
      */
     public E get(int position) {
         //TODO
-        if (position < 0 || position > counter){
+        if (position < 0 || position >= counter){
             throw new InvalidPositionException();
         }
         else if (position == 0){

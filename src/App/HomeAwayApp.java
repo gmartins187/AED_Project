@@ -206,4 +206,12 @@ public interface HomeAwayApp {
      * @return the name of the student registered to the region
      */
     String getStudentName(String name);
+
+    /**
+     * Checks if a thrifty student is distracted changing location
+     * @param name the name of the student
+     * @param locationName the location of the student
+     * @return yes if it is
+     */
+    boolean isStudentDistracted(String name, String locationName);
 }
