@@ -97,7 +97,8 @@ public abstract class ServiceAbstractClass implements Service {
         long newAverage = (averageRating + (reviewCounter - 1) + review.getNumRate()) / reviewCounter;
         if(Math.round(newAverage) != Math.round(averageRating)){
             averageRating = newAverage;
-            this.myOrder = orderOfInsertion++;
+            orderOfInsertion = orderOfInsertion + 1;
+            this.myOrder = orderOfInsertion;
         }
     }
 
@@ -105,7 +106,7 @@ public abstract class ServiceAbstractClass implements Service {
     public boolean isTagged(String tag){
         Iterator<Review> it = reviews.iterator();
         while(it.hasNext())
-            if(it.next().getTag().equals(tag)) return true;
+            if(it.next().getTag().trim().equalsIgnoreCase(tag.trim())) return true;
 
         return false;
     }

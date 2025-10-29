@@ -297,6 +297,7 @@ public class homeAwayAppClass implements HomeAwayApp{
     @Override
     public Iterator<Service> listServicesByTypeAndRating(int numericRate, String type, String studentName)
             throws InvalidValue, DoesNotExist, InvalidType, Untouched, ServiceFull {
+
         if(numericRate < 0 ||numericRate > 5)
             throw new InvalidValue("");
         else if(this.currentRegion.getStudent(studentName) == null)
@@ -307,10 +308,10 @@ public class homeAwayAppClass implements HomeAwayApp{
             throw new Untouched("");
         else if(!this.currentRegion.hasServicesTypeRate(type, numericRate))
             throw new ServiceFull("");
-        else{
-            return this.currentRegion.getRankedServices(numericRate, type,
-                    this.currentRegion.getStudent(studentName));
-        }
+
+        return this.currentRegion.getRankedServices(numericRate, type,
+                this.currentRegion.getStudent(studentName));
+
     }
 
     @Override

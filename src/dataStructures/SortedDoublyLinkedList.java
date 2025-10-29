@@ -162,48 +162,46 @@ public class SortedDoublyLinkedList<E> implements SortedList<E> {
      * @param element to be inserted
      */
     public void add(E element) {
-        //TODO
+        DoublyListNode<E> newNode = new DoublyListNode<>(element);
+
+        // 1. Handle the empty list case
         if (head == null) {
-            DoublyListNode<E> newNode = new DoublyListNode<>(element);
             head = newNode;
             tail = newNode;
             currentSize++;
             return;
         }
+
+        // 2. Find the correct insertion point
         DoublyListNode<E> current = head;
-        DoublyListNode<E> newNode = new DoublyListNode<>(element);
         while (current != null) {
             int comparison = compareElements(element, current.getElement());
+
             if (comparison < 0) {
+                // Found the spot: element < current.getElement()
+                // We must insert *before* the 'current' node.
                 break;
             }
-            if (comparison == 0) {
-                while (current.getNext() != null) {
-                    int nextComparison = compareElements(element, current.getNext().getElement());
-                    if (nextComparison <= 0) {
-                        if (nextComparison == 0) {
-                            current = current.getNext();
-                        } else {
-                            break;
-                        }
-                    } else {
-                        break;
-                    }
-                }
-                current = current.getNext();
-                break;
-            }
+
+            // If comparison >= 0 (element is greater or equal),
+            // we keep moving forward. This naturally finds the spot
+            // after any duplicates.
             current = current.getNext();
         }
+
+        // 3. Insert the node (this logic from your code is correct)
         if (current == head) {
+            // Insert at head
             newNode.setNext(head);
             head.setPrevious(newNode);
             head = newNode;
         } else if (current == null) {
+            // Insert at tail
             tail.setNext(newNode);
             newNode.setPrevious(tail);
             tail = newNode;
         } else {
+            // Insert in middle (before 'current')
             DoublyListNode<E> previous = current.getPrevious();
             newNode.setNext(current);
             newNode.setPrevious(previous);
