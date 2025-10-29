@@ -470,8 +470,8 @@ public class Main {
         String name = "";
         try {
             int numericRate = in.nextInt();
-            name = in.nextLine();
-            String tag = in.nextLine();
+            name = in.nextLine().trim();
+            String tag = in.nextLine().trim();
 
             app.rateService(name, numericRate, tag);
             System.out.println(SERVICE_RATED);

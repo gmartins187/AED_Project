@@ -122,11 +122,11 @@ public class SortedDoublyLinkedList<E> implements SortedList<E> {
         }
         DoublyListNode<E> current = head;
         while (current != null) {
-            if (comparator.compare(current.getElement(), element) == 0) {
+            if(current.equals(element))
                 return current.getElement();
-            } else if (comparator.compare(current.getElement(), element) > 0) {
+            else if(current.getNext() == null)
                 current = current.getNext();
-            } else break;
+            else break;
         }
         return null;
     }

@@ -1,6 +1,7 @@
 package App.Services;
 
 import App.Students.Student;
+import dataStructures.DoublyLinkedList;
 import dataStructures.Iterator;
 import dataStructures.List;
 import dataStructures.ListInArray;
@@ -41,9 +42,9 @@ public abstract class ServiceAbstractClass implements Service {
 
         this.orderOfInsertion = 0;
 
-        this.reviewCounter = 0;
-        reviews = new ListInArray<>(INITIAL_CAPACITY);
+        reviews = new DoublyLinkedList<>();
 
+        reviewCounter = 1;
         averageRating = 4;
     }
 
@@ -74,7 +75,8 @@ public abstract class ServiceAbstractClass implements Service {
 
     @Override
     public void addReview(Review review){
-        reviews.add(reviewCounter++, review);
+        reviews.addLast(review);
+        reviewCounter++;
         calculateAverage(review);
     }
 
@@ -92,10 +94,10 @@ public abstract class ServiceAbstractClass implements Service {
      * calculates and updates the average review
      */
     private void calculateAverage(Review review) {
-        long newAverage = (averageRating+ (reviewCounter - 1) + review.getNumRate()) / reviewCounter;
+        long newAverage = (averageRating + (reviewCounter - 1) + review.getNumRate()) / reviewCounter;
         if(Math.round(newAverage) != Math.round(averageRating)){
             averageRating = newAverage;
-            this.myOrder = orderOfInsertion;
+            this.myOrder = orderOfInsertion++;
         }
     }
 

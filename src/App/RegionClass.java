@@ -82,13 +82,15 @@ public class RegionClass implements Region {
 
     @Override
     public void addService(Service service) {
-        services.addLast(service);
-        sortedRatingServices.add(service);
+        if(services.indexOf(service) < 0)
+            services.addLast(service);
+        if(sortedRatingServices.get(service) == null)
+            sortedRatingServices.add(service);
     }
 
     @Override
-    public boolean hasServices() {
-        return !services.isEmpty();
+    public boolean isEmpty() {
+        return services.isEmpty();
     }
 
     @Override

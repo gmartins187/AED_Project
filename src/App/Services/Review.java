@@ -1,6 +1,8 @@
 package App.Services;
 
-public interface Review {
+import java.io.Serializable;
+
+public interface Review extends Serializable {
 
     /**
      * @return the numeric rating stored in the review

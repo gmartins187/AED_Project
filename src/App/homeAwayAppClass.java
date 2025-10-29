@@ -125,7 +125,7 @@ public class homeAwayAppClass implements HomeAwayApp{
     public Iterator<Service> listAllServices() {
         if(this.currentRegion == null)
             throw new NoCurrentArea("");
-        else if(!this.currentRegion.hasServices())
+        else if(this.currentRegion.isEmpty())
             throw new DoesNotExist("");
         else
             return this.currentRegion.listAllServices();
@@ -274,7 +274,7 @@ public class homeAwayAppClass implements HomeAwayApp{
     public void rateService(String name, int numericRate, String tag) {
         Service loc = this.currentRegion.getService(name);
 
-        if(numericRate >= 1 && numericRate <= 5)
+        if (numericRate < 1 || numericRate > 5)
             throw new InvalidType("");
         else if(loc == null)
             throw new DoesNotExist("");
@@ -285,11 +285,13 @@ public class homeAwayAppClass implements HomeAwayApp{
 
     @Override
     public Iterator<Service> getServicesIteratorByRating() {
-        if(!this.currentRegion.hasServices())
+
+        if(this.currentRegion.isEmpty())
             throw new DoesNotExist("");
-        else{
-            return this.currentRegion.listServicesByReview();
-        }
+
+
+        return this.currentRegion.listServicesByReview();
+
     }
 
     @Override

@@ -37,7 +37,7 @@ public interface Region extends Serializable {
     /**
      * @return if there is any service
      */
-    boolean hasServices();
+    boolean isEmpty();
 
     /**
      * Iterates all the services in the current region loaded
