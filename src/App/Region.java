@@ -152,4 +152,16 @@ public interface Region extends Serializable {
      * @return the most relevant service to the student
      */
     String findMostRelevantService(Student student, String type);
+
+    /**
+     * removes this service
+     * @param loc service to remove
+     */
+    void removeServiceFromSorted(Service loc);
+
+    /**
+     * adds service back to the sorted list
+     * @param loc the service to add
+     */
+    void addServiceToSorted(Service loc);
 }

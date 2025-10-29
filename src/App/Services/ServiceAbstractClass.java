@@ -91,15 +91,31 @@ public abstract class ServiceAbstractClass implements Service {
     }
 
     /**
-     * calculates and updates the average review
+     * Adds a new review and recalculates the average rating.
+     * Updates the insertion order only if the average changes by a significant amount.
      */
-    private void calculateAverage(Review review) {
-        long newAverage = (averageRating + (reviewCounter - 1) + review.getNumRate()) / reviewCounter;
-        if(Math.round(newAverage) != Math.round(averageRating)){
-            averageRating = newAverage;
+    public void calculateAverage(Review review) {
+        // Define how much the average must change to be considered "new"
+        // (This avoids tiny changes like 4.33333... vs 4.33334...)
+        final double CHANGE_THRESHOLD = 0.01;
+
+        // --- Standard Average Calculation ---
+        long currentTotalSum = this.averageRating * this.reviewCounter;
+        long newRating = review.getNumRate();
+        this.reviewCounter++;
+        long newAverage = (currentTotalSum + newRating) / this.reviewCounter;
+
+        // --- Using Math.abs() to Check the Difference ---
+        // This is the correct and logical use case.
+        // We check if the *absolute difference* is greater than our threshold.
+        if (Math.abs(newAverage - this.averageRating) > CHANGE_THRESHOLD) {
+            // The average changed significantly, so update order
             orderOfInsertion = orderOfInsertion + 1;
             this.myOrder = orderOfInsertion;
         }
+
+        // Always update the average, regardless of the 'if' check
+        this.averageRating = newAverage;
     }
 
     @Override

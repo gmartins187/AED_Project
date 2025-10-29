@@ -279,8 +279,9 @@ public class homeAwayAppClass implements HomeAwayApp{
         else if(loc == null)
             throw new DoesNotExist("");
 
+        currentRegion.removeServiceFromSorted(loc);
         loc.addReview(new ReviewClass(numericRate, tag));
-
+        currentRegion.addServiceToSorted(loc);
     }
 
     @Override

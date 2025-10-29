@@ -260,4 +260,14 @@ public class RegionClass implements Region {
             return null;
         }
     }
+
+    @Override
+    public void removeServiceFromSorted(Service loc) {
+        sortedRatingServices.remove(loc);
+    }
+
+    @Override
+    public void addServiceToSorted(Service loc) {
+        sortedRatingServices.add(loc);
+    }
 }

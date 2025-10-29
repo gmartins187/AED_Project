@@ -545,7 +545,7 @@ public class Main {
             Iterator<Service> it = app.getServicesWithTag(tag);
             while(it.hasNext()){
                 Service next = it.next();
-                System.out.println(next.getClass() + " " +next.getName());
+                System.out.println(next.getType().toLowerCase() + " " +next.getName());
             }
         } catch (Untouched e) {
             System.out.println(NO_TAG);
