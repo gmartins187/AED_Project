@@ -40,7 +40,7 @@ public class Main {
     private static final String NO_STUDENTS_FROM = "No students from %s!\n";
     private static final String CURRENT_HOME = "That is %s's home!\n";
     private static final String LODGING_FULL = "lodging %s is full!\n";
-    private static final String INVALID_MOVE = "Move is not acceptable for %s!";
+    private static final String INVALID_MOVE = "Move is not acceptable for %s!\n";
     private static final String INVALID_CAPACITY = "Invalid capacity!";
     private static final String INVALID_ROOM_PRICE = "Invalid room price!";
     private static final String INVALID_TICKET_PRICE = "Invalid ticket price!";
@@ -58,11 +58,13 @@ public class Main {
     private static final String RANKING = "%s services closer with %d average\n";
     private static final String SERVICE_RATED = "Your evaluation has been registered!";
     private static final String IS_AT = "%s is now at %s.";
-    private static final String NEW_HOME = "lodging %s is now %s’s home. %s is at home.\n";
+    private static final String NEW_HOME = "lodging %s is now %s's home. %s is at home.\n";
     private static final String NEW_SERVICE = "%s %s added.\n";
     private static final String AREA_LOADED = "%s loaded.\n";
     private static final String IS_DISTRACTED = " %s is distracted!";
     private static final String NO_SYSTEM_BOUNDS = "System bounds not defined.";
+    private static final String NO_STUDENTS_IN = "No students on %s!\n";
+    private static final String NO_ORDER = "This order does not exists!";
 
 
     public static void main(String[] args){commands();}
@@ -333,7 +335,8 @@ public class Main {
             boolean isDistracted = app.isStudentDistracted(name, locationName);
             app.changeStudentLocation(name, locationName);
 
-            System.out.printf(IS_AT, app.getStudentName(name), locationName);
+            System.out.printf(IS_AT, app.getStudentName(name),
+                    app.getServiceName(locationName));
 
             if(isDistracted) System.out.printf(IS_DISTRACTED, name);
 
@@ -365,17 +368,18 @@ public class Main {
             lodgingName = in.nextLine().trim();
 
             app.changeStudentHome(name, lodgingName);
-            System.out.printf(NEW_HOME, lodgingName, name, name);
+            String newName = app.getStudentName(name);
+            System.out.printf(NEW_HOME, app.getServiceName(lodgingName), newName, newName);
         } catch (InvalidLocation e){
             System.out.printf(INVALID_LODGING, lodgingName);
         } catch (DoesNotExist e){
             System.out.printf(DOES_NOT_EXIST, name);
         } catch (AlreadyThere e){
-            System.out.printf(CURRENT_HOME, name);
+            System.out.printf(CURRENT_HOME, app.getStudentName(name));
         } catch (ServiceFull e){
             System.out.printf(LODGING_FULL, lodgingName);
         } catch (InvalidService e){
-            System.out.printf(INVALID_MOVE, name);
+            System.out.printf(INVALID_MOVE, app.getStudentName(name));
         }
     }
 
@@ -389,14 +393,14 @@ public class Main {
         String serviceName = "";
         try{
             String order = in.next().trim();
-            serviceName = in.nextLine();
+            serviceName = in.nextLine().trim();
 
             Iterator<Student> it = app.listUsersInService(order, serviceName);
 
             if(order.equals("<")){
                 TwoWayIterator<Student> newIt = (TwoWayIterator<Student>) it;
                 while(newIt.hasPrevious()){
-                    Student next = newIt.next();
+                    Student next = newIt.previous();
                     System.out.println(next.getName() + ": " + next.getType());
                 }
             } else{
@@ -406,11 +410,13 @@ public class Main {
                 }
             }
         } catch (InvalidOrder e){
-            System.out.println("This order does not exist!");
+            System.out.println(NO_ORDER);
         } catch (DoesNotExist e){
             System.out.printf(DOES_NOT_EXIST, serviceName);
         } catch (InvalidType e){
-            System.out.printf(DOES_NOT_CONTROL, serviceName);
+            System.out.printf(DOES_NOT_CONTROL, app.getServiceName(serviceName));
+        } catch (InvalidValue e){
+            System.out.printf(NO_STUDENTS_IN, app.getServiceName(serviceName));
         }
     }
 
@@ -440,17 +446,17 @@ public class Main {
     private static void listVisitedLocations(HomeAwayApp app, Scanner in) {
         String name = "";
         try{
-            name = in.next();
+            name = in.nextLine().trim();
 
             Iterator<Service> it = app.listVisitedLocations(name);
             while(it.hasNext())
-                System.out.println(name);
+                System.out.println(it.next().getName());
         } catch (DoesNotExist e){
             System.out.printf(DOES_NOT_EXIST, name);
         } catch (InvalidType e){
-            System.out.printf(IS_THRIFTY, name);
+            System.out.printf(IS_THRIFTY, app.getStudentName(name));
         } catch (Untouched e){
-            System.out.printf(HAS_NOT_VISITED, name);
+            System.out.printf(HAS_NOT_VISITED, app.getStudentName(name));
         }
     }
 
@@ -464,12 +470,12 @@ public class Main {
         String name = "";
         try {
             int numericRate = in.nextInt();
-            name = in.next();
-            String tag = in.next();
+            name = in.nextLine();
+            String tag = in.nextLine();
 
             app.rateService(name, numericRate, tag);
             System.out.println(SERVICE_RATED);
-        } catch (InvalidValue e){
+        } catch (InvalidType e){
             System.out.println(INVALID_RATE);
         } catch (DoesNotExist e){
             System.out.printf(DOES_NOT_EXIST, name);

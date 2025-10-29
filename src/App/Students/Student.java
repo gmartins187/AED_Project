@@ -53,7 +53,7 @@ public interface Student extends Serializable {
     /**
      * @return if the student has visited any places
      */
-    boolean hasVisited();
+    boolean hasnotVisited();
 
     /**
      * iterates all the places visited by the student

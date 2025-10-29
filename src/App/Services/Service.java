@@ -75,4 +75,14 @@ public interface Service extends Serializable {
      * @return the distance from the service to the student
      */
     long getDistance(Student student);
+
+    /**
+     * @return yes if it has student in service
+     */
+    boolean hasStudent(Student student);
+
+    /**
+     * @return true if there is no student in the service
+     */
+    boolean isEmpty();
 }

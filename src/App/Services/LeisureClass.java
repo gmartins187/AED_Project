@@ -30,4 +30,14 @@ public class LeisureClass extends ServiceAbstractClass implements Leisure{
     @Override
     public void removeStudent(Student student) {
     }
+
+    @Override
+    public boolean hasStudent(Student stu) {
+        return false;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return false;
+    }
 }

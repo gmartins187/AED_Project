@@ -89,17 +89,6 @@ public class homeAwayAppClass implements HomeAwayApp{
         return currentRegion.getName();
     }
 
-
-
-
-
-
-
-
-
-
-
-
     @Override
     public void newService(String type, long latitude, long longitude, int price, int value2, String name) {
         if(!isSerTypeValid(type))
@@ -142,15 +131,6 @@ public class homeAwayAppClass implements HomeAwayApp{
             return this.currentRegion.listAllServices();
     }
 
-
-
-
-
-
-
-
-
-
     @Override
     public void newStudent(String type, String name, String country, String lodgingName){
         if(!isStuTypeValid(type))
@@ -169,7 +149,9 @@ public class homeAwayAppClass implements HomeAwayApp{
                 case BOOKISH -> this.currentRegion.addStudent(new BookishClass(name, country, lodgingService, type));
                 case THRIFTY -> this.currentRegion.addStudent(new ThriftyClass(name, country, lodgingService, type));
             }
-            lodgingService.addStudent(this.currentRegion.getStudent(name));
+            Student student = this.currentRegion.getStudent(name);
+            lodgingService.addStudent(student);
+            student.pingService(lodgingService);
         }
     }
 
@@ -240,24 +222,27 @@ public class homeAwayAppClass implements HomeAwayApp{
         else if(stu instanceof Thrifty && lodging.getPrice() > stu.getHome().getPrice())
             throw new InvalidService("");
 
-        this.currentRegion.getStudent(name).setHome((Lodging) this.currentRegion.getService(lodgingName));
-        this.currentRegion.getStudent(name).setLocation(this.currentRegion.getService(lodgingName));
-        this.currentRegion.getStudent(name).pingService(this.currentRegion.getService(lodgingName));
+        stu.setHome((Lodging) lodging);
+        stu.pingService(lodging);
 
     }
 
     @Override
     public Iterator<Student> listUsersInService(String order, String serviceName) {
-        if(!order.equals(">") && !order.equals("<")){
+        Service location = this.currentRegion.getService(serviceName);
+
+
+        if(!order.equals(">") && !order.equals("<"))
             throw new InvalidOrder("");
-        }else if(this.currentRegion.getService(serviceName) == null){
+        else if(location == null)
             throw new DoesNotExist("");
-        } else if(!(this.currentRegion.getService(serviceName) instanceof Leisure)){
+        else if(location instanceof Leisure)
             throw new InvalidType("");
-        } else{
-            Service service= this.currentRegion.getService(serviceName);
-            return this.currentRegion.listUsersIn(service, order);
-        }
+        else if(location.isEmpty())
+            throw new InvalidValue("");
+
+        return this.currentRegion.listUsersIn(location, order);
+
     }
 
     @Override
@@ -273,26 +258,29 @@ public class homeAwayAppClass implements HomeAwayApp{
 
     @Override
     public Iterator<Service> listVisitedLocations(String name) {
-        if(this.currentRegion.getStudent(name) == null)
+        Student stu = this.currentRegion.getStudent(name);
+
+        if(stu == null)
             throw new DoesNotExist("");
-        else if(this.currentRegion.getStudent(name) instanceof Thrifty)
+        else if(stu instanceof Thrifty)
             throw new InvalidType("");
-        else if(this.currentRegion.getStudent(name).hasVisited())
+        else if(stu.hasnotVisited())
             throw new Untouched("");
-        else{
-            return this.currentRegion.getStudent(name).getVisitedPlaces();
-        }
+
+        return this.currentRegion.getStudent(name).getVisitedPlaces();
     }
 
     @Override
     public void rateService(String name, int numericRate, String tag) {
-        if(numericRate < 1 || numericRate > 5)
+        Service loc = this.currentRegion.getService(name);
+
+        if(numericRate >= 1 && numericRate <= 5)
             throw new InvalidType("");
-        else if(this.currentRegion.getService(name) == null)
+        else if(loc == null)
             throw new DoesNotExist("");
-        else{
-            this.currentRegion.getService(name).addReview(new ReviewClass(numericRate, tag));
-        }
+
+        loc.addReview(new ReviewClass(numericRate, tag));
+
     }
 
     @Override
