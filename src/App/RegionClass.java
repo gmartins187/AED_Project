@@ -11,6 +11,8 @@ import dataStructures.*;
 
 public class RegionClass implements Region {
 
+    private static final long MAX_DISTANCE = 500000000;
+
     private final long topBound;
     private final long lowBound;
     private final long leftBound;
@@ -198,9 +200,11 @@ public class RegionClass implements Region {
     @Override
     public boolean hasServicesType(String type) {
         Iterator<Service> it = services.iterator();
-        while (it.hasNext())
-            if(it.next().getType().equals(type)) return true;
-
+        while (it.hasNext()) {
+            Service next = it.next();
+            if (it.next().getType().equalsIgnoreCase(type))
+                return true;
+        }
         return false;
     }
 
@@ -232,12 +236,13 @@ public class RegionClass implements Region {
 
         Iterator<Service> it = services.iterator();
 
-        long minDistance = it.next().getDistance(student);
+        long minDistance = MAX_DISTANCE;
 
         while(it.hasNext()) {
             Service next = it.next();
-            if (next.getDistance(student) < minDistance)
-                minDistance = next.getDistance(student);
+            if (next.getAverageRating() == numericRate && next.getType().equalsIgnoreCase(type))
+                if(next.getDistance(student) < minDistance)
+                    minDistance = next.getDistance(student);
         }
 
         it.rewind();
@@ -245,7 +250,8 @@ public class RegionClass implements Region {
         while(it.hasNext()){
             Service next = it.next();
             if(next.getAverageRating() == numericRate
-                    && next.getDistance(student) == minDistance)
+                    && next.getDistance(student) == minDistance
+                    && next.getType().equalsIgnoreCase(type))
                 ret.add(next);
         }
 
@@ -269,9 +275,13 @@ public class RegionClass implements Region {
         if(student instanceof Thrifty){
             Iterator<Service> it = services.iterator();
             Service ret = it.next();
-            while(it.hasNext()) {
+            int MinPrice = Integer.MAX_VALUE;
+            while(it.hasNext()){
                 Service next = it.next();
-                if(next.getPrice() < ret.getPrice() && next.getType().equals(type)) ret = next;
+                if(next.getType().equals(type) && next.getPrice() < MinPrice) {
+                    MinPrice = next.getPrice();
+                    ret = next;
+                }
             }
             return ret.getName();
         } else {

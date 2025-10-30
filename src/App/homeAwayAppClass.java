@@ -311,7 +311,7 @@ public class homeAwayAppClass implements HomeAwayApp{
         else if(student == null)
             throw new DoesNotExist("");
         else if(!(type.equalsIgnoreCase(LEISURE)
-                || type.equalsIgnoreCase(LODGING) || type.equalsIgnoreCase(BOOKISH)))
+                || type.equalsIgnoreCase(LODGING) || type.equalsIgnoreCase(EATING)))
             throw new InvalidType("");
         else if(!this.currentRegion.hasServicesType(type))
             throw new Untouched("");
@@ -335,16 +335,19 @@ public class homeAwayAppClass implements HomeAwayApp{
 
     @Override
     public String mostRelevantService(String studentName, String type) throws InvalidType, DoesNotExist, Untouched {
-        if(!(type.equals(LEISURE) || type.equals(LODGING) || type.equals(BOOKISH)))
+
+        Student student = this.currentRegion.getStudent(studentName);
+
+        if(!(type.equals(LEISURE) || type.equals(LODGING) || type.equals(EATING)))
             throw new InvalidType("");
-        else if(this.currentRegion.getStudent(studentName) == null)
+        else if(student == null)
             throw new DoesNotExist("");
-        else if(this.currentRegion.hasServicesType(type))
+        else if(!this.currentRegion.hasServicesType(type))
             throw new Untouched("");
-        else{
-            return this.currentRegion.
-                    findMostRelevantService(this.currentRegion.getStudent(studentName), type);
-        }
+
+
+        return this.currentRegion.findMostRelevantService(student, type);
+
     }
 
 
