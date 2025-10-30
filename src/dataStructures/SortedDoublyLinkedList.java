@@ -218,30 +218,43 @@ public class SortedDoublyLinkedList<E> implements SortedList<E> {
      * @return element removed from the list or null if !belongs(element)
      */
     public E remove(E element) {
-        //TODO
         if (head == null) {
             return null;
         }
         DoublyListNode<E> current = head;
         int comparison;
+
         while (current != null) {
             comparison = compareElements(element, current.getElement());
 
             if (comparison == 0) {
-                break;
-            }
+                // Encontrámos um elemento "igual".
+                // É o *mesmo* objeto que queremos remover?
+                if (current.getElement() == element) {
+                    break; // Sim, encontrámos o objeto exato.
+                }
+                // Não é o objeto exato, mas é "igual".
+                // Temos de continuar a procurar, pode ser o próximo.
 
-            if (comparison < 0) {
+            } else if (comparison < 0) {
+                // Passámos do ponto onde o elemento devia estar.
+                // (Assumindo que o `==` não apanhou)
                 return null;
             }
+
             current = current.getNext();
         }
+
         if (current == null) {
+            // Chegámos ao fim e não encontrámos o objeto exato.
             return null;
         }
+
+        // O resto do seu código de remoção (unlinking) está correto.
         E elementRemoved = current.getElement();
         DoublyListNode<E> previous = current.getPrevious();
         DoublyListNode<E> next = current.getNext();
+
         if (current == head) {
             head = next;
             if (head != null) {

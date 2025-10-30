@@ -25,6 +25,7 @@ public abstract class ServiceAbstractClass implements Service {
     private int reviewCounter;
 
     private long averageRating;
+    private long totalRatingSum;
 
     /**
      * Constructor for ServiceAbstractClass.
@@ -40,12 +41,13 @@ public abstract class ServiceAbstractClass implements Service {
         this.name = name;
         this.type = type;
 
-        this.orderOfInsertion = 0;
+        this.myOrder = orderOfInsertion++;
 
         reviews = new DoublyLinkedList<>();
 
         reviewCounter = 1;
         averageRating = 4;
+        totalRatingSum = 4;
     }
 
     @Override
@@ -76,7 +78,7 @@ public abstract class ServiceAbstractClass implements Service {
     @Override
     public void addReview(Review review){
         reviews.addLast(review);
-        reviewCounter++;
+        orderOfInsertion++;
         calculateAverage(review);
     }
 
@@ -95,37 +97,45 @@ public abstract class ServiceAbstractClass implements Service {
      * Updates the insertion order only if the average changes by a significant amount.
      */
     public void calculateAverage(Review review) {
-        // Define how much the average must change to be considered "new"
-        // (This avoids tiny changes like 4.33333... vs 4.33334...)
-        final double CHANGE_THRESHOLD = 0.01;
 
-        // --- Standard Average Calculation ---
-        long currentTotalSum = this.averageRating * this.reviewCounter;
-        long newRating = review.getNumRate();
+        this.totalRatingSum += review.getNumRate();
         this.reviewCounter++;
-        long newAverage = (currentTotalSum + newRating) / this.reviewCounter;
 
-        // --- Using Math.abs() to Check the Difference ---
-        // This is the correct and logical use case.
-        // We check if the *absolute difference* is greater than our threshold.
-        if (Math.abs(newAverage - this.averageRating) > CHANGE_THRESHOLD) {
-            // The average changed significantly, so update order
-            orderOfInsertion = orderOfInsertion + 1;
+        double trueAverage = (double) this.totalRatingSum / this.reviewCounter;
+
+        if(Math.round(trueAverage) != this.averageRating){
             this.myOrder = orderOfInsertion;
+            this.averageRating = Math.round(trueAverage);
         }
 
-        // Always update the average, regardless of the 'if' check
-        this.averageRating = newAverage;
     }
 
     @Override
     public boolean isTagged(String tag){
         Iterator<Review> it = reviews.iterator();
-        while(it.hasNext())
-            if(it.next().getTag().trim().equalsIgnoreCase(tag.trim())) return true;
+        while(it.hasNext()) {
+
+            String reviewText = it.next().getTag();
+
+            if (myContainsIgnoreCase(reviewText, tag)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean myContainsIgnoreCase(String reviewText, String tag){
+        String[] words = reviewText.split(" +");
+
+        for (String word : words) {
+            if (word.equalsIgnoreCase(tag)) {
+                return true;
+            }
+        }
 
         return false;
     }
+
 
     @Override
     public long getDistance(Student student){

@@ -101,7 +101,7 @@ public class RegionClass implements Region {
     @Override
     public void addStudent(Student student) {
         students.addLast(student);
-        sortedStudents.add(student);
+        if(!sortedStudents.contains(student))sortedStudents.add(student);
     }
 
     @Override
@@ -129,8 +129,8 @@ public class RegionClass implements Region {
 
     @Override
     public void removeStudent(String name) {
-        students.remove(students.indexOf(getStudent(name)));
         sortedStudents.remove(getStudent(name));
+        students.remove(students.indexOf(getStudent(name)));
     }
 
     @Override
@@ -227,18 +227,41 @@ public class RegionClass implements Region {
     @Override
     public Iterator<Service> getRankedServices(int numericRate, String type, Student student) {
         Comparator<Service> comparator = new DistanceComparator(student);
+
         SortedList<Service> ret = new SortedDoublyLinkedList<>(comparator);
+
         Iterator<Service> it = services.iterator();
+
+        long minDistance = it.next().getDistance(student);
+
+        while(it.hasNext()) {
+            Service next = it.next();
+            if (next.getDistance(student) < minDistance)
+                minDistance = next.getDistance(student);
+        }
+
+        it.rewind();
+
         while(it.hasNext()){
             Service next = it.next();
-            if(next.getAverageRating() == numericRate) ret.add(next);
+            if(next.getAverageRating() == numericRate
+                    && next.getDistance(student) == minDistance)
+                ret.add(next);
         }
+
         return ret.iterator();
     }
 
     @Override
-    public Iterator<Service> listServicesWithTag() {
-        return services.iterator();
+    public Iterator<Service> listServicesWithTag(String tag) {
+        List<Service> ret = new DoublyLinkedList<>();
+        Iterator<Service> it = services.iterator();
+        while (it.hasNext()){
+            Service next = it.next();
+            if(next.isTagged(tag)) ret.addLast(next);
+        }
+
+        return ret.iterator();
     }
 
     @Override

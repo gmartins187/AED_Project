@@ -284,7 +284,7 @@ public class Main {
      * @param in the scanner to read input from
      */
     private static void removeStudent(HomeAwayApp app, Scanner in) {
-        String name = in.next();
+        String name = in.nextLine().trim();
         try{
             app.removeStudent(name);
             System.out.println(name + HAS_LEFT);

@@ -143,9 +143,10 @@ public interface Region extends Serializable {
     Iterator<Service> getRankedServices(int numericRate, String type, Student student);
 
     /**
+     * @param tag the tag the services must be tagged with
      * @return an iterator with the services by rating
      */
-    Iterator<Service> listServicesWithTag();
+    Iterator<Service> listServicesWithTag(String tag);
 
     /**
      * @param student the student
