@@ -284,8 +284,9 @@ public class Main {
      * @param in the scanner to read input from
      */
     private static void removeStudent(HomeAwayApp app, Scanner in) {
-        String name = in.next();
+        String name = in.nextLine().trim();
         try{
+            name = app.getStudentName(name);
             app.removeStudent(name);
             System.out.println(name + HAS_LEFT);
         } catch (DoesNotExist e){
@@ -470,8 +471,8 @@ public class Main {
         String name = "";
         try {
             int numericRate = in.nextInt();
-            name = in.nextLine();
-            String tag = in.nextLine();
+            name = in.nextLine().trim();
+            String tag = in.nextLine().trim();
 
             app.rateService(name, numericRate, tag);
             System.out.println(SERVICE_RATED);
@@ -510,9 +511,9 @@ public class Main {
         String type = "";
         String name = "";
         try {
-            int numericRate = in.nextInt();
             type = in.next().trim();
-            name = in.next();
+            int numericRate = in.nextInt();
+            name = in.nextLine().trim();
 
             Iterator<Service> it = app.listServicesByTypeAndRating(numericRate, type, name);
             System.out.printf(RANKING, type, numericRate);
@@ -540,12 +541,12 @@ public class Main {
      */
     private static void allServicesWithTag(HomeAwayApp app, Scanner in) {
         try {
-            String tag = in.next();
+            String tag = in.nextLine().trim();
 
             Iterator<Service> it = app.getServicesWithTag(tag);
             while(it.hasNext()){
                 Service next = it.next();
-                System.out.println(next.getClass() + " " +next.getName());
+                System.out.println(next.getType().toLowerCase() + " " +next.getName());
             }
         } catch (Untouched e) {
             System.out.println(NO_TAG);
@@ -562,8 +563,8 @@ public class Main {
         String name = "";
         String type = "";
         try {
-            name = in.next();
-            type = in.next().trim();
+            name = in.nextLine().trim();
+            type = in.nextLine().trim();
 
             System.out.println(app.mostRelevantService(name, type));
         } catch (InvalidType e) {

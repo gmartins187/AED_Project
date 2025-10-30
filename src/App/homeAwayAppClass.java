@@ -74,6 +74,9 @@ public class homeAwayAppClass implements HomeAwayApp{
 
     @Override
     public String loadArea(String regionName) throws NoCurrentArea{
+        if(currentRegion != null)
+            saveArea();
+
         File file = new File("data", regionName.replace(" ", ""));
 
         if (!file.exists()) throw new NoCurrentArea("");
@@ -86,6 +89,7 @@ public class homeAwayAppClass implements HomeAwayApp{
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+
         return currentRegion.getName();
     }
 
@@ -125,7 +129,7 @@ public class homeAwayAppClass implements HomeAwayApp{
     public Iterator<Service> listAllServices() {
         if(this.currentRegion == null)
             throw new NoCurrentArea("");
-        else if(!this.currentRegion.hasServices())
+        else if(this.currentRegion.isEmpty())
             throw new DoesNotExist("");
         else
             return this.currentRegion.listAllServices();
@@ -165,11 +169,12 @@ public class homeAwayAppClass implements HomeAwayApp{
 
     @Override
     public void removeStudent(String name) {
+
         if(this.currentRegion.getStudent(name) == null)
             throw new DoesNotExist("");
-        else {
-            this.currentRegion.removeStudent(name);
-        }
+
+        this.currentRegion.removeStudent(name);
+
     }
 
     @Override
@@ -274,64 +279,75 @@ public class homeAwayAppClass implements HomeAwayApp{
     public void rateService(String name, int numericRate, String tag) {
         Service loc = this.currentRegion.getService(name);
 
-        if(numericRate >= 1 && numericRate <= 5)
+        if (numericRate < 1 || numericRate > 5)
             throw new InvalidType("");
         else if(loc == null)
             throw new DoesNotExist("");
 
+        currentRegion.removeServiceFromSorted(loc);
         loc.addReview(new ReviewClass(numericRate, tag));
-
+        currentRegion.addServiceToSorted(loc);
     }
 
     @Override
     public Iterator<Service> getServicesIteratorByRating() {
-        if(!this.currentRegion.hasServices())
+
+        if(this.currentRegion.isEmpty())
             throw new DoesNotExist("");
-        else{
-            return this.currentRegion.listServicesByReview();
-        }
+
+
+        return this.currentRegion.listServicesByReview();
+
     }
 
     @Override
     public Iterator<Service> listServicesByTypeAndRating(int numericRate, String type, String studentName)
             throws InvalidValue, DoesNotExist, InvalidType, Untouched, ServiceFull {
-        if(numericRate < 0 ||numericRate > 5)
+
+        Student student = this.currentRegion.getStudent(studentName);
+
+        if(numericRate < 1 || numericRate > 5)
             throw new InvalidValue("");
-        else if(this.currentRegion.getStudent(studentName) == null)
+        else if(student == null)
             throw new DoesNotExist("");
-        else if(!(type.equals(LEISURE) || type.equals(LODGING) || type.equals(BOOKISH)))
+        else if(!(type.equalsIgnoreCase(LEISURE)
+                || type.equalsIgnoreCase(LODGING) || type.equalsIgnoreCase(EATING)))
             throw new InvalidType("");
         else if(!this.currentRegion.hasServicesType(type))
             throw new Untouched("");
         else if(!this.currentRegion.hasServicesTypeRate(type, numericRate))
             throw new ServiceFull("");
-        else{
-            return this.currentRegion.getRankedServices(numericRate, type,
-                    this.currentRegion.getStudent(studentName));
-        }
+
+        return this.currentRegion.getRankedServices(numericRate, type,student);
+
     }
 
     @Override
     public Iterator<Service> getServicesWithTag(String tag) throws Untouched {
+
         if(!this.currentRegion.hasServicesWithTag(tag))
             throw new Untouched("");
-        else{
-            return this.currentRegion.listServicesWithTag();
-        }
+
+
+        return this.currentRegion.listServicesWithTag(tag);
+
     }
 
     @Override
     public String mostRelevantService(String studentName, String type) throws InvalidType, DoesNotExist, Untouched {
-        if(!(type.equals(LEISURE) || type.equals(LODGING) || type.equals(BOOKISH)))
+
+        Student student = this.currentRegion.getStudent(studentName);
+
+        if(!(type.equals(LEISURE) || type.equals(LODGING) || type.equals(EATING)))
             throw new InvalidType("");
-        else if(this.currentRegion.getStudent(studentName) == null)
+        else if(student == null)
             throw new DoesNotExist("");
-        else if(this.currentRegion.hasServicesType(type))
+        else if(!this.currentRegion.hasServicesType(type))
             throw new Untouched("");
-        else{
-            return this.currentRegion.
-                    findMostRelevantService(this.currentRegion.getStudent(studentName), type);
-        }
+
+
+        return this.currentRegion.findMostRelevantService(student, type);
+
     }
 
 

@@ -11,6 +11,8 @@ import dataStructures.*;
 
 public class RegionClass implements Region {
 
+    private static final long MAX_DISTANCE = 500000000;
+
     private final long topBound;
     private final long lowBound;
     private final long leftBound;
@@ -82,13 +84,15 @@ public class RegionClass implements Region {
 
     @Override
     public void addService(Service service) {
-        services.addLast(service);
-        sortedRatingServices.add(service);
+        if(services.indexOf(service) < 0)
+            services.addLast(service);
+        if(sortedRatingServices.get(service) == null)
+            sortedRatingServices.add(service);
     }
 
     @Override
-    public boolean hasServices() {
-        return !services.isEmpty();
+    public boolean isEmpty() {
+        return services.isEmpty();
     }
 
     @Override
@@ -99,7 +103,7 @@ public class RegionClass implements Region {
     @Override
     public void addStudent(Student student) {
         students.addLast(student);
-        sortedStudents.add(student);
+        if(!sortedStudents.contains(student))sortedStudents.add(student);
     }
 
     @Override
@@ -127,8 +131,8 @@ public class RegionClass implements Region {
 
     @Override
     public void removeStudent(String name) {
-        students.remove(students.indexOf(getStudent(name)));
         sortedStudents.remove(getStudent(name));
+        students.remove(students.indexOf(getStudent(name)));
     }
 
     @Override
@@ -196,9 +200,11 @@ public class RegionClass implements Region {
     @Override
     public boolean hasServicesType(String type) {
         Iterator<Service> it = services.iterator();
-        while (it.hasNext())
-            if(it.next().getType().equals(type)) return true;
-
+        while (it.hasNext()) {
+            Service next = it.next();
+            if (it.next().getType().equalsIgnoreCase(type))
+                return true;
+        }
         return false;
     }
 
@@ -225,18 +231,43 @@ public class RegionClass implements Region {
     @Override
     public Iterator<Service> getRankedServices(int numericRate, String type, Student student) {
         Comparator<Service> comparator = new DistanceComparator(student);
+
         SortedList<Service> ret = new SortedDoublyLinkedList<>(comparator);
+
         Iterator<Service> it = services.iterator();
+
+        long minDistance = MAX_DISTANCE;
+
+        while(it.hasNext()) {
+            Service next = it.next();
+            if (next.getAverageRating() == numericRate && next.getType().equalsIgnoreCase(type))
+                if(next.getDistance(student) < minDistance)
+                    minDistance = next.getDistance(student);
+        }
+
+        it.rewind();
+
         while(it.hasNext()){
             Service next = it.next();
-            if(next.getAverageRating() == numericRate) ret.add(next);
+            if(next.getAverageRating() == numericRate
+                    && next.getDistance(student) == minDistance
+                    && next.getType().equalsIgnoreCase(type))
+                ret.add(next);
         }
+
         return ret.iterator();
     }
 
     @Override
-    public Iterator<Service> listServicesWithTag() {
-        return services.iterator();
+    public Iterator<Service> listServicesWithTag(String tag) {
+        List<Service> ret = new DoublyLinkedList<>();
+        Iterator<Service> it = services.iterator();
+        while (it.hasNext()){
+            Service next = it.next();
+            if(next.isTagged(tag)) ret.addLast(next);
+        }
+
+        return ret.iterator();
     }
 
     @Override
@@ -244,9 +275,13 @@ public class RegionClass implements Region {
         if(student instanceof Thrifty){
             Iterator<Service> it = services.iterator();
             Service ret = it.next();
-            while(it.hasNext()) {
+            int MinPrice = Integer.MAX_VALUE;
+            while(it.hasNext()){
                 Service next = it.next();
-                if(next.getPrice() < ret.getPrice() && next.getType().equals(type)) ret = next;
+                if(next.getType().equals(type) && next.getPrice() < MinPrice) {
+                    MinPrice = next.getPrice();
+                    ret = next;
+                }
             }
             return ret.getName();
         } else {
@@ -257,5 +292,15 @@ public class RegionClass implements Region {
             }
             return null;
         }
+    }
+
+    @Override
+    public void removeServiceFromSorted(Service loc) {
+        sortedRatingServices.remove(loc);
+    }
+
+    @Override
+    public void addServiceToSorted(Service loc) {
+        sortedRatingServices.add(loc);
     }
 }

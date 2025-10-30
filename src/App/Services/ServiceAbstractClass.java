@@ -1,6 +1,7 @@
 package App.Services;
 
 import App.Students.Student;
+import dataStructures.DoublyLinkedList;
 import dataStructures.Iterator;
 import dataStructures.List;
 import dataStructures.ListInArray;
@@ -24,6 +25,7 @@ public abstract class ServiceAbstractClass implements Service {
     private int reviewCounter;
 
     private long averageRating;
+    private long totalRatingSum;
 
     /**
      * Constructor for ServiceAbstractClass.
@@ -39,12 +41,13 @@ public abstract class ServiceAbstractClass implements Service {
         this.name = name;
         this.type = type;
 
-        this.orderOfInsertion = 0;
+        this.myOrder = orderOfInsertion++;
 
-        this.reviewCounter = 0;
-        reviews = new ListInArray<>(INITIAL_CAPACITY);
+        reviews = new DoublyLinkedList<>();
 
+        reviewCounter = 1;
         averageRating = 4;
+        totalRatingSum = 4;
     }
 
     @Override
@@ -74,7 +77,8 @@ public abstract class ServiceAbstractClass implements Service {
 
     @Override
     public void addReview(Review review){
-        reviews.add(reviewCounter++, review);
+        reviews.addLast(review);
+        orderOfInsertion++;
         calculateAverage(review);
     }
 
@@ -89,24 +93,49 @@ public abstract class ServiceAbstractClass implements Service {
     }
 
     /**
-     * calculates and updates the average review
+     * Adds a new review and recalculates the average rating.
+     * Updates the insertion order only if the average changes by a significant amount.
      */
-    private void calculateAverage(Review review) {
-        long newAverage = (averageRating+ (reviewCounter - 1) + review.getNumRate()) / reviewCounter;
-        if(Math.round(newAverage) != Math.round(averageRating)){
-            averageRating = newAverage;
+    public void calculateAverage(Review review) {
+
+        this.totalRatingSum += review.getNumRate();
+        this.reviewCounter++;
+
+        double trueAverage = (double) this.totalRatingSum / this.reviewCounter;
+
+        if(Math.round(trueAverage) != this.averageRating){
             this.myOrder = orderOfInsertion;
+            this.averageRating = Math.round(trueAverage);
         }
+
     }
 
     @Override
     public boolean isTagged(String tag){
         Iterator<Review> it = reviews.iterator();
-        while(it.hasNext())
-            if(it.next().getTag().equals(tag)) return true;
+        while(it.hasNext()) {
+
+            String reviewText = it.next().getTag();
+
+            if (myContainsIgnoreCase(reviewText, tag)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean myContainsIgnoreCase(String reviewText, String tag){
+        String[] words = reviewText.split(" +");
+
+        for (String word : words) {
+            if (word.equalsIgnoreCase(tag)) {
+                return true;
+            }
+        }
 
         return false;
     }
+
 
     @Override
     public long getDistance(Student student){

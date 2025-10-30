@@ -37,7 +37,6 @@ class DoublyListNode<E> implements Serializable {
 
 
         /**
-         * 
          * @param theElement - The element to be contained in the node
          * @param thePrevious - the previous node
          * @param theNext - the next node

@@ -122,11 +122,11 @@ public class SortedDoublyLinkedList<E> implements SortedList<E> {
         }
         DoublyListNode<E> current = head;
         while (current != null) {
-            if (comparator.compare(current.getElement(), element) == 0) {
+            if(current.equals(element))
                 return current.getElement();
-            } else if (comparator.compare(current.getElement(), element) > 0) {
+            else if(current.getNext() == null)
                 current = current.getNext();
-            } else break;
+            else break;
         }
         return null;
     }
@@ -162,48 +162,46 @@ public class SortedDoublyLinkedList<E> implements SortedList<E> {
      * @param element to be inserted
      */
     public void add(E element) {
-        //TODO
+        DoublyListNode<E> newNode = new DoublyListNode<>(element);
+
+        // 1. Handle the empty list case
         if (head == null) {
-            DoublyListNode<E> newNode = new DoublyListNode<>(element);
             head = newNode;
             tail = newNode;
             currentSize++;
             return;
         }
+
+        // 2. Find the correct insertion point
         DoublyListNode<E> current = head;
-        DoublyListNode<E> newNode = new DoublyListNode<>(element);
         while (current != null) {
             int comparison = compareElements(element, current.getElement());
+
             if (comparison < 0) {
+                // Found the spot: element < current.getElement()
+                // We must insert *before* the 'current' node.
                 break;
             }
-            if (comparison == 0) {
-                while (current.getNext() != null) {
-                    int nextComparison = compareElements(element, current.getNext().getElement());
-                    if (nextComparison <= 0) {
-                        if (nextComparison == 0) {
-                            current = current.getNext();
-                        } else {
-                            break;
-                        }
-                    } else {
-                        break;
-                    }
-                }
-                current = current.getNext();
-                break;
-            }
+
+            // If comparison >= 0 (element is greater or equal),
+            // we keep moving forward. This naturally finds the spot
+            // after any duplicates.
             current = current.getNext();
         }
+
+        // 3. Insert the node (this logic from your code is correct)
         if (current == head) {
+            // Insert at head
             newNode.setNext(head);
             head.setPrevious(newNode);
             head = newNode;
         } else if (current == null) {
+            // Insert at tail
             tail.setNext(newNode);
             newNode.setPrevious(tail);
             tail = newNode;
         } else {
+            // Insert in middle (before 'current')
             DoublyListNode<E> previous = current.getPrevious();
             newNode.setNext(current);
             newNode.setPrevious(previous);
@@ -220,30 +218,43 @@ public class SortedDoublyLinkedList<E> implements SortedList<E> {
      * @return element removed from the list or null if !belongs(element)
      */
     public E remove(E element) {
-        //TODO
         if (head == null) {
             return null;
         }
         DoublyListNode<E> current = head;
         int comparison;
+
         while (current != null) {
             comparison = compareElements(element, current.getElement());
 
             if (comparison == 0) {
-                break;
-            }
+                // Encontrámos um elemento "igual".
+                // É o *mesmo* objeto que queremos remover?
+                if (current.getElement() == element) {
+                    break; // Sim, encontrámos o objeto exato.
+                }
+                // Não é o objeto exato, mas é "igual".
+                // Temos de continuar a procurar, pode ser o próximo.
 
-            if (comparison < 0) {
+            } else if (comparison < 0) {
+                // Passámos do ponto onde o elemento devia estar.
+                // (Assumindo que o `==` não apanhou)
                 return null;
             }
+
             current = current.getNext();
         }
+
         if (current == null) {
+            // Chegámos ao fim e não encontrámos o objeto exato.
             return null;
         }
+
+        // O resto do seu código de remoção (unlinking) está correto.
         E elementRemoved = current.getElement();
         DoublyListNode<E> previous = current.getPrevious();
         DoublyListNode<E> next = current.getNext();
+
         if (current == head) {
             head = next;
             if (head != null) {

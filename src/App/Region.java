@@ -37,7 +37,7 @@ public interface Region extends Serializable {
     /**
      * @return if there is any service
      */
-    boolean hasServices();
+    boolean isEmpty();
 
     /**
      * Iterates all the services in the current region loaded
@@ -143,13 +143,26 @@ public interface Region extends Serializable {
     Iterator<Service> getRankedServices(int numericRate, String type, Student student);
 
     /**
+     * @param tag the tag the services must be tagged with
      * @return an iterator with the services by rating
      */
-    Iterator<Service> listServicesWithTag();
+    Iterator<Service> listServicesWithTag(String tag);
 
     /**
      * @param student the student
      * @return the most relevant service to the student
      */
     String findMostRelevantService(Student student, String type);
+
+    /**
+     * removes this service
+     * @param loc service to remove
+     */
+    void removeServiceFromSorted(Service loc);
+
+    /**
+     * adds service back to the sorted list
+     * @param loc the service to add
+     */
+    void addServiceToSorted(Service loc);
 }
