@@ -61,9 +61,9 @@ public class Tests {
     @Test public void test13() { test("input13","output13"); }
     @Test public void test14() { test("input14","output14"); }
     @Test public void test15() { test("input15","output15"); }
-    //@Test public void test16() { test("input16","output16"); }
-    //@Test public void test17() { test("input17","output17"); }
-    //@Test public void test18() { test("input18","output18"); }
+    @Test public void test16() { test("input16","output16"); }
+    @Test public void test17() { test("input17","output17"); }
+    @Test public void test18() { test("input18","output18"); }
     //@Test public void test19() { test("input19","output19"); }
     //@Test public void test20() { test("input20","output20"); }
     //@Test public void test21() { test("input21","output21"); }
