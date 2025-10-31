@@ -131,8 +131,21 @@ public class RegionClass implements Region {
 
     @Override
     public void removeStudent(String name) {
-        sortedStudents.remove(getStudent(name));
-        students.remove(students.indexOf(getStudent(name)));
+        Student student = getStudent(name);
+        String ethnicity = getStudent(name).getEthnicity();
+        getService(student.getHome().getName()).removeStudent(student);
+        sortedStudents.remove(student);
+        students.remove(students.indexOf(student));
+        if(!containsEthnicity(ethnicity))
+            ethnicityList.remove(ethnicityList.indexOf(ethnicity.toLowerCase()));
+    }
+
+    private boolean containsEthnicity(String ethnicity) {
+        Iterator<Student> it = students.iterator();
+        while (it.hasNext())
+            if(it.next().getEthnicity().equalsIgnoreCase(ethnicity)) return true;
+
+        return false;
     }
 
     @Override
@@ -272,7 +285,7 @@ public class RegionClass implements Region {
 
     @Override
     public String findMostRelevantService(Student student, String type) {
-        if(student instanceof Thrifty && !type.equalsIgnoreCase(LEISURE)){
+        if(student instanceof Thrifty){
             Iterator<Service> it = services.iterator();
             Service ret = null;
             int MinPrice = Integer.MAX_VALUE;

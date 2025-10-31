@@ -173,8 +173,9 @@ public class homeAwayAppClass implements HomeAwayApp{
 
     @Override
     public void removeStudent(String name) {
+        Student student = this.currentRegion.getStudent(name);
 
-        if(this.currentRegion.getStudent(name) == null)
+        if(student == null)
             throw new DoesNotExist("");
 
         this.currentRegion.removeStudent(name);
