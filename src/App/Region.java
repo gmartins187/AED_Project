@@ -165,4 +165,15 @@ public interface Region extends Serializable {
      * @param loc the service to add
      */
     void addServiceToSorted(Service loc);
+
+    /**
+     * save the global counter when the region is saved
+     * @param counter the global watch
+     */
+    void setSavedOrderCounter(int counter);
+
+    /**
+     * @return the stored value
+     */
+    int getSavedOrderCounter();
 }

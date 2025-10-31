@@ -34,12 +34,12 @@ public class LodgingClass extends ServiceAbstractClass implements Lodging {
         visited = new DoublyLinkedList<>();
         inService = new DoublyLinkedList<>();
 
-        numOfPeople = inService.size();
+        numOfPeople = 0;
     }
 
     @Override
     public boolean isFull() {
-        return inService.size() == capacity;
+        return numOfPeople == capacity;
     }
 
     @Override

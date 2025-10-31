@@ -4,11 +4,10 @@ import App.Students.Student;
 import dataStructures.DoublyLinkedList;
 import dataStructures.Iterator;
 import dataStructures.List;
-import dataStructures.ListInArray;
 
 public abstract class ServiceAbstractClass implements Service {
 
-    private static int orderOfInsertion;
+    public static int orderOfInsertion;
     private int myOrder;
 
     private final long latitude;
@@ -78,7 +77,7 @@ public abstract class ServiceAbstractClass implements Service {
     @Override
     public void addReview(Review review){
         reviews.addLast(review);
-        orderOfInsertion++;
+        //orderOfInsertion++;
         calculateAverage(review);
     }
 
@@ -104,7 +103,7 @@ public abstract class ServiceAbstractClass implements Service {
         double trueAverage = (double) this.totalRatingSum / this.reviewCounter;
 
         if(Math.round(trueAverage) != this.averageRating){
-            this.myOrder = orderOfInsertion;
+            this.myOrder = orderOfInsertion++;
             this.averageRating = Math.round(trueAverage);
         }
 

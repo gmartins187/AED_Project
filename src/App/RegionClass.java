@@ -1,9 +1,6 @@
 package App;
 
-import App.Services.DistanceComparator;
-import App.Services.Lodging;
-import App.Services.Service;
-import App.Services.ServicesComparator;
+import App.Services.*;
 import App.Students.Student;
 import App.Students.StudentsComparator;
 import App.Students.Thrifty;
@@ -11,6 +8,9 @@ import dataStructures.*;
 
 public class RegionClass implements Region {
 
+    private int savedOrderCounter;
+
+    private static final String LEISURE = "leisure";
     private static final long MAX_DISTANCE = 500000000;
 
     private final long topBound;
@@ -272,9 +272,9 @@ public class RegionClass implements Region {
 
     @Override
     public String findMostRelevantService(Student student, String type) {
-        if(student instanceof Thrifty){
+        if(student instanceof Thrifty && !type.equalsIgnoreCase(LEISURE)){
             Iterator<Service> it = services.iterator();
-            Service ret = it.next();
+            Service ret = null;
             int MinPrice = Integer.MAX_VALUE;
             while(it.hasNext()){
                 Service next = it.next();
@@ -302,5 +302,16 @@ public class RegionClass implements Region {
     @Override
     public void addServiceToSorted(Service loc) {
         sortedRatingServices.add(loc);
+    }
+
+
+    @Override
+    public void setSavedOrderCounter(int counter) {
+        this.savedOrderCounter = counter;
+    }
+
+    @Override
+    public int getSavedOrderCounter() {
+        return this.savedOrderCounter;
     }
 }

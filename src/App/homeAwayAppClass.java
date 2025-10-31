@@ -55,6 +55,8 @@ public class homeAwayAppClass implements HomeAwayApp{
 
                 if (!dataFolder.exists()) dataFolder.mkdir();
 
+                currentRegion.setSavedOrderCounter(ServiceAbstractClass.orderOfInsertion);
+
                 File file = new File(dataFolder, currentRegion.getName().toLowerCase().replace(" ",""));
 
                 FileOutputStream output = new FileOutputStream(file);
@@ -85,6 +87,8 @@ public class homeAwayAppClass implements HomeAwayApp{
              ObjectInputStream in = new ObjectInputStream(input)) {
 
             currentRegion = (Region) in.readObject();
+
+            ServiceAbstractClass.orderOfInsertion = currentRegion.getSavedOrderCounter();
 
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
