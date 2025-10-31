@@ -9,13 +9,10 @@ public class LodgingClass extends ServiceAbstractClass implements Lodging {
 
     private final int capacity;
 
-    List<Student> visited;
-    List<Student> inService;
+    private final List<Student> visited;
+    private final List<Student> inService;
 
     private int numOfPeople;
-
-    private final int MAX_CAPACITY = 1000;
-
 
     /**
      * Constructor for ServiceAbstractClass.

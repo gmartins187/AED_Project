@@ -3,6 +3,7 @@ package App.Services;
 import App.Students.Student;
 
 public class LeisureClass extends ServiceAbstractClass implements Leisure{
+
     /**
      * Constructor for ServiceAbstractClass.
      *

@@ -6,9 +6,9 @@ public class ServicesComparator implements Comparator<Service>{
 
     /**
      * Compares two services by rate and order in which got the rating average
-     * @param x
-     * @param y
-     * @return
+     * @param x the element to compare
+     * @param y the element to compare
+     * @return a comparison on average and longer time with that average
      */
     @Override
     public int compare(Service x, Service y) {

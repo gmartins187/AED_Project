@@ -5,7 +5,6 @@ import App.Services.Service;
 import dataStructures.DoublyLinkedList;
 import dataStructures.Iterator;
 import dataStructures.List;
-import dataStructures.ListInArray;
 
 public class BookishClass extends StudentAbstractClass implements Bookish {
 
@@ -25,22 +24,11 @@ public class BookishClass extends StudentAbstractClass implements Bookish {
 
     @Override
     public boolean hasnotVisited() {
-       //Iterator<Service> it = visitedServices.iterator();
-       //while(it.hasNext()) if(it.next() instanceof Leisure) return true;
-
         return visitedServices.isEmpty();
     }
 
     @Override
     public Iterator<Service> getVisitedPlaces() {
-        //List<Service> ret = new DoublyLinkedList<>();
-        //Iterator<Service> it = visitedServices.iterator();
-        //while(it.hasNext()){
-        //    Service next = it.next();
-        //    if(next instanceof Leisure)
-        //        ret.addLast(next);
-        //}
-        //return ret.iterator();
         return visitedServices.iterator();
     }
 

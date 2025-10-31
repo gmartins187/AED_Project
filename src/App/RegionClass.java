@@ -10,9 +10,6 @@ public class RegionClass implements Region {
 
     private int savedOrderCounter;
 
-    private static final String LEISURE = "leisure";
-    private static final long MAX_DISTANCE = 500000000;
-
     private final long topBound;
     private final long lowBound;
     private final long leftBound;
@@ -214,7 +211,6 @@ public class RegionClass implements Region {
     public boolean hasServicesType(String type) {
         Iterator<Service> it = services.iterator();
         while (it.hasNext()) {
-            Service next = it.next();
             if (it.next().getType().equalsIgnoreCase(type))
                 return true;
         }
@@ -249,7 +245,7 @@ public class RegionClass implements Region {
 
         Iterator<Service> it = services.iterator();
 
-        long minDistance = MAX_DISTANCE;
+        long minDistance = Integer.MAX_VALUE;
 
         while(it.hasNext()) {
             Service next = it.next();

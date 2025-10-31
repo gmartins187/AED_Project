@@ -1,7 +1,7 @@
 package App.Exceptions;
 
 public class InvalidLocation extends RuntimeException {
-    public InvalidLocation(String message) {
-        super(message);
+    public InvalidLocation() {
+
     }
 }

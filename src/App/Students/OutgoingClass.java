@@ -9,8 +9,7 @@ import dataStructures.ListInArray;
 
 public class OutgoingClass extends StudentAbstractClass implements Outgoing {
 
-    private int numberOfServicesVisited;
-    private List<Service> visitedServices;
+    private final List<Service> visitedServices;
 
 
     /**
@@ -23,27 +22,15 @@ public class OutgoingClass extends StudentAbstractClass implements Outgoing {
     public OutgoingClass(String name, String ethnicity, Service currentService, String type) {
         super(name, ethnicity, currentService, type);
         visitedServices = new DoublyLinkedList<>();
-        this.numberOfServicesVisited = 0;
     }
 
     @Override
     public boolean hasnotVisited() {
-        //Iterator<Service> it = visitedServices.iterator();
-        //while(it.hasNext()) if(it.next() instanceof Leisure) return true;
-
         return visitedServices.isEmpty();
     }
 
     @Override
     public Iterator<Service> getVisitedPlaces() {
-        //List<Service> ret = new DoublyLinkedList<>();
-        //Iterator<Service> it = visitedServices.iterator();
-        //while(it.hasNext()){
-        //    Service next = it.next();
-        //    if(next instanceof Leisure)
-        //        ret.addLast(next);
-        //}
-        //return ret.iterator();
         return visitedServices.iterator();
     }
 

@@ -2,8 +2,8 @@ package App.Services;
 
 public class ReviewClass implements Review{
 
-    int numericRating;
-    String textReview;
+    private final int numericRating;
+    private final String textReview;
 
 
     /**

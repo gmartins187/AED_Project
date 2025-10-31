@@ -7,9 +7,9 @@ public abstract class StudentAbstractClass implements Student{
     private Lodging home;
     private Service Location;
 
-    private String type;
-    private String name;
-    private String ethnicity;
+    private final String type;
+    private final String name;
+    private final String ethnicity;
 
 
     /**
@@ -53,21 +53,16 @@ public abstract class StudentAbstractClass implements Student{
 
     @Override
     public void setHome(Lodging home) {
-        // 1. Check if the current home is also the current location
+
         if (this.home == this.Location) {
-            // 2. If so, remove student from the current home
-            // Note: This will cause a NullPointerException if this.home is null
             this.home.removeStudent(this);
-        } else{
+        } else {
             this.home.removeStudent(this);
             this.Location.removeStudent(this);
         }
 
-        // 3. Add student to the new home
-        // Note: This will cause a NullPointerException if 'home' (the parameter) is null
         home.addStudent(this);
 
-        // 4. Update the instance's home and location
         this.home = home;
         this.Location = home;
     }
