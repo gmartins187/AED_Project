@@ -1,9 +1,6 @@
 package App;
 
-import App.Services.DistanceComparator;
-import App.Services.Lodging;
-import App.Services.Service;
-import App.Services.ServicesComparator;
+import App.Services.*;
 import App.Students.Student;
 import App.Students.StudentsComparator;
 import App.Students.Thrifty;
@@ -11,7 +8,7 @@ import dataStructures.*;
 
 public class RegionClass implements Region {
 
-    private static final long MAX_DISTANCE = 500000000;
+    private int savedOrderCounter;
 
     private final long topBound;
     private final long lowBound;
@@ -131,8 +128,21 @@ public class RegionClass implements Region {
 
     @Override
     public void removeStudent(String name) {
-        sortedStudents.remove(getStudent(name));
-        students.remove(students.indexOf(getStudent(name)));
+        Student student = getStudent(name);
+        String ethnicity = getStudent(name).getEthnicity();
+        getService(student.getHome().getName()).removeStudent(student);
+        sortedStudents.remove(student);
+        students.remove(students.indexOf(student));
+        if(!containsEthnicity(ethnicity))
+            ethnicityList.remove(ethnicityList.indexOf(ethnicity.toLowerCase()));
+    }
+
+    private boolean containsEthnicity(String ethnicity) {
+        Iterator<Student> it = students.iterator();
+        while (it.hasNext())
+            if(it.next().getEthnicity().equalsIgnoreCase(ethnicity)) return true;
+
+        return false;
     }
 
     @Override
@@ -201,7 +211,6 @@ public class RegionClass implements Region {
     public boolean hasServicesType(String type) {
         Iterator<Service> it = services.iterator();
         while (it.hasNext()) {
-            Service next = it.next();
             if (it.next().getType().equalsIgnoreCase(type))
                 return true;
         }
@@ -236,7 +245,7 @@ public class RegionClass implements Region {
 
         Iterator<Service> it = services.iterator();
 
-        long minDistance = MAX_DISTANCE;
+        long minDistance = Integer.MAX_VALUE;
 
         while(it.hasNext()) {
             Service next = it.next();
@@ -274,7 +283,7 @@ public class RegionClass implements Region {
     public String findMostRelevantService(Student student, String type) {
         if(student instanceof Thrifty){
             Iterator<Service> it = services.iterator();
-            Service ret = it.next();
+            Service ret = null;
             int MinPrice = Integer.MAX_VALUE;
             while(it.hasNext()){
                 Service next = it.next();
@@ -302,5 +311,16 @@ public class RegionClass implements Region {
     @Override
     public void addServiceToSorted(Service loc) {
         sortedRatingServices.add(loc);
+    }
+
+
+    @Override
+    public void setSavedOrderCounter(int counter) {
+        this.savedOrderCounter = counter;
+    }
+
+    @Override
+    public int getSavedOrderCounter() {
+        return this.savedOrderCounter;
     }
 }

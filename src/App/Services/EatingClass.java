@@ -7,8 +7,8 @@ import dataStructures.ListInArray;
 
 public class EatingClass extends ServiceAbstractClass implements Eating{
 
-    List<Student> visited;
-    List<Student> inService;
+    private final List<Student> visited;
+    private final List<Student> inService;
 
     private final int capacity;
 

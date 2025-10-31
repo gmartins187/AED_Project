@@ -4,11 +4,15 @@ import App.Students.Student;
 import dataStructures.DoublyLinkedList;
 import dataStructures.Iterator;
 import dataStructures.List;
-import dataStructures.ListInArray;
 
 public abstract class ServiceAbstractClass implements Service {
 
-    private static int orderOfInsertion;
+    /**
+     * Is only public because is used in the app method save to serialize and save ich time it loads the area to get the number where it left of
+     */
+    public static int orderOfInsertion;
+
+
     private int myOrder;
 
     private final long latitude;
@@ -19,9 +23,7 @@ public abstract class ServiceAbstractClass implements Service {
     private final int price;
     private final String name;
 
-
-    private final int INITIAL_CAPACITY = 100;
-    private List<Review> reviews;
+    private final List<Review> reviews;
     private int reviewCounter;
 
     private long averageRating;
@@ -78,7 +80,6 @@ public abstract class ServiceAbstractClass implements Service {
     @Override
     public void addReview(Review review){
         reviews.addLast(review);
-        orderOfInsertion++;
         calculateAverage(review);
     }
 
@@ -104,7 +105,7 @@ public abstract class ServiceAbstractClass implements Service {
         double trueAverage = (double) this.totalRatingSum / this.reviewCounter;
 
         if(Math.round(trueAverage) != this.averageRating){
-            this.myOrder = orderOfInsertion;
+            this.myOrder = orderOfInsertion++;
             this.averageRating = Math.round(trueAverage);
         }
 
@@ -124,6 +125,11 @@ public abstract class ServiceAbstractClass implements Service {
         return false;
     }
 
+    /**
+     * @param reviewText the review text to compare
+     * @param tag the word to search
+     * @return true if the tag is contained in some other tag from this service
+     */
     private boolean myContainsIgnoreCase(String reviewText, String tag){
         String[] words = reviewText.split(" +");
 

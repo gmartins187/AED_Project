@@ -8,7 +8,7 @@ import dataStructures.List;
 
 public class ThriftyClass extends StudentAbstractClass implements Thrifty {
 
-    List<Service> EatingVisited;
+    private final List<Service> EatingVisited;
 
     /**
      * Constructor for StudentAbstractClass.
@@ -23,7 +23,6 @@ public class ThriftyClass extends StudentAbstractClass implements Thrifty {
     }
 
 
-
     @Override
     public boolean hasnotVisited() {
         return false;
@@ -33,8 +32,6 @@ public class ThriftyClass extends StudentAbstractClass implements Thrifty {
     public Iterator<Service> getVisitedPlaces() {
         return null;
     }
-
-
 
     @Override
     public void pingService(Service service) {
