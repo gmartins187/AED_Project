@@ -287,6 +287,7 @@ public class RegionClass implements Region {
             int MinPrice = Integer.MAX_VALUE;
             while(it.hasNext()){
                 Service next = it.next();
+                //ties
                 if(next.getType().equals(type) && next.getPrice() < MinPrice) {
                     MinPrice = next.getPrice();
                     ret = next;
