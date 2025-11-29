@@ -31,6 +31,7 @@ public class EatingClass extends ServiceAbstractClass implements Eating{
         this.capacity = capacity;
 
         visited = new ListInArray<>(MAX_CAPACITY);
+        //cannot add more than capacity
         inService = new ListInArray<>(capacity);
 
         numOfPeople = 0;

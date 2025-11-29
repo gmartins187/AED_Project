@@ -229,7 +229,7 @@ public class homeAwayAppClass implements HomeAwayApp{
             throw new AlreadyThere();
         else if(lodging.isFull())
             throw new ServiceFull();
-        else if(stu instanceof Thrifty && lodging.getPrice() > stu.getHome().getPrice())
+        else if(stu instanceof Thrifty && lodging.getPrice() >= stu.getHome().getPrice())
             throw new InvalidService();
 
         stu.setHome((Lodging) lodging);
